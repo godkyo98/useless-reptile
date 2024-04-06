@@ -172,4 +172,9 @@ public abstract class URFlyingDragonEntity extends URDragonEntity implements Fly
     public float getVerticalSpeed() {
         return verticalSpeed;
     }
+
+    @Override
+    public FlyingDragonMoveControl<? extends FlyingDragon> getMoveControl() {
+        return (FlyingDragonMoveControl<?>) moveControl;
+    }
 }

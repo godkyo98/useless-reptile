@@ -38,8 +38,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
+import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
+import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserAttackGoal;
+import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserRevengeGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserRoamAroundGoal;
 import nordmods.uselessreptile.common.entity.base.URDragonPart;
 import nordmods.uselessreptile.common.entity.base.URRideableFlyingDragonEntity;
@@ -111,6 +114,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     @Override
     protected void initGoals() {
         goalSelector.add(1, new LightningChaserRoamAroundGoal(this));
+        goalSelector.add(2, new LightningChaserAttackGoal(this));
+        goalSelector.add(1, new LightningChaserRevengeGoal(this));
     }
 
     @Override

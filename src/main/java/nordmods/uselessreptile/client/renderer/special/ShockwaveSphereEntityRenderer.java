@@ -31,7 +31,7 @@ public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSpher
     public void render(ShockwaveSphereEntity entity, float yaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         matrixStack.push();
 
-        float alpha = MathHelper.clamp(1f - entity.getCurrentRadius() / entity.maxRadius, 0f, 1f);
+        float alpha = MathHelper.clamp(1f - entity.getCurrentRadius() / entity.MAX_RADIUS, 0f, 1f);
         alpha = MathHelper.lerp(tickDelta, prevAlpha, alpha);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(getTexture(entity), true));

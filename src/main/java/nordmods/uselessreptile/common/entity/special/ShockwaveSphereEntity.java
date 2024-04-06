@@ -19,24 +19,17 @@ import java.util.List;
 
 public class ShockwaveSphereEntity extends ProjectileEntity {
     private float currentRadius = 0;
-    public final float maxRadius;
-    public final float radiusChangeSpeed;
-    public final float power;
+    public static final float MAX_RADIUS = 20;
+    public static final float RADIUS_CHANGE_SPEED = 0.4f;
+    public static final float POWER = 1;
     private final List<Entity> affected = new ArrayList<>();
     private final List<Entity> prevAffected = new ArrayList<>();
     private boolean spawnSoundPlayed = false;
 
-    public ShockwaveSphereEntity(EntityType<? extends ProjectileEntity> entityType, World world, float maxRadius, float radiusChangeSpeed, float power) {
+    public ShockwaveSphereEntity(EntityType<? extends ProjectileEntity> entityType, World world) {
         super(entityType, world);
-        this.maxRadius = maxRadius;
-        this.radiusChangeSpeed = radiusChangeSpeed;
-        this.power = power;
         setNoGravity(true);
         setInvulnerable(true);
-    }
-
-    public ShockwaveSphereEntity(EntityType<? extends ProjectileEntity> entityType, World world) {
-        this(entityType, world, 20, 0.4f, 1);
     }
 
     public ShockwaveSphereEntity(World world) {
@@ -50,8 +43,8 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
     public void tick() {
         super.tick();
         tryPlaySpawnSound();
-        if (currentRadius <= maxRadius) {
-            setPosition(getPos().subtract(0, radiusChangeSpeed, 0));
+        if (currentRadius <= MAX_RADIUS) {
+            setPosition(getPos().subtract(0, RADIUS_CHANGE_SPEED, 0));
             calculateDimensions();
             List<Entity> targets = getWorld().getOtherEntities(this, getBoundingBox(), this::canTarget);
             for (Entity target : targets) {
@@ -59,7 +52,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
                 onEntityHit(entityHitResult);
             }
 
-            currentRadius += radiusChangeSpeed;
+            currentRadius += RADIUS_CHANGE_SPEED;
             prevAffected.clear();
             prevAffected.addAll(affected);
             affected.clear();
@@ -76,7 +69,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
             target.playSound(URSounds.SHOCKWAVE_HIT, 1, 1 / exposure);
             Vec3d vec3d = target.getPos().subtract(getEyePos());
             double lengthMod = currentRadius / vec3d.length();
-            target.addVelocity(vec3d.normalize().multiply(power * lengthMod * exposure));
+            target.addVelocity(vec3d.normalize().multiply(POWER * lengthMod * exposure));
             if (target instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new StatusEffectInstance(URStatusEffects.SHOCK, (int) (100 * MathHelper.clamp(lengthMod, 1, 2) * exposure), 0, false, false), getOwner());
                 livingEntity.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), (float) (2.5 * MathHelper.clamp(lengthMod, 1, 2)));

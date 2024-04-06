@@ -3,6 +3,7 @@ package nordmods.uselessreptile.common.entity.base;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -262,5 +263,10 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
     @Override
     public float getVerticalSpeed() {
         return verticalSpeed;
+    }
+
+    @Override
+    public FlyingDragonMoveControl<? extends FlyingDragon> getMoveControl() {
+        return (FlyingDragonMoveControl<?>) moveControl;
     }
 }

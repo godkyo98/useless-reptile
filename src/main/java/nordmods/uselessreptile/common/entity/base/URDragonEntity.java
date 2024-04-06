@@ -153,7 +153,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public void setIsSitting(boolean state) {
         dataTracker.set(IS_SITTING, state);
         setSitting(state);
-        setTarget(null);
+        if (state) setTarget(null);
     }
 
     public String getVariant() {return dataTracker.get(VARIANT);}

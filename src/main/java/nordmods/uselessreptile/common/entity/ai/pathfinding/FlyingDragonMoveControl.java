@@ -15,6 +15,11 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
         this.entity = entity;
     }
 
+    public void moveBack() {
+        this.state = MoveControl.State.STRAFE;
+    }
+
+    @Override
     public void tick() {
         if (entity.hasControllingPassenger() || entity.hasVehicle()) return;
 
@@ -31,9 +36,25 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
         float accelerationModifier = (float)accelerationDuration/entity.getMaxAccelerationDuration();
         if (accelerationModifier > 1.5) accelerationModifier = 1.5f;
         entity.setGliding(accelerationModifier > 1);
+        entity.setMovingBackwards(false);
 
         if (this.state == MoveControl.State.STRAFE) {
             state = State.WAIT;
+            entity.setMovingBackwards(true);
+
+            if (accelerationDuration > entity.getMaxAccelerationDuration() * 0.25) accelerationDuration -= 2;
+            else accelerationDuration++;
+
+            float speed;
+            if (entity.isFlying() && !swimming) {
+                speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_FLYING_SPEED) * accelerationModifier;
+                if (entity.isTouchingWater() || entity.getRecentDamageSource() == entity.getDamageSources().lava()) {
+                    entity.getJumpControl().setActive();
+                }
+            } else speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+
+            entity.setMovementSpeed(-speed * entity.getSpeedMod());
+
         } else if (state == State.MOVE_TO) {
             state = State.WAIT;
             if (distanceSquared < 2.500000277905201E-7D) {
