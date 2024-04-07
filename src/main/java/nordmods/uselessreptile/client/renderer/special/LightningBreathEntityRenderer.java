@@ -18,6 +18,7 @@ import org.joml.Vector3f;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.util.RenderUtils;
 
+//reference: https://habr.com/ru/articles/230483/
 public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreathEntity> {
     public LightningBreathEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx);
