@@ -25,14 +25,18 @@ import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
+import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LightningBreathEntity extends ProjectileEntity {
     private boolean spawnSoundPlayed = false;
     private int age;
-    public final int maxAge = 10;
-    public static final int MAX_LENGTH = 30; //default model has only 30 parts
+    public static final int MAX_AGE = 10;
+    public static final int MAX_LENGTH = 30;
+    public float prevAlpha = 0.5f;
+    public LightningBreathBolt[] lightningBreathBolts = {null, null, null, null, null};
 
     public LightningBreathEntity(EntityType<? extends ProjectileEntity> entityType, World world, Entity owner) {
         super(entityType, world);
@@ -70,7 +74,7 @@ public class LightningBreathEntity extends ProjectileEntity {
     public void tick() {
         super.tick();
         tryPlaySpawnSound();
-        if (++age <= maxAge) {
+        if (++age <= MAX_AGE) {
             List<Entity> targets = getWorld().getOtherEntities(this, getBoundingBox(), this::canTarget);
             for (Entity target : targets) {
                 EntityHitResult entityHitResult = new EntityHitResult(target);
@@ -134,5 +138,11 @@ public class LightningBreathEntity extends ProjectileEntity {
 
     public int getAge() {
         return age;
+    }
+
+    public static class LightningBreathBolt {
+        public final List<Segment> segments = new ArrayList<>();
+
+        public record Segment (Vector3f startPoint, Vector3f endPoint) {}
     }
 }

@@ -4,7 +4,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import nordmods.uselessreptile.client.model.special.LightningBreathEntityModel;
 import nordmods.uselessreptile.client.model.special.RiverPikehornOnHeadFeatureModel;
 import nordmods.uselessreptile.client.renderer.*;
 import nordmods.uselessreptile.client.renderer.special.LightningBreathEntityRenderer;
@@ -25,6 +24,5 @@ public class URRenderers {
         EntityRendererRegistry.register(UREntities.LIGHTNING_BREATH_ENTITY, LightningBreathEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(RiverPikehornOnHeadFeatureModel.PIKEHORN_ON_HEAD_MODEL, RiverPikehornOnHeadFeatureModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(LightningBreathEntityModel.LIGHTNING_BREATH_MODEL, LightningBreathEntityModel::getTexturedModelData);
     }
 }
