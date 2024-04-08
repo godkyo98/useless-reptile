@@ -11,6 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.crash.CrashException;
 import net.minecraft.util.crash.CrashReport;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import software.bernie.geckolib.cache.object.GeoBone;
@@ -44,7 +45,8 @@ public class DragonPassengerLayer<T extends URRideableDragonEntity> extends GeoR
 
             matrixStackIn.translate(0, -0.7f, 0);
             RenderUtils.translateToPivotPoint(matrixStackIn, bone);
-            matrixStackIn.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(entity.getYaw(partialTick) - 180));
+            float yaw = MathHelper.lerpAngleDegrees(partialTick, entity.prevBodyYaw, entity.bodyYaw);
+            matrixStackIn.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(180f - yaw));
             renderEntity(passenger, partialTick, matrixStackIn, bufferSource, packedLight);
             buffer = bufferSource.getBuffer(renderType);
 

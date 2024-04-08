@@ -10,6 +10,8 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.client.model.special.DragonEqupmentModel;
+import nordmods.uselessreptile.client.renderer.base.DragonEquipmentRenderer;
+import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -22,8 +24,9 @@ import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import java.util.Map;
 
 public class URDragonEquipmentLayer<T extends URDragonEntity> extends GeoRenderLayer<T> {
-    private final Map<String, CoreGeoBone> saddleBones = new Object2ObjectOpenHashMap<>();
-    private DragonEqupmentModel<T> equpmentModel;
+    private final Map<String, CoreGeoBone> equipmentBones = new Object2ObjectOpenHashMap<>();
+    private DragonEquipmentRenderer dragonEquipmentRenderer;
+    private DragonEquipmentAnimatable dragonEquipmentAnimatable;
     private BakedGeoModel bakedEquipmentModel;
     private final EquipmentSlot equipmentSlot;
 
@@ -38,16 +41,18 @@ public class URDragonEquipmentLayer<T extends URDragonEntity> extends GeoRenderL
                           int packedLight, int packedOverlay) {
         ItemStack itemStack = entity.getEquippedStack(equipmentSlot);
         if (itemStack.isEmpty()) {
-            equpmentModel = null;
+            dragonEquipmentRenderer = null;
             bakedEquipmentModel = null;
             return;
         }
 
-        equpmentModel = new DragonEqupmentModel<>(entity, itemStack.getItem());
-        Identifier id = equpmentModel.getModelResource(entity);
+        dragonEquipmentAnimatable = new DragonEquipmentAnimatable(entity, itemStack.getItem());
+
+        dragonEquipmentRenderer = new DragonEquipmentRenderer();
+        Identifier id = dragonEquipmentRenderer.getGeoModel().getModelResource(dragonEquipmentAnimatable);
         if (!ResourceUtil.doesExist(id)) return;
 
-        bakedEquipmentModel = equpmentModel.getBakedModel(id);
+        bakedEquipmentModel = dragonEquipmentRenderer.getGeoModel().getBakedModel(id);
         getSaddleBones(bakedEquipmentModel);
     }
 
@@ -56,31 +61,31 @@ public class URDragonEquipmentLayer<T extends URDragonEntity> extends GeoRenderL
                        VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick,
                        int packedLight, int packedOverlay) {
         if (bakedEquipmentModel == null) return;
-        Identifier id = equpmentModel.getTextureResource(entity);
+        Identifier id = dragonEquipmentRenderer.getGeoModel().getTextureResource(dragonEquipmentAnimatable);
         if (!ResourceUtil.doesExist(id)) return;
 
         getGeoModel().getAnimationProcessor().getRegisteredBones().forEach(bone -> {
-            GeoBone saddleBone = (GeoBone) saddleBones.get(bone.getName());
-            if (saddleBone != null) {
-                saddleBone.updateScale(bone.getScaleX(), bone.getScaleY(), bone.getScaleZ());
-                saddleBone.updateRotation(bone.getRotX(), bone.getRotY(), bone.getRotZ());
-                saddleBone.updatePosition(bone.getPosX(), bone.getPosY(), bone.getPosZ());
+            GeoBone equipmentBone = (GeoBone) equipmentBones.get(bone.getName());
+            if (equipmentBone != null) {
+                equipmentBone.updateScale(bone.getScaleX(), bone.getScaleY(), bone.getScaleZ());
+                equipmentBone.updateRotation(bone.getRotX(), bone.getRotY(), bone.getRotZ());
+                equipmentBone.updatePosition(bone.getPosX(), bone.getPosY(), bone.getPosZ());
             }
         });
 
-        RenderLayer cameo = equpmentModel.getRenderType(entity, id);
-        getRenderer().reRender(bakedEquipmentModel, matrixStackIn, bufferSource, entity, cameo,
-                bufferSource.getBuffer(cameo), partialTick, packedLight, OverlayTexture.DEFAULT_UV,
-                1, 1, 1, 1);
+        RenderLayer cameo = dragonEquipmentRenderer.getGeoModel().getRenderType(dragonEquipmentAnimatable, id);
+        buffer = bufferSource.getBuffer(cameo);
+
+        dragonEquipmentRenderer.render(matrixStackIn, dragonEquipmentAnimatable, bufferSource, cameo, buffer, packedLight);
     }
 
     private void addChildren(CoreGeoBone bone) {
-        saddleBones.put(bone.getName(), bone);
+        equipmentBones.put(bone.getName(), bone);
         for (CoreGeoBone child : bone.getChildBones()) addChildren(child);
     }
 
     private void getSaddleBones(CoreBakedGeoModel model) {
-        saddleBones.clear();
+        equipmentBones.clear();
         for (CoreGeoBone bone : model.getBones()) addChildren(bone);
     }
 }

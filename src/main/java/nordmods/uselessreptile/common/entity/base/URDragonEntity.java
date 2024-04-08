@@ -70,7 +70,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected float rotationProgress;
     protected float heightMod = 1;
     protected float widthMod = 1;
-    protected static final int TRANSITION_TICKS = 10;
+    public static final int TRANSITION_TICKS = 10;
     protected int baseSecondaryAttackCooldown = 20;
     protected int basePrimaryAttackCooldown = 20;
     protected int baseAccelerationDuration = 1;
