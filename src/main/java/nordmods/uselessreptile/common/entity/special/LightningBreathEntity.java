@@ -140,6 +140,11 @@ public class LightningBreathEntity extends ProjectileEntity {
         return age;
     }
 
+    @Override
+    public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
+        return true;
+    }
+
     public static class LightningBreathBolt {
         public final List<Segment> segments = new ArrayList<>();
 

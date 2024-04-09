@@ -9,14 +9,12 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.client.renderer.LightningChaserEntityRenderer;
 import nordmods.uselessreptile.client.util.RenderUtil;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
 import org.joml.Random;
-import org.joml.Vector3d;
 import org.joml.Vector3f;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.util.RenderUtils;
 
 //reference: https://habr.com/ru/articles/230483/
 public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreathEntity> {
@@ -40,18 +38,18 @@ public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreat
                 if (!(entity.getOwner() instanceof LightningChaserEntity owner)) return;
                 lightningBreathBolt = new LightningBreathEntity.LightningBreathBolt();
                 float offset = length / (4f + i * 2);
-                Vector3d startPos;
-                GeoModel<?> model = RenderUtils.getGeoModelForEntity(owner);
-                //todo head tracking
-                if (model != null) startPos = model.getBone("head").orElseThrow().getLocalPosition();
-                else return;
+                Vector3f headPos = LightningChaserEntityRenderer.headPos.get(owner.getUuid());
+                if (headPos == null) return;
+                //because actual owner's position and lightning breath's one are never the same, and we technically render lightning breath here...
+                Vector3f startPos = new Vector3f((float) (owner.getX() - entity.getX()), (float) (owner.getY() - entity.getY()), (float) (owner.getZ() - entity.getZ()));
+                startPos.add(headPos);
                 Vector3f vec3d = owner.getRotationVector().multiply(length).toVector3f();
                 lightningBreathBolt.segments.add(
                         new LightningBreathEntity.LightningBreathBolt.Segment(
-                                new Vector3f((float) startPos.x, (float) startPos.y, (float) startPos.z),
-                                new Vector3f((float) (vec3d.x + startPos.x), (float) (vec3d.y + startPos.y), (float) (vec3d.z + startPos.x))));
+                                new Vector3f(startPos.x, startPos.y, startPos.z),
+                                new Vector3f(vec3d.x + startPos.x, vec3d.y + startPos.y, vec3d.z + startPos.x)));
                 for (int l = 0; l < 3; l++) {
-                    //do not the foreach
+                    //do not the foreach unless you want to cause infinite loop
                     int listSize = lightningBreathBolt.segments.size();
                     for (int j = 0; j < listSize; j++) {
                         LightningBreathEntity.LightningBreathBolt.Segment segment = lightningBreathBolt.segments.get(j);
@@ -85,7 +83,7 @@ public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreat
                         new Vector3f(current.startPoint()).add(0, -0.1f, 0),
                         new Vector3f(current.endPoint()).add(0, -0.1f, 0),
                         new Vector3f(current.endPoint()).add(0, 0.1f, 0),
-                        alpha, 1, 1,1, LightmapTextureManager.MAX_LIGHT_COORDINATE,
+                        alpha, 1, 1, 1, LightmapTextureManager.MAX_LIGHT_COORDINATE,
                         0, 1, 0, 1);
                 RenderUtil.renderQuad(matrices.peek().getPositionMatrix(), matrices.peek().getNormalMatrix(),
                         vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(getTexture(entity))),
@@ -93,7 +91,7 @@ public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreat
                         new Vector3f(current.startPoint()).add(0, 0.2f, 0),
                         new Vector3f(current.endPoint()).add(0, 0.2f, 0),
                         new Vector3f(current.endPoint()).add(0, -0.2f, 0),
-                        alpha / 1.5f, 1, 1,1, LightmapTextureManager.MAX_LIGHT_COORDINATE,
+                        alpha / 1.5f, 1, 1, 1, LightmapTextureManager.MAX_LIGHT_COORDINATE,
                         0, 1, 0, 1);
                 RenderUtil.renderQuad(matrices.peek().getPositionMatrix(), matrices.peek().getNormalMatrix(),
                         vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(getTexture(entity))),
@@ -101,9 +99,9 @@ public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreat
                         new Vector3f(current.startPoint()).add(0, 0.3f, 0),
                         new Vector3f(current.endPoint()).add(0, 0.3f, 0),
                         new Vector3f(current.endPoint()).add(0, -0.3f, 0),
-                        alpha / 3f, 1, 1,1, LightmapTextureManager.MAX_LIGHT_COORDINATE,
+                        alpha / 3f, 1, 1, 1, LightmapTextureManager.MAX_LIGHT_COORDINATE,
                         0, 1, 0, 1);
-            }
+        }
         matrices.pop();
     }
 

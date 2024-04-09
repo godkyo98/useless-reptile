@@ -19,7 +19,12 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 import software.bernie.geckolib.util.RenderUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 public class DragonPassengerLayer<T extends URRideableDragonEntity> extends GeoRenderLayer<T> {
+    public static Set<UUID> passengers = new HashSet<>();
     private final String passengerBone;
     private final int passengerNumber;
 
@@ -41,7 +46,7 @@ public class DragonPassengerLayer<T extends URRideableDragonEntity> extends GeoR
         Entity passenger = entity.getPassengerList().size() > passengerNumber ? entity.getPassengerList().get(passengerNumber) : null;
         if (passenger != null) {
             matrixStackIn.push();
-            URRideableDragonEntity.passengers.remove(passenger.getUuid());
+            passengers.remove(passenger.getUuid());
 
             matrixStackIn.translate(0, -0.7f, 0);
             RenderUtils.translateToPivotPoint(matrixStackIn, bone);
@@ -50,7 +55,7 @@ public class DragonPassengerLayer<T extends URRideableDragonEntity> extends GeoR
             renderEntity(passenger, partialTick, matrixStackIn, bufferSource, packedLight);
             buffer = bufferSource.getBuffer(renderType);
 
-            URRideableDragonEntity.passengers.add(passenger.getUuid());
+            passengers.add(passenger.getUuid());
             matrixStackIn.pop();
         }
     }
