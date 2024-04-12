@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AssetCache {
+    //todo add caching for equipment model paths because else performance is fucked
     private Identifier modelLocationCache;
     private Identifier textureLocationCache;
     private Identifier animationLocationCache;

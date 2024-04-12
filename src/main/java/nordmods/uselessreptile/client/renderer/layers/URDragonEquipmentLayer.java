@@ -1,7 +1,7 @@
 package nordmods.uselessreptile.client.renderer.layers;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.client.render.OverlayTexture;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -9,18 +9,19 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
-import nordmods.uselessreptile.client.model.special.DragonEqupmentModel;
 import nordmods.uselessreptile.client.renderer.base.DragonEquipmentRenderer;
 import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
+import software.bernie.geckolib.cache.object.GeoCube;
 import software.bernie.geckolib.core.animatable.model.CoreBakedGeoModel;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
 import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
+import java.util.List;
 import java.util.Map;
 
 public class URDragonEquipmentLayer<T extends URDragonEntity> extends GeoRenderLayer<T> {
@@ -40,7 +41,7 @@ public class URDragonEquipmentLayer<T extends URDragonEntity> extends GeoRenderL
                           VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick,
                           int packedLight, int packedOverlay) {
         ItemStack itemStack = entity.getEquippedStack(equipmentSlot);
-        if (itemStack.isEmpty()) {
+        if (itemStack.isEmpty() || !ResourceUtil.isResourceReloadFinished) {
             dragonEquipmentRenderer = null;
             bakedEquipmentModel = null;
             return;
@@ -60,6 +61,7 @@ public class URDragonEquipmentLayer<T extends URDragonEntity> extends GeoRenderL
     public void render(MatrixStack matrixStackIn, T entity, BakedGeoModel bakedModel, RenderLayer renderType,
                        VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick,
                        int packedLight, int packedOverlay) {
+        if (!ResourceUtil.isResourceReloadFinished) return;
         if (bakedEquipmentModel == null) return;
         Identifier id = dragonEquipmentRenderer.getGeoModel().getTextureResource(dragonEquipmentAnimatable);
         if (!ResourceUtil.doesExist(id)) return;
