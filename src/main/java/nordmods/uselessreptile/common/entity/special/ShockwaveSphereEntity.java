@@ -16,6 +16,7 @@ import nordmods.uselessreptile.common.init.URStatusEffects;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ShockwaveSphereEntity extends ProjectileEntity {
     private float currentRadius = 0;
@@ -25,11 +26,13 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
     private final List<Entity> affected = new ArrayList<>();
     private final List<Entity> prevAffected = new ArrayList<>();
     private boolean spawnSoundPlayed = false;
+    public float prevAlpha = 1f;
 
     public ShockwaveSphereEntity(EntityType<? extends ProjectileEntity> entityType, World world) {
         super(entityType, world);
         setNoGravity(true);
         setInvulnerable(true);
+        setYaw(new Random(getId()).nextInt(360));
     }
 
     public ShockwaveSphereEntity(World world) {

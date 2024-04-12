@@ -9,13 +9,14 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.RenderUtil;
 import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
 import org.joml.Vector3f;
 
 public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSphereEntity> {
-    private float prevAlpha = 1f;
+
     private static final int SPHERE_ROWS = 16;
 
     public ShockwaveSphereEntityRenderer(EntityRendererFactory.Context ctx) {
@@ -31,18 +32,30 @@ public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSpher
     public void render(ShockwaveSphereEntity entity, float yaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         matrixStack.push();
 
-        float alpha = MathHelper.clamp(1f - entity.getCurrentRadius() / entity.MAX_RADIUS, 0f, 1f);
-        alpha = MathHelper.lerp(tickDelta, prevAlpha, alpha);
+        float alpha = MathHelper.clamp(1f - entity.getCurrentRadius() / ShockwaveSphereEntity.MAX_RADIUS, 0f, 1f);
+        alpha = MathHelper.lerp(tickDelta, entity.prevAlpha, alpha);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(getTexture(entity), true));
         matrixStack.translate(0, entity.getCurrentRadius(), 0);
-        renderSphere(entity, matrixStack, vertexConsumer, alpha);
 
-        prevAlpha = alpha;
+        matrixStack.push();
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha / 2 * 180));
+        renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha - 0.2f, 0, 1), entity.getCurrentRadius());
+        matrixStack.pop();
+
+        matrixStack.push();
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-alpha / 1.5f * 180));
+        renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha/1.5f - 0.1f, 0, 1), entity.getCurrentRadius()/1.5f);
+        matrixStack.pop();
+        
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha * 180));
+        renderSphere(matrixStack, vertexConsumer, alpha/2f, entity.getCurrentRadius()/2f);
+
+        entity.prevAlpha = alpha;
         matrixStack.pop();
     }
 
-    private void renderSphere(ShockwaveSphereEntity entity, MatrixStack matrixStack, VertexConsumer vertexConsumer, float alpha) {
+    private void renderSphere(MatrixStack matrixStack, VertexConsumer vertexConsumer, float alpha, float radius) {
         float dPhi = (float) (-Math.PI / SPHERE_ROWS);
         float dTheta = (float) (-2 * Math.PI / SPHERE_ROWS);
 
@@ -59,8 +72,6 @@ public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSpher
 
                 float minTheta = j * dTheta;
                 float maxTheta = (j + 1) * dTheta;
-
-                float radius = entity.getCurrentRadius();
 
                 Vector3f v0 = getSphereDot(minPhi, minTheta, radius);
                 Vector3f v1 = getSphereDot(minPhi, maxTheta, radius);
