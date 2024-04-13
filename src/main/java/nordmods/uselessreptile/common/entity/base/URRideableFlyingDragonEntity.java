@@ -3,7 +3,6 @@ package nordmods.uselessreptile.common.entity.base;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
@@ -26,7 +25,8 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
     protected float pitchLimitAir = 90;
     protected float rotationSpeedAir = 180;
     protected float verticalSpeed;
-    private int pressedTimer;
+    private int flyUpWindow;
+    private boolean jumpWasPressed;
     protected float tiltProgress;
     protected boolean shouldGlide;
     private int glideTimer = 100;
@@ -147,20 +147,22 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
         setMovingBackwards(isMoveBackPressed() || (!isMoveForwardPressed() && !isMoveBackPressed() && isMoving()));
         setPitch(MathHelper.clamp(rider.getPitch(), -getPitchLimit(), getPitchLimit()));
         if (!isFlying()) {
-
             if (isSprintPressed()) setSprinting(true);
             if (isMovingBackwards() && (isMoveBackPressed() || isMoveBackPressed())) setSprinting(false);
             setRotation(rider);
-            //todo исправить прыжок
-            if (isJumpPressed()) pressedTimer++;
-            if (!isJumpPressed() && pressedTimer <= 10 && pressedTimer != 0) {
-                if (isOnGround()) jump();
-                pressedTimer = 0;
-            }
-            if (isJumpPressed() && pressedTimer > 10) {
-                startToFly();
-                pressedTimer = 0;
-            }
+
+            if (isJumpPressed() && !jumpWasPressed) {
+                if (flyUpWindow <= 0) {
+                    jumpWasPressed = true;
+                    flyUpWindow = 10;
+                    if (isOnGround()) jump();
+                } else {
+                    startToFly();
+                    flyUpWindow = 0;
+                }
+            } else if (!isJumpPressed()) jumpWasPressed = false;
+            if (flyUpWindow > 0) flyUpWindow--;
+            else jumpWasPressed = false;
 
             return new Vec3d(0, movementInput.y, f1);
         } else {
