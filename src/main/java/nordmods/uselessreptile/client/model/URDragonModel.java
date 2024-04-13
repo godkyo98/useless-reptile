@@ -5,6 +5,7 @@ import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.config.URClientConfig;
 import nordmods.uselessreptile.client.util.AssetCache;
+import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 import nordmods.uselessreptile.client.util.model_data.ModelDataUtil;
 import nordmods.uselessreptile.client.util.model_data.base.DragonModelData;
@@ -133,7 +134,7 @@ public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T
     public RenderLayer getRenderType(T entity, Identifier texture) {
         if (!ResourceUtil.isResourceReloadFinished) return RenderLayer.getEntityCutout(texture);
 
-        AssetCache assetCache = entity.getAssetCache();
+        DragonAssetCache assetCache = entity.getAssetCache();
         RenderLayer renderType = assetCache.getRenderTypeCache();
         if (renderType != null) return renderType;
 

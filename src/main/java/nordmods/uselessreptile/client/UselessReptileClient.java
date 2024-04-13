@@ -6,9 +6,8 @@ import net.fabricmc.api.Environment;
 import nordmods.uselessreptile.client.config.URClientConfig;
 import nordmods.uselessreptile.client.init.*;
 import nordmods.uselessreptile.client.network.*;
-import nordmods.uselessreptile.client.util.model_data.EquipmentModelDataReloadListener;
 import nordmods.uselessreptile.client.util.model_data.DragonModelDataReloadListener;
-import nordmods.uselessreptile.common.init.UREvents;
+import nordmods.uselessreptile.client.util.model_data.EquipmentModelDataReloadListener;
 
 @Environment(EnvType.CLIENT)
 public class UselessReptileClient implements ClientModInitializer {
@@ -19,7 +18,7 @@ public class UselessReptileClient implements ClientModInitializer {
         EquipmentModelDataReloadListener.init();
         URModelPredicates.init();
         URRenderers.init();
-        //URClientEvents.init();
+        URClientEvents.init();
         URKeybinds.init();
         URScreens.init();
 

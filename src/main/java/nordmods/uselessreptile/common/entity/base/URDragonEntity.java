@@ -44,7 +44,8 @@ import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.PositionSource;
 import net.minecraft.world.event.listener.EntityGameEventHandler;
 import net.minecraft.world.event.listener.GameEventListener;
-import nordmods.uselessreptile.client.util.AssetCache;
+import nordmods.uselessreptile.client.util.AssetCahceOwner;
+import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonNavigation;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
@@ -64,7 +65,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory {
+public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner {
     public int attackType = 1;
     protected double animationSpeed = 1;
     protected float rotationProgress;
@@ -678,9 +679,9 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     //asset location caching so mod doesn't have to make stupid amount of string operations and map references each frame
-    @Environment(EnvType.CLIENT) private final AssetCache assetCache = new AssetCache();
+    @Environment(EnvType.CLIENT) private final DragonAssetCache assetCache = new DragonAssetCache();
     @Environment(EnvType.CLIENT)
-    public AssetCache getAssetCache() {
+    public DragonAssetCache getAssetCache() {
         return assetCache;
     }
 }

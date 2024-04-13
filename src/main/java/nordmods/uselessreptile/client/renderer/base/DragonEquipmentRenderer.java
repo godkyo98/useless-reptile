@@ -8,20 +8,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import nordmods.uselessreptile.client.model.special.DragonEqupmentModel;
-import nordmods.uselessreptile.client.renderer.layers.URDragonGlowingLayer;
 import nordmods.uselessreptile.client.renderer.layers.URGlowingLayer;
 import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
-import org.joml.Quaternionf;
-import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.GeoObjectRenderer;
-import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
-import software.bernie.geckolib.util.RenderUtils;
 
 public class DragonEquipmentRenderer extends GeoObjectRenderer<DragonEquipmentAnimatable> {
     public DragonEquipmentRenderer() {
