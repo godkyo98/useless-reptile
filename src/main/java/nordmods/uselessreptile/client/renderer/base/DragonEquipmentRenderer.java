@@ -23,7 +23,6 @@ public class DragonEquipmentRenderer extends GeoObjectRenderer<DragonEquipmentAn
         addRenderLayer(new URGlowingLayer<>(this));
     }
 
-    //todo update old equipment models to have proper size
     public void render(MatrixStack poseStack, DragonEquipmentAnimatable animatable, @Nullable VertexConsumerProvider bufferSource, @Nullable RenderLayer renderType,
                        @Nullable VertexConsumer buffer, int packedLight) {
         this.animatable = animatable;
