@@ -32,6 +32,12 @@
     "item.uselessreptile.lightning_chaser_spawn_egg": "Lightning Chaser Spawn Egg",
     "item.uselessreptile.flute": "Flute",
 
+    "tooltip.uselessreptile.hidden": "Hold Left Shift for more info",
+    "tooltip.uselessreptile.flute": "Can be used to command River Pikehorns.\nRight-click in air while crouching to change mode",
+    "tooltip.uselessreptile.flute_mode0": "Flute mode: Call",
+    "tooltip.uselessreptile.flute_mode1": "Flute mode: Gather Fish",
+    "tooltip.uselessreptile.flute_mode2": "Flute mode: Attack Target",
+
     "entity.uselessreptile.wyvern": "Swamp Wyvern",
     "entity.uselessreptile.moleclaw": "Moleclaw",
     "entity.uselessreptile.river_pikehorn": "River Pikehorn",
@@ -69,9 +75,6 @@
 
     "other.uselessreptile.none": "None",
     "other.uselessreptile.sound_respond": "%1$s will now respond to the following sound: %2$s",
-    "other.uselessreptile.flute_mode0": "Flute mode: Call",
-    "other.uselessreptile.flute_mode1": "Flute mode: Gather Fish",
-    "other.uselessreptile.flute_mode2": "Flute mode: Attack Target",
 
     "config.uselessreptile.title": "Useless Reptile Configuration",
     "config.uselessreptile.category.gameplay" : "Gameplay Options",
@@ -137,7 +140,7 @@
     "config.uselessreptile.option.dragonSpawnGroupCapacity": "Dragon Spawn Group Capacity",
     "config.uselessreptile.option.smallDragonSpawnGroupCapacity": "Small Dragon Spawn Group Capacity",
     "config.uselessreptile.option.undergroundDragonSpawnGroupCapacity": "Underground Dragon Spawn Group Capacity",
-    "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown": "Lightning Chaser Spawn Timer",
+    "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown": "Lightning Chaser Spawn Timer Cooldown",
 
     "config.uselessreptile.requires_restart.@Tooltip" : "\nChanging this option requires game restart",
     "config.uselessreptile.group.spawnWeight.@Tooltip" : "Spawn weights for each dragon. Each option allows you to control frequency of appearing of specific dragon",
@@ -145,9 +148,9 @@
     "config.uselessreptile.group.dragonBehaviour.@Tooltip" : "Options for changing behavior of dragons in game",
     "config.uselessreptile.group.camera.@Tooltip" : "Settings for camera when you riding the dragon",
     "config.uselessreptile.group.dragonAppearance.@Tooltip" : "Options to change how dragons look",
-    "config.uselessreptile.group.groupSize.@Tooltip" : "Defines in group sizes of dragons when they spawn naturally. Minimal group size always must be equal or less than maximum one.",
+    "config.uselessreptile.group.groupSize.@Tooltip" : "Defines group sizes of dragons when they spawn naturally. Minimal group size always must be equal or less than maximum one.",
     "config.uselessreptile.group.globalMultipliers.@Tooltip" : "Multipliers for specific base attribute of ALL dragons",
-    "config.uselessreptile.group.dragonAttributes.@Tooltip" : "Base dragon attributes. Note that in vanilla game attribute values are limited by certain range (this can be changed by other mods): \n§6Damage: §c[0;2048] \n§6Knockback: §c[0;5] \n§6Health: §c[1;1024] \n§6Armor: §c[0;30] \n§6Armor toughness: §c[0;20] \n§6Ground and flying speed: §c[0;1024]",
+    "config.uselessreptile.group.dragonAttributes.@Tooltip" : "Base dragon attributes. Note that in vanilla game attribute values are limited by certain range (this can be changed by other mods): \n§6Damage: §c[0;2048] \n§6Knockback: §c[0;5] \n§6Health: §c[1;1024] \n§6Armor: §c[0;30] \n§6Armor toughness: §c[0;20] \n§6Ground and flying speed: §c[0;1024] \nOther values are technically not attributes and added by the mod itself and have no limitations. Attack cooldowns and acceleration duration are measured in ticks, rotation speeds - in degrees. Movement speed is measured in corgi-sized meteors",
 
     "config.uselessreptile.option.dragonSpawnWeight.@Tooltip": "Responsible for how often this dragon spawn in the world.\nSetting this to 0 will disable spawning \n§cValues lower than 0 may cause crash",
     "config.uselessreptile.option.blockDropChance.@Tooltip": "Defines percentage of blocks that will be dropped after some of block-breaking dragon attacks",
@@ -186,7 +189,7 @@
     "config.uselessreptile.option.moleclawBaseSecondaryAttackCooldown.@Tooltip": "Melee attack cooldown (in ticks)",
     "config.uselessreptile.option.pikehornBasePrimaryAttackCooldown.@Tooltip": "Melee attack cooldown (in ticks)",
     "config.uselessreptile.option.lightningChaserBasePrimaryAttackCooldown.@Tooltip": "Lightning breath attack cooldown (in ticks)",
-    "config.uselessreptile.option.lightningChaserBaseSecondaryAttackCooldown.@Tooltip": "Melee and shockwave attack cooldown (in ticks). Note: shockwave attack is always 10 times bigger than one in this field",
+    "config.uselessreptile.option.lightningChaserBaseSecondaryAttackCooldown.@Tooltip": "Melee and shockwave attack cooldown (in ticks). Note: shockwave attack cooldown is always 10 times bigger than one in this field",
     "config.uselessreptile.option.spawnGroupCapacity.@Tooltip": "Maximum capacity of this group. \nGroup includes following entities: %s",
     "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip": "Amount of time (in ticks) that must pass before Lightning Chaser can attempt to spawn near the same player",
 
