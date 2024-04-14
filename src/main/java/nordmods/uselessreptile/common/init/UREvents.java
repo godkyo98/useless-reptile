@@ -20,7 +20,6 @@ public class UREvents {
                     worldTimer.setTimer(worldTimer.getTimer() - 1);
                     return;
                 }
-                //todo config
                 for (ServerPlayerEntity player : world.getPlayers()) {
                     if (!(player instanceof LightningChaserSpawnTimer playerTimer)) continue;
                     if (player.getY() < 60) continue;
@@ -41,7 +40,7 @@ public class UREvents {
                                     pos.getZ());
                             URPacketHelper.playSound(lightningChaser, URSounds.LIGHTNING_CHASER_DISTANT_ROAR, lightningChaser.getSoundCategory(), 1, 1, 1);
                         }
-                        playerTimer.setTimer(24000);
+                        playerTimer.setTimer(URConfig.getConfig().lightningChaserThunderstormSpawnTimerCooldown);
                         break;
                     }
                 }

@@ -138,6 +138,15 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.lightningChaserThunderstormSpawnChance = val)
                 .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
                 .build();
+        Option<Integer> lightningChaserThunderstormSpawnTimerCooldown = Option.<Integer>createBuilder()
+                .name(key("option.lightningChaserThunderstormSpawnTimerCooldown"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip")).build())
+                .binding(defaults.lightningChaserThunderstormSpawnTimerCooldown,
+                        () -> config.lightningChaserThunderstormSpawnTimerCooldown,
+                        val -> config.lightningChaserThunderstormSpawnTimerCooldown = val)
+                .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
+                .build();
 
         Option<Integer> dragonSpawnGroupCapacity = Option.<Integer>createBuilder()
                 .name(key("option.dragonSpawnGroupCapacity"))
@@ -264,6 +273,7 @@ public class ModMenuIntegration implements ModMenuApi {
         spawnWeightGroup.option(pikehornSpawnWeight);
         spawnWeightGroup.option(lightningChaserSpawnWeight);
         spawnWeightGroup.option(lightningChaserThunderstormSpawnChance);
+        spawnWeightGroup.option(lightningChaserThunderstormSpawnTimerCooldown);
 
         spawnGroupsGroup.option(dragonSpawnGroupCapacity);
         spawnGroupsGroup.option(undergroundDragonSpawnGroupCapacity);

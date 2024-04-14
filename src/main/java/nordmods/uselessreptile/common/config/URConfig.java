@@ -25,8 +25,10 @@ public class URConfig {
     public int pikehornSpawnWeight = 1;
     @SerialEntry
     public int lightningChaserSpawnWeight = 0;
-    @SerialEntry(comment = "Defines a chance of Lightning Chaser spawning near player during thunderstorms each 30 seconds")
+    @SerialEntry(comment = "Defines a chance of Lightning Chaser spawning near player during thunderstorms each 30 seconds (1200 ticks)")
     public int lightningChaserThunderstormSpawnChance = 10;
+    @SerialEntry(comment = "Amount of time (in ticks) that must pass before Lightning Chaser can attempt to spawn near the same player")
+    public int lightningChaserThunderstormSpawnTimerCooldown = 24000;
     @SerialEntry(comment = "SPAWN GROUP CAPACITIES")
     public int dragonSpawnGroupCapacity = 2;
     @SerialEntry
@@ -49,8 +51,7 @@ public class URConfig {
     public int lightningChaserMinGroupSize = 1;
     @SerialEntry
     public int lightningChaserMaxGroupSize = 1;
-
-    @SerialEntry(comment = "BEHAVIOUR")
+    @SerialEntry(comment = "BEHAVIOUR \nPossible values: ALL, TAMED, DISABLED")
     public DragonGriefing allowDragonGriefing = DragonGriefing.ALL;
     @SerialEntry
     public int blockDropChance = 100;

@@ -137,6 +137,7 @@
     "config.uselessreptile.option.dragonSpawnGroupCapacity": "Dragon Spawn Group Capacity",
     "config.uselessreptile.option.smallDragonSpawnGroupCapacity": "Small Dragon Spawn Group Capacity",
     "config.uselessreptile.option.undergroundDragonSpawnGroupCapacity": "Underground Dragon Spawn Group Capacity",
+    "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown": "Lightning Chaser Spawn Timer",
 
     "config.uselessreptile.requires_restart.@Tooltip" : "\nChanging this option requires game restart",
     "config.uselessreptile.group.spawnWeight.@Tooltip" : "Spawn weights for each dragon. Each option allows you to control frequency of appearing of specific dragon",
@@ -187,6 +188,7 @@
     "config.uselessreptile.option.lightningChaserBasePrimaryAttackCooldown.@Tooltip": "Lightning breath attack cooldown (in ticks)",
     "config.uselessreptile.option.lightningChaserBaseSecondaryAttackCooldown.@Tooltip": "Melee and shockwave attack cooldown (in ticks). Note: shockwave attack is always 10 times bigger than one in this field",
     "config.uselessreptile.option.spawnGroupCapacity.@Tooltip": "Maximum capacity of this group. \nGroup includes following entities: %s",
+    "config.uselessreptile.option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip": "Amount of time (in ticks) that must pass before Lightning Chaser can attempt to spawn near the same player",
 
     "effect.uselessreptile.acid": "Acid",
 
