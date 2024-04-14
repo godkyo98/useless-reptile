@@ -8,6 +8,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import nordmods.uselessreptile.client.model.special.DragonEqupmentModel;
+import nordmods.uselessreptile.client.renderer.layers.BannerLayer;
+import nordmods.uselessreptile.client.renderer.layers.DragonPassengerLayer;
 import nordmods.uselessreptile.client.renderer.layers.URGlowingLayer;
 import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
 import nordmods.uselessreptile.client.util.ResourceUtil;
@@ -21,6 +23,8 @@ public class DragonEquipmentRenderer extends GeoObjectRenderer<DragonEquipmentAn
     public DragonEquipmentRenderer() {
         super(new DragonEqupmentModel());
         addRenderLayer(new URGlowingLayer<>(this));
+        addRenderLayer(new DragonPassengerLayer<>(this, "rider"));
+        addRenderLayer(new BannerLayer<>(this));
     }
 
     public void render(MatrixStack poseStack, DragonEquipmentAnimatable animatable, @Nullable VertexConsumerProvider bufferSource, @Nullable RenderLayer renderType,

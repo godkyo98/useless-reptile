@@ -5,10 +5,8 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Items;
 import nordmods.uselessreptile.client.model.LightningChaserEntityModel;
-import nordmods.uselessreptile.client.renderer.base.URRideableDragonRenderer;
+import nordmods.uselessreptile.client.renderer.base.URDragonRenderer;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
@@ -18,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class LightningChaserEntityRenderer extends URRideableDragonRenderer<LightningChaserEntity> {
+public class LightningChaserEntityRenderer extends URDragonRenderer<LightningChaserEntity> {
     public static final Map<UUID, Vector3f> headPos = new HashMap<>();
 
     public LightningChaserEntityRenderer(EntityRendererFactory.Context renderManager) {
-        super(renderManager, new LightningChaserEntityModel(), true, true, "rider");
+        super(renderManager, new LightningChaserEntityModel());
         shadowRadius = 1.5f;
     }
 

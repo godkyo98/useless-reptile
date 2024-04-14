@@ -146,17 +146,6 @@
 					"pivot": [0, 35, 2]
 				},
 				{
-					"name": "saddle_front",
-					"parent": "body_front",
-					"pivot": [0, 35, 2]
-				},
-				{
-					"name": "banner",
-					"parent": "saddle_front",
-					"pivot": [0, 50, -6],
-					"rotation": [10, 0, 0]
-				},
-				{
 					"name": "Tleg_front_right",
 					"parent": "body_front",
 					"pivot": [-8, 29, -12]
@@ -380,23 +369,6 @@
 					"name": "jaw",
 					"parent": "head",
 					"pivot": [0, 30.5, -34]
-				},
-				{
-					"name": "saddle_neck",
-					"parent": "neck",
-					"pivot": [0, 30, -23]
-				},
-				{
-					"name": "ropes",
-					"parent": "saddle_neck",
-					"pivot": [0, 35.1, -23.2],
-					"rotation": [-1, 0, 0]
-				},
-				{
-					"name": "rider",
-					"parent": "body_front",
-					"pivot": [0, 40.25, -9.825],
-					"rotation": [25, 0, 0]
 				}
 			]
 		}

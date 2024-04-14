@@ -419,26 +419,6 @@
 					]
 				},
 				{
-					"name": "saddle_neck1",
-					"parent": "neck1",
-					"pivot": [0, 30.75, -0.6]
-				},
-				{
-					"name": "Tsaddle_ropes",
-					"parent": "saddle_neck1",
-					"pivot": [0, 30.85, -21.3]
-				},
-				{
-					"name": "Asaddle_ropes",
-					"parent": "Tsaddle_ropes",
-					"pivot": [0, 30.85, -21.3]
-				},
-				{
-					"name": "saddle_ropes",
-					"parent": "Asaddle_ropes",
-					"pivot": [0, 30.85, -21.3]
-				},
-				{
 					"name": "spike15",
 					"parent": "front",
 					"pivot": [0, 19.75, -10.5],
@@ -499,17 +479,6 @@
 					]
 				},
 				{
-					"name": "saddle_front",
-					"parent": "front",
-					"pivot": [0, 22, 4]
-				},
-				{
-					"name": "rider",
-					"parent": "saddle_front",
-					"pivot": [0, 33.8, -1.5],
-					"rotation": [-2.5, 0, 0]
-				},
-				{
 					"name": "back",
 					"parent": "dragon",
 					"pivot": [0, 21.7, 4],
@@ -537,11 +506,6 @@
 					"name": "tail1",
 					"parent": "Ttail1",
 					"pivot": [0, 30.75, 19]
-				},
-				{
-					"name": "saddle_tail1",
-					"parent": "tail1",
-					"pivot": [0, 30.75, 45]
 				},
 				{
 					"name": "Ttail2",

@@ -428,7 +428,8 @@
 								"east": {"uv": [496, 61], "uv_size": [-16, -2]},
 								"south": {"uv": [488, 63], "uv_size": [12, -2]},
 								"west": {"uv": [496, 61], "uv_size": [16, -2]},
-								"up": {"uv": [488, 79], "uv_size": [12, -16]}
+								"up": {"uv": [488, 79], "uv_size": [12, -16]},
+								"down": {"uv": [500, 63], "uv_size": [12, 16]}
 							}
 						},
 						{
@@ -505,6 +506,11 @@
 					"parent": "saddle_front",
 					"pivot": [0, 33.8, -1.5],
 					"rotation": [-2.5, 0, 0]
+				},
+				{
+					"name": "banner",
+					"parent": "saddle_front",
+					"pivot": [0, 43.5, 5]
 				},
 				{
 					"name": "back",

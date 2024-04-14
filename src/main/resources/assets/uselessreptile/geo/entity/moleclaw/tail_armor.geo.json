@@ -26,7 +26,7 @@
 					"pivot": [7, 24, 9],
 					"cubes": [
 						{
-							"origin": [4.97, 14.935, 4.96],
+							"origin": [4.97, 15.035, 4.96],
 							"size": [6.06, 13.13, 8.08],
 							"uv": {
 								"north": {"uv": [8, 115], "uv_size": [6, 13]},
@@ -75,7 +75,7 @@
 					"pivot": [-7, 24, 9],
 					"cubes": [
 						{
-							"origin": [-11.03, 14.935, 4.96],
+							"origin": [-11.03, 15.035, 4.96],
 							"size": [6.06, 13.13, 8.08],
 							"uv": {
 								"north": {"uv": [14, 115], "uv_size": [-6, 13]},
@@ -129,7 +129,7 @@
 					"pivot": [0, 30, 16.5],
 					"cubes": [
 						{
-							"origin": [-5.05, 24.955, 12.92],
+							"origin": [-5.05, 25.055, 12.92],
 							"size": [10.1, 9.09, 16.16],
 							"uv": {
 								"north": {"uv": [58, 65], "uv_size": [10, 9]},
@@ -153,7 +153,7 @@
 					"pivot": [0, 30, 29],
 					"cubes": [
 						{
-							"origin": [-4.04, 25.965, 25.92],
+							"origin": [-4.04, 26.065, 25.92],
 							"size": [8.08, 7.07, 16.16],
 							"uv": {
 								"north": {"uv": [76, 36], "uv_size": [8, 7]},
@@ -177,7 +177,7 @@
 					"pivot": [0, 30, 42],
 					"cubes": [
 						{
-							"origin": [-3.03, 26.975, 39.425],
+							"origin": [-3.03, 27.075, 39.425],
 							"size": [6.06, 5.05, 15.15],
 							"uv": {
 								"north": {"uv": [91, 89], "uv_size": [6, 5]},
@@ -201,7 +201,7 @@
 					"pivot": [0, 30, 54.5],
 					"cubes": [
 						{
-							"origin": [-2.02, 27.985, 52.43],
+							"origin": [-2.02, 28.085, 52.43],
 							"size": [4.04, 3.03, 14.14],
 							"uv": {
 								"north": {"uv": [42, 115], "uv_size": [4, 3]},
@@ -228,17 +228,6 @@
 					"name": "body_front",
 					"parent": "Tbody_front",
 					"pivot": [0, 35, 2]
-				},
-				{
-					"name": "saddle_front",
-					"parent": "body_front",
-					"pivot": [0, 35, 2]
-				},
-				{
-					"name": "banner",
-					"parent": "saddle_front",
-					"pivot": [0, 50, -6],
-					"rotation": [10, 0, 0]
 				},
 				{
 					"name": "Tleg_front_right",
@@ -424,23 +413,6 @@
 					"name": "jaw",
 					"parent": "head",
 					"pivot": [0, 30.5, -34]
-				},
-				{
-					"name": "saddle_neck",
-					"parent": "neck",
-					"pivot": [0, 30, -23]
-				},
-				{
-					"name": "ropes",
-					"parent": "saddle_neck",
-					"pivot": [0, 35.1, -23.2],
-					"rotation": [-1, 0, 0]
-				},
-				{
-					"name": "rider",
-					"parent": "body_front",
-					"pivot": [0, 40.25, -9.825],
-					"rotation": [25, 0, 0]
 				}
 			]
 		}

@@ -7,13 +7,13 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.Items;
 import nordmods.uselessreptile.client.model.WyvernEntityModel;
-import nordmods.uselessreptile.client.renderer.base.URRideableDragonRenderer;
+import nordmods.uselessreptile.client.renderer.base.URDragonRenderer;
 import nordmods.uselessreptile.common.entity.WyvernEntity;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 
-public class WyvernEntityRenderer extends URRideableDragonRenderer<WyvernEntity> {
+public class WyvernEntityRenderer extends URDragonRenderer<WyvernEntity> {
     public WyvernEntityRenderer(EntityRendererFactory.Context renderManager) {
-        super(renderManager, new WyvernEntityModel(), true, false, "rider");
+        super(renderManager, new WyvernEntityModel());
         shadowRadius = 1.5f;
     }
 
