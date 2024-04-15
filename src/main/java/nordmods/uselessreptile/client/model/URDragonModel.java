@@ -3,7 +3,6 @@ package nordmods.uselessreptile.client.model;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
-import nordmods.uselessreptile.client.config.URClientConfig;
 import nordmods.uselessreptile.client.util.AssetCache;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.client.util.ResourceUtil;
@@ -30,21 +29,11 @@ public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T
         Identifier id = assetCache.getAnimationLocationCache();
         if (id != null) return id;
 
-        DragonModelData data;
-        if (!URClientConfig.getConfig().disableNamedEntityModels && entity.getCustomName() != null) {
-            data = ModelDataUtil.getNametagDragonModelData(entity);
-            if (data != null && ResourceUtil.doesExist(data.modelData().animation())) {
-                id = data.modelData().animation();
-                assetCache.setAnimationLocationCache(id);
-                return data.modelData().animation();
-            }
-        }
-
-        data = ModelDataUtil.getVariantDragonModelData(entity);
+        DragonModelData data  = ModelDataUtil.getDragonModelData(entity);
         if (data != null && ResourceUtil.doesExist(data.modelData().animation())) {
             id = data.modelData().animation();
             assetCache.setAnimationLocationCache(id);
-            return data.modelData().animation();
+            return id;
         }
 
         id = getDefaultAnimation(entity);
@@ -63,21 +52,11 @@ public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
 
-        DragonModelData data;
-        if (!URClientConfig.getConfig().disableNamedEntityModels && entity.getCustomName() != null) {
-            data = ModelDataUtil.getNametagDragonModelData(entity);
-            if (data != null && ResourceUtil.doesExist(data.modelData().model())) {
-                id = data.modelData().model();
-                assetCache.setModelLocationCache(id);
-                return data.modelData().model();
-            }
-        }
-
-        data = ModelDataUtil.getVariantDragonModelData(entity);
+        DragonModelData data = ModelDataUtil.getDragonModelData(entity);
         if (data != null && ResourceUtil.doesExist(data.modelData().model())) {
             id = data.modelData().model();
             assetCache.setModelLocationCache(id);
-            return data.modelData().model();
+            return id;
         }
 
         id = getDefaultModel(entity);
@@ -96,21 +75,11 @@ public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 
-        DragonModelData data;
-        if (!URClientConfig.getConfig().disableNamedEntityModels && entity.getCustomName() != null) {
-            data = ModelDataUtil.getNametagDragonModelData(entity);
-            if (data != null && ResourceUtil.doesExist(data.modelData().texture())) {
-                id = data.modelData().texture();
-                assetCache.setTextureLocationCache(id);
-                return data.modelData().texture();
-            }
-        }
-
-        data = ModelDataUtil.getVariantDragonModelData(entity);
+        DragonModelData data = ModelDataUtil.getDragonModelData(entity);
         if (data != null && ResourceUtil.doesExist(data.modelData().texture())) {
             id = data.modelData().texture();
             assetCache.setTextureLocationCache(id);
-            return data.modelData().texture();
+            return id;
         }
 
         id = getDefaultTexture(entity);
@@ -138,14 +107,16 @@ public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T
         RenderLayer renderType = assetCache.getRenderTypeCache();
         if (renderType != null) return renderType;
 
-        DragonModelData data = ModelDataUtil.getDragonModelData(entity, assetCache.isNametagModel());
+        DragonModelData data = ModelDataUtil.getDragonModelData(entity);
         if (data != null) {
             renderType = data.modelData().renderType();
             assetCache.setRenderTypeCache(renderType);
             return renderType;
         }
 
-        return RenderLayer.getEntityCutout(texture);
+        renderType = RenderLayer.getEntityCutout(texture);
+        assetCache.setRenderTypeCache(renderType);
+        return renderType;
     }
 
 }

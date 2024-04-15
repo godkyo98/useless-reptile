@@ -26,20 +26,15 @@ public class ModelDataUtil {
             if (temp != null && temp.nametagAccessible()) dragonModelData = temp;
             else dragonModelData = dragonModelDataMap.get(dragon.getVariant());
         }
-        dragon.getAssetCache().setNametagModel(viaNametag);
         return dragonModelData;
     }
 
     @Nullable
-    public static DragonModelData getNametagDragonModelData(URDragonEntity dragon) {
-        DragonModelData dragonModelData = getDragonModelData(dragon, true);
-        if (dragonModelData == null) dragonModelData = getVariantDragonModelData(dragon);
+    public static DragonModelData getDragonModelData(URDragonEntity dragon) {
+        DragonModelData dragonModelData
+                = URClientConfig.getConfig().disableNamedEntityModels || dragon.getCustomName() == null ? null : getDragonModelData(dragon, true);
+        if (dragonModelData == null) dragonModelData = getDragonModelData(dragon, false);
         return dragonModelData;
-    }
-
-    @Nullable
-    public static DragonModelData getVariantDragonModelData(URDragonEntity dragon) {
-        return getDragonModelData(dragon, false);
     }
 
     @Nullable
@@ -47,7 +42,7 @@ public class ModelDataUtil {
         if (!ResourceUtil.isResourceReloadFinished) return null;
 
         Identifier id = Registries.ITEM.getId(item);
-        DragonModelData dragonModelData = getNametagDragonModelData(dragon);
+        DragonModelData dragonModelData = getDragonModelData(dragon);
         if (dragonModelData != null && dragonModelData.equipmentModelDataOverrides() != null)
             for (EquipmentModelData data : dragonModelData.equipmentModelDataOverrides()) {
                 if (data.item().equals(id)) return data;
@@ -56,7 +51,7 @@ public class ModelDataUtil {
     }
 
     @Nullable
-    private static EquipmentModelData getDefaultEquipmentModelData(URDragonEntity dragon, Identifier id) {
+    public static EquipmentModelData getDefaultEquipmentModelData(URDragonEntity dragon, Identifier id) {
         for (EquipmentModelData data : EquipmentModelData.equipmentModelDataHolder.get(dragon.getDragonID())) {
             if (data.item().equals(id)) return data;
         }

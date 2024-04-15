@@ -90,6 +90,8 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
             return renderType;
         }
 
-        return RenderLayer.getEntityCutout(texture);
+        renderType = RenderLayer.getEntityCutout(texture);
+        assetCache.setRenderTypeCache(renderType);
+        return renderType;
     }
 }
