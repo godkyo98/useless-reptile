@@ -9,6 +9,7 @@ public class AssetCache {
     private Identifier animationLocationCache;
     private Identifier glowLayerLocationCache;
     private RenderLayer renderTypeCache;
+    private boolean hasGlowing = true;
 
     public Identifier getGlowLayerLocationCache() {
         return glowLayerLocationCache;
@@ -50,11 +51,20 @@ public class AssetCache {
         renderTypeCache = state;
     }
 
+    public boolean hasGlowing() {
+        return hasGlowing;
+    }
+    public void setHasGlowing(boolean state) {
+        hasGlowing = state;
+    }
+
+
     public void cleanCache() {
         modelLocationCache = null;
         textureLocationCache = null;
         animationLocationCache = null;
         glowLayerLocationCache = null;
         renderTypeCache = null;
+        hasGlowing = true;
     }
 }

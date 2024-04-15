@@ -4,6 +4,7 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.client.config.URClientConfig;
+import nordmods.uselessreptile.client.util.AssetCache;
 import nordmods.uselessreptile.client.util.AssetCahceOwner;
 import nordmods.uselessreptile.client.util.ResourceUtil;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -20,13 +21,19 @@ public class URGlowingLayer<T extends GeoAnimatable & AssetCahceOwner> extends G
                        int packedLight, int packedOverlay) {
         if (URClientConfig.getConfig().disableEmissiveTextures) return;
 
+        AssetCache assetCache = animatable.getAssetCache();
         if (!ResourceUtil.isResourceReloadFinished) {
-            animatable.getAssetCache().setGlowLayerLocationCache(null);
+            assetCache.setGlowLayerLocationCache(null);
+            assetCache.setHasGlowing(true);
             return;
         }
 
+        if (!assetCache.hasGlowing()) return;
         Identifier id = getGlowingTexture(animatable);
-        if (!ResourceUtil.doesExist(id)) return;
+        if (!ResourceUtil.doesExist(id)) {
+            assetCache.setHasGlowing(false);
+            return;
+        }
 
         RenderLayer cameo =  RenderLayer.getEyes(id);
         getRenderer().reRender(getDefaultBakedModel(animatable), matrixStackIn, bufferSource, animatable, cameo,

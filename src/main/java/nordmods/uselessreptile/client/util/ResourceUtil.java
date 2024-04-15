@@ -20,6 +20,7 @@ public class ResourceUtil {
         return name;
     }
 
+    //note: very resource intense, try to avoid repetitive calls
     public static boolean doesExist(Identifier id) {
         return  id != null && MinecraftClient.getInstance().getResourceManager().getResource(id).isPresent();
     }

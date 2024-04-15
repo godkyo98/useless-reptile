@@ -41,10 +41,10 @@ public class URClientEvents {
                 }
 
                 Identifier id = dragonEquipmentRenderer.getGeoModel().getModelResource(dragonEquipmentAnimatable);
-                if (!ResourceUtil.doesExist(id)) continue;
+                if (id == null) continue;
                 BakedGeoModel bakedEquipmentModel = dragonEquipmentRenderer.getGeoModel().getBakedModel(id);
                 id = dragonEquipmentRenderer.getGeoModel().getTextureResource(dragonEquipmentAnimatable);
-                if (!ResourceUtil.doesExist(id)) continue;
+                if (id == null) continue;
 
                 Map<String, CoreGeoBone> equipmentBones = dragonEquipmentAnimatable.equipmentBones;
                 if (equipmentBones.isEmpty()) getSaddleBones(equipmentBones, bakedEquipmentModel);
@@ -73,7 +73,7 @@ public class URClientEvents {
     }
 
     private static void getSaddleBones(Map<String, CoreGeoBone> equipmentBones, CoreBakedGeoModel model) {
-        equipmentBones.clear();
+        //equipmentBones.clear();
         for (CoreGeoBone bone : model.getBones()) addChildren(equipmentBones, bone);
     }
 }

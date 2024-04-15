@@ -46,7 +46,7 @@ public class DragonPassengerLayer<T extends DragonEquipmentAnimatable> extends G
         if (!bone.getName().equals(passengerBone)) return;
 
         Entity passenger = animatable.owner.getPassengerList().size() > passengerNumber ? animatable.owner.getPassengerList().get(passengerNumber) : null;
-        if (passenger != null && !passenger.isInvisible()) {
+        if (passenger != null) {
             matrixStackIn.push();
             passengers.remove(passenger.getUuid());
 
