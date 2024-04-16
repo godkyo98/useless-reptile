@@ -24,9 +24,12 @@ public class PikehornAttackGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (entity.isTargetFriendly(entity.getTarget())) entity.setTarget(null);
-        LivingEntity entityTarget = entity.getTarget();
-        return entityTarget != null && (!(entity.squaredDistanceTo(entityTarget) > maxSearchDistance / (entity.isTamed() ? 1 : 8)));
+        if (entity.isTargetFriendly(entity.getTarget())) {
+            entity.setTarget(null);
+            return false;
+        }
+        target = entity.getTarget();
+        return target != null && (entity.squaredDistanceTo(target) < maxSearchDistance / (entity.isTamed() ? 1 : 8));
     }
 
     @Override

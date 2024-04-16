@@ -1,6 +1,5 @@
 package nordmods.uselessreptile.common.entity;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -18,8 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -39,7 +36,6 @@ import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.items.FluteItem;
-import nordmods.uselessreptile.common.network.AttackTypeSyncS2CPacket;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -140,7 +136,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     private <A extends GeoEntity> PlayState attack(AnimationState<A> event) {
         event.getController().setAnimationSpeed(1/calcCooldownMod());
-        if (isPrimaryAttack()) return playAnim( "attack" + attackType, event);
+        if (isPrimaryAttack()) return playAnim( "attack" + getAttackType(), event);
         return playAnim("attack.none", event);
     }
 
@@ -281,9 +277,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     public void attackMelee(LivingEntity target) {
         setPrimaryAttackCooldown(getMaxPrimaryAttackCooldown());
-        attackType = random.nextInt(3)+1;
-        if (getWorld() instanceof ServerWorld world)
-            for (ServerPlayerEntity player : PlayerLookup.tracking(world, getBlockPos())) AttackTypeSyncS2CPacket.send(player, this);
+        setAttackType(random.nextInt(3)+1);
         tryAttack(target);
     }
 

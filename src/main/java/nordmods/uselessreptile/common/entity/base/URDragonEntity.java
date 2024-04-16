@@ -66,7 +66,6 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner {
-    public int attackType = 1;
     protected double animationSpeed = 1;
     protected float rotationProgress;
     protected float heightMod = 1;
@@ -105,6 +104,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         dataTracker.startTracking(DANCING, false);
         dataTracker.startTracking(TURNING_STATE, (byte)0);//1 - left, 2 - right, 0 - straight
         dataTracker.startTracking(TAMING_PROGRESS, 1);
+        dataTracker.startTracking(ATTACK_TYPE, 1);
         dataTracker.startTracking(SPEED_MODIFIER, 1f);
         dataTracker.startTracking(MOUNTED_OFFSET, 0.35f);
         dataTracker.startTracking(HEIGHT_MODIFIER, 1f);
@@ -128,6 +128,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public static final TrackedData<Integer> SECONDARY_ATTACK_COOLDOWN = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Integer> PRIMARY_ATTACK_COOLDOWN = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Integer> ACCELERATION_DURATION = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Integer> ATTACK_TYPE = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<String> BOUNDED_INSTRUMENT_SOUND = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.STRING);
     public static final TrackedData<String> VARIANT = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.STRING);
 
@@ -141,6 +142,9 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     public int getAccelerationDuration() {return dataTracker.get(ACCELERATION_DURATION);}
     public void setAccelerationDuration(int state) {dataTracker.set(ACCELERATION_DURATION, state);}
+
+    public int getAttackType() {return dataTracker.get(ATTACK_TYPE);}
+    public void setAttackType(int state) {dataTracker.set(ATTACK_TYPE, state);}
 
     public boolean isMovingBackwards() {return dataTracker.get(MOVING_BACKWARDS);}
     public void setMovingBackwards(boolean state) {dataTracker.set(MOVING_BACKWARDS, state);}

@@ -1,6 +1,5 @@
 package nordmods.uselessreptile.common.entity;
 
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.ai.goal.SitGoal;
@@ -24,7 +23,6 @@ import net.minecraft.item.Items;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -51,7 +49,6 @@ import nordmods.uselessreptile.common.init.URPotions;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 import nordmods.uselessreptile.common.init.URTags;
-import nordmods.uselessreptile.common.network.AttackTypeSyncS2CPacket;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import org.jetbrains.annotations.Nullable;
@@ -191,7 +188,7 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
 
     private <A extends GeoEntity> PlayState attack(AnimationState<A> event) {
         event.getController().setAnimationSpeed(1/calcCooldownMod());
-        if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + attackType, event);
+        if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + getAttackType(), event);
         if (isPrimaryAttack()) {
             if (isFlying() && (isMoving() || event.isMoving()) && !isMovingBackwards()) return playAnim("attack.fly.range", event);
             return playAnim("attack.range", event);
@@ -327,9 +324,7 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
 
     public void meleeAttack(LivingEntity target) {
         setSecondaryAttackCooldown(getMaxSecondaryAttackCooldown());
-        attackType = random.nextInt(3)+1;
-        if (getWorld() instanceof ServerWorld world)
-            for (ServerPlayerEntity player : PlayerLookup.tracking(world, getBlockPos())) AttackTypeSyncS2CPacket.send(player, this);
+        setAttackType(random.nextInt(3)+1);
         if (isFlying()) URPacketHelper.playSound(this, URSounds.WYVERN_BITE, SoundCategory.NEUTRAL, 1, 1, 3);
         if (target != null && !getPassengerList().contains(target)) {
             Box targetBox = target.getBoundingBox();

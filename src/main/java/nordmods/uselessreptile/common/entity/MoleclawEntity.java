@@ -3,7 +3,6 @@ package nordmods.uselessreptile.common.entity;
 import com.mojang.authlib.GameProfile;
 import eu.pb4.common.protection.api.CommonProtection;
 import net.fabricmc.fabric.api.mininglevel.v1.MiningLevelManager;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.SitGoal;
@@ -26,7 +25,6 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
@@ -50,7 +48,6 @@ import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.items.DragonArmorItem;
-import nordmods.uselessreptile.common.network.AttackTypeSyncS2CPacket;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -66,7 +63,6 @@ public class MoleclawEntity extends URRideableDragonEntity {
     public int attackDelay = 0;
     public static final float defaultWidth = 2f;
     public static final float defaultHeight = 2.9f;
-    private int attackType = 1;
     private int panicSoundDelay = 0;
 
     public MoleclawEntity(EntityType<? extends URRideableDragonEntity> entityType, World world) {
@@ -179,7 +175,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
 
     private <A extends GeoEntity> PlayState attack(AnimationState<A> event){
         event.getController().setAnimationSpeed(1/calcCooldownMod());
-        if (isSecondaryAttack()) return playAnim( "attack.normal" + attackType, event);
+        if (isSecondaryAttack()) return playAnim( "attack.normal" + getAttackType(), event);
         if (isPrimaryAttack()) {
             if (isPanicking()) return playAnim( "attack.strong.panic", event);
             return playAnim( "attack.strong", event);
@@ -195,17 +191,17 @@ public class MoleclawEntity extends URRideableDragonEntity {
         tryPanic();
 
         if (canBeControlledByRider()) {
-            if (attackDelay > 0) {
-                attackDelay++;
-                if (attackDelay > TRANSITION_TICKS + 1) {
-                    if (isPrimaryAttack()) strongAttack();
-                    if (isSecondaryAttack()) meleeAttack();
-                    attackDelay = 0;
-                }
-            }
+            if (isSecondaryAttackPressed && getSecondaryAttackCooldown() == 0) scheduleNormalAttack();
+            if (isPrimaryAttackPressed && getPrimaryAttackCooldown() == 0) scheduleStrongAttack();
+        }
 
-            if (isSecondaryAttackPressed) tryNormalAttack();
-            if (isPrimaryAttackPressed) tryStrongAttack();
+        if (attackDelay > 0) {
+            attackDelay++;
+            if (attackDelay > TRANSITION_TICKS + 1) {
+                if (isPrimaryAttack()) strongAttack();
+                if (isSecondaryAttack()) meleeAttack();
+                attackDelay = 0;
+            }
         }
     }
 
@@ -393,21 +389,15 @@ public class MoleclawEntity extends URRideableDragonEntity {
         return super.canBeControlledByRider() && !isPanicking();
     }
 
-    public void tryNormalAttack() {
-        if (getSecondaryAttackCooldown() == 0) {
-            if (attackDelay == 0) attackDelay = 6;
-            setSecondaryAttackCooldown(getMaxSecondaryAttackCooldown());
-            attackType = random.nextInt(2)+1;
-            if (getWorld() instanceof ServerWorld world)
-                for (ServerPlayerEntity player : PlayerLookup.tracking(world, getBlockPos())) AttackTypeSyncS2CPacket.send(player, this);
-        }
+    public void scheduleNormalAttack() {
+        setSecondaryAttackCooldown(getMaxSecondaryAttackCooldown());
+        if (attackDelay == 0) attackDelay = 6;
+        setAttackType(random.nextInt(2)+1);
     }
 
-    public void tryStrongAttack() {
-        if (getPrimaryAttackCooldown() == 0) {
-            if (attackDelay == 0) attackDelay = 6;
-            setPrimaryAttackCooldown(getMaxPrimaryAttackCooldown());
-        }
+    public void scheduleStrongAttack() {
+        if (attackDelay == 0) attackDelay = 6;
+        setPrimaryAttackCooldown(getMaxPrimaryAttackCooldown());
     }
 
     private SoundEvent getStepSound(BlockPos pos, BlockState state) {

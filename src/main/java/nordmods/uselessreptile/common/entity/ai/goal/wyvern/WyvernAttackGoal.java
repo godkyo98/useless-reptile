@@ -26,17 +26,18 @@ public class WyvernAttackGoal extends Goal {
     @Override
     public boolean canStart() {
         if (entity.canBeControlledByRider()) return false;
-        if (entity.isTargetFriendly(entity.getTarget())) entity.setTarget(null);
-        LivingEntity entityTarget = entity.getTarget();
-        return entityTarget != null && (!(entity.squaredDistanceTo(entityTarget) > maxSearchDistance));
+        if (entity.isTargetFriendly(entity.getTarget())) {
+            entity.setTarget(null);
+            return false;
+        }
+        target = entity.getTarget();
+        return target != null && (entity.squaredDistanceTo(target) < maxSearchDistance);
     }
 
     @Override
     public boolean shouldContinue() {
         if (target == null) return false;
-        if (!target.isAlive()) {
-            return false;
-        }
+        if (!target.isAlive()) return false;
         return !entity.getNavigation().isIdle() || canStart();
     }
 
@@ -66,14 +67,12 @@ public class WyvernAttackGoal extends Goal {
         entity.getNavigation().startMovingTo(target, 1);
         boolean doesCollide = entity.doesCollide(entity.getAttackBox(), target.getBoundingBox());
 
-        if (entity.getPrimaryAttackCooldown() == 0 && (distance > attackDistance * 4 || !target.isOnGround() || distance < attackDistance && !doesCollide && entity.getY() - target.getY() >= 1)) {
+        if (!doesCollide && entity.getPrimaryAttackCooldown() == 0 && (distance > attackDistance * 4 || !target.isOnGround() || distance < attackDistance && entity.getY() - target.getY() >= 1)) {
             entity.lookAtEntity(target, yawChange, 180);
             entity.shoot();
         }
 
         if (entity.getSecondaryAttackCooldown() > 0) return;
-        if (!doesCollide) return;
-
-        entity.meleeAttack(target);
+        if (doesCollide) entity.meleeAttack(target);
     }
 }

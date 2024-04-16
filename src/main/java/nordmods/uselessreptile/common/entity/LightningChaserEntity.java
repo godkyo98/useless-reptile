@@ -38,7 +38,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
-import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserAttackGoal;
@@ -53,7 +52,6 @@ import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.items.DragonArmorItem;
-import nordmods.uselessreptile.common.network.AttackTypeSyncS2CPacket;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.SyncLightningBreathRotationsS2CPacket;
 import org.jetbrains.annotations.Nullable;
@@ -214,7 +212,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     private <A extends GeoEntity> PlayState attack(AnimationState<A> event) {
         event.getController().setAnimationSpeed(1/calcCooldownMod());
-        if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + attackType, event);
+        if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + getAttackType(), event);
         if (isPrimaryAttack()) {
             if (isFlying()) {
                 if ((isMoving() || event.isMoving()) && !isMovingBackwards()) return playAnim("attack.range.fly", event);
@@ -325,16 +323,10 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         if (isFlying()) secondaryAttackDuration = 30;
         else secondaryAttackDuration = 20;
 
-        if (shockwaveDelay == 0) {
-            shockwave();
-            shockwaveDelay--;
-        }
+        if (shockwaveDelay == 0) shockwave();
         if (shockwaveDelay > -1) shockwaveDelay--;
 
-        if (shootDelay == 0) {
-            shoot();
-            shootDelay--;
-        }
+        if (shootDelay == 0) shoot();
         if (shootDelay > -1) shootDelay--;
 
         if (canBeControlledByRider()) {
@@ -453,9 +445,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     public void meleeAttack(LivingEntity target) {
         setSecondaryAttackCooldown(getMaxSecondaryAttackCooldown());
-        attackType = random.nextInt(3)+1;
-        if (getWorld() instanceof ServerWorld world)
-            for (ServerPlayerEntity player : PlayerLookup.tracking(world, getBlockPos())) AttackTypeSyncS2CPacket.send(player, this);
+        setAttackType(random.nextInt(3)+1);
         if (target != null && !getPassengerList().contains(target)) {
             Box targetBox = target.getBoundingBox();
             if (doesCollide(targetBox, getAttackBox())) tryAttack(target);
