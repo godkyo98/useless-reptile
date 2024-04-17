@@ -5,7 +5,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
+import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
 import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
 
 import java.util.EnumSet;
@@ -60,14 +62,11 @@ public class LightningChaserAttackGoal extends Goal {
             return;
         }
         entity.setSprinting(true);
-        float yawChange = entity.getRotationSpeed();
-        entity.lookAtEntity(target, yawChange, 180);
+        entity.lookAt(target);
 
         double distance = entity.squaredDistanceTo(target);
         if (distance > maxDistanceSquared) entity.getNavigation().startMovingTo(target, 1);
         if (distance < minDistanceSquared) entity.getMoveControl().moveBack();
-        double minDistance = entity.getWidth() * entity.getWidth() * 2;
-        if (distance < minDistance) entity.getMoveControl().moveBack();
 
         if (--attackCooldown <= 0) {
             if (tryMeleeAttack()) return;
@@ -88,7 +87,7 @@ public class LightningChaserAttackGoal extends Goal {
     private boolean tryRangedAttack() {
         if (entity.getPrimaryAttackCooldown() > 0) return false;
         double distance = entity.squaredDistanceTo(target);
-        if (distance < minDistanceSquared) return false;
+        if (distance > LightningBreathEntity.MAX_LENGTH * LightningBreathEntity.MAX_LENGTH * 0.81 || distance < minDistanceSquared) return false;
         entity.triggerShoot();
         return true;
     }
@@ -97,7 +96,7 @@ public class LightningChaserAttackGoal extends Goal {
         if (entity.getSecondaryAttackCooldown() > 0) return false;
         if (!entity.isFlying()) return false;
         double attackDistance = ShockwaveSphereEntity.MAX_RADIUS * ShockwaveSphereEntity.MAX_RADIUS * 0.49;
-        List<Entity> projectiles = entity.getWorld().getOtherEntities(entity, new Box(entity.getBlockPos()).expand(attackDistance), c -> c instanceof ProjectileEntity);
+        List<Entity> projectiles = entity.getWorld().getOtherEntities(entity, new Box(entity.getBlockPos()).expand(attackDistance * 2), c -> c instanceof ProjectileEntity projectile && projectile.getOwner() == target && !projectile.getVelocity().equals(Vec3d.ZERO));
         if (!projectiles.isEmpty()) {
             entity.triggerShockwave();
             return true;

@@ -107,7 +107,6 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
             if (rider instanceof PlayerEntity player) super.travel(getControlledMovementInput(player, player.getVelocity()));
         } else {
             if (isFlying()) {
-                setPitch( MathHelper.clamp(getPitch(), -getPitchLimit(), getPitchLimit()));
                 if (getInAirTimer() < maxInAirTimer) setInAirTimer(getInAirTimer() + 1);
                 super.travel(movementInput);
             } else {
@@ -220,8 +219,8 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
 
     @Override
     public float getRotationSpeed() {
-        if (isFlying()) return rotationSpeedAir * calcSpeedMod();
-        return rotationSpeedGround * calcSpeedMod();
+        if (isFlying()) return rotationSpeedAir * calcSpeedMod() / 2f;
+        return super.getRotationSpeed();
     }
 
     @Override

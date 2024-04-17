@@ -29,9 +29,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
@@ -388,6 +386,17 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     @Override
     public EntityPart[] getParts() {
         return parts;
+    }
+
+    @Override
+    public void lookAt(Vec3d pos) {
+        double dx = pos.getX() - head.getX();
+        double dz = pos.getZ() - head.getZ();
+        double dy = pos.getY() - head.getY() + head.getHeight()/2;
+        double distance = Math.sqrt(dx * dx + dz * dz);
+        float yaw = (float)(MathHelper.atan2(dz, dx) * MathHelper.DEGREES_PER_RADIAN) - 90;
+        float pitch = (float)(MathHelper.atan2(dy, distance) * -MathHelper.DEGREES_PER_RADIAN);
+        setRotation(yaw, pitch);
     }
 
     public void updateChildParts() {

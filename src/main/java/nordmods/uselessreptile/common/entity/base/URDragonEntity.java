@@ -47,6 +47,7 @@ import net.minecraft.world.event.listener.GameEventListener;
 import nordmods.uselessreptile.client.util.AssetCahceOwner;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
+import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonLookControl;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonNavigation;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URStatusEffects;
@@ -94,6 +95,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected URDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
         navigation = new DragonNavigation(this, world);
+        lookControl = new DragonLookControl(this);
     }
 
     @Override
@@ -417,12 +419,11 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
                 setTurningState((byte)1);
             }
             else currentYaw = destinationYaw;
-
         } else {
             setTurningState((byte)0);
         }
         prevYaw = bodyYaw = getYaw();
-        super.setRotation(currentYaw, pitch);
+        super.setRotation(currentYaw, MathHelper.clamp(pitch, -getPitchLimit(), getPitchLimit()));
         headYaw = currentYaw;
     }
 
@@ -461,8 +462,9 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         calculateDimensions();
     }
 
+    //because rotation is called twice within one tick... somehow
     public float getRotationSpeed() {
-        return rotationSpeedGround * calcSpeedMod();
+        return rotationSpeedGround * calcSpeedMod() / 2f;
     }
     public float getPitchLimit() {
         return pitchLimitGround;
@@ -656,6 +658,21 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
                 }
             }
         }
+    }
+
+    //must use that instead of lookAtEntity() for looking at target
+    public void lookAt(Vec3d pos) {
+        double dx = pos.getX() - getX();
+        double dz = pos.getZ() - getZ();
+        double dy = pos.getY() - getEyeY();
+        double distance = Math.sqrt(dx * dx + dz * dz);
+        float yaw = (float)(MathHelper.atan2(dz, dx) * MathHelper.DEGREES_PER_RADIAN) - 90;
+        float pitch = (float)(MathHelper.atan2(dy, distance) * -MathHelper.DEGREES_PER_RADIAN);
+        setRotation(yaw, pitch);
+    }
+
+    public void lookAt(Entity entity) {
+        lookAt(new Vec3d(entity.getX(), entity.getEyeY(), entity.getZ()));
     }
 
     //making public for sake of debug render

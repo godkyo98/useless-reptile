@@ -61,14 +61,14 @@ public class WyvernAttackGoal extends Goal {
         }
         entity.setSprinting(true);
         float yawChange = entity.getRotationSpeed();
-        entity.lookAtEntity(target, yawChange, 180);
+        entity.lookAt(target);
         double attackDistance = entity.getWidth() * 2.0f * (entity.getWidth() * 2.0f);
         double distance = entity.squaredDistanceTo(target);
         entity.getNavigation().startMovingTo(target, 1);
         boolean doesCollide = entity.doesCollide(entity.getAttackBox(), target.getBoundingBox());
 
         if (!doesCollide && entity.getPrimaryAttackCooldown() == 0 && (distance > attackDistance * 4 || !target.isOnGround() || distance < attackDistance && entity.getY() - target.getY() >= 1)) {
-            entity.lookAtEntity(target, yawChange, 180);
+            entity.lookAt(target);
             entity.shoot();
         }
 

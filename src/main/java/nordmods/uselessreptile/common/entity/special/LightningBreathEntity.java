@@ -28,6 +28,7 @@ import nordmods.uselessreptile.common.init.URTags;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class LightningBreathEntity extends ProjectileEntity {
@@ -88,29 +89,41 @@ public class LightningBreathEntity extends ProjectileEntity {
             if (getWorld().isBlockSpaceEmpty(this, getBoundingBox())) return;
             Iterable<BlockPos> blocks = BlockPos.iterateOutwards(getBlockPos(), 3, 2, 3);
             float harnessLimit = 30;
-            float blockBreakLimit = 5;
+            List<FallingBlockEntity> fallingBlockEntities = new ArrayList<>();
             for (BlockPos blockPos : blocks) {
                 BlockState blockState = getWorld().getBlockState(blockPos);
                 PlayerEntity rider = getOwner() instanceof URRideableDragonEntity dragon && dragon.canBeControlledByRider() ?
                         (PlayerEntity) getControllingPassenger() : null;
                 GameProfile playerId = rider != null ? rider.getGameProfile() : CommonProtection.UNKNOWN;
-                if (blockState.isIn(URTags.DRAGON_UNBREAKABLE) || !CommonProtection.canBreakBlock(getWorld(), blockPos, playerId, rider)) continue;
+                if (blockState.isAir() || blockState.isIn(URTags.DRAGON_UNBREAKABLE) || !CommonProtection.canBreakBlock(getWorld(), blockPos, playerId, rider)) continue;
 
                 float hardness =  blockState.getHardness(getWorld(), blockPos);
                 if (hardness < 0) continue;
                 harnessLimit -= hardness;
                 if (harnessLimit < 0) break;
-                if (harnessLimit > 20 && --blockBreakLimit > 0) {
-                    boolean shouldDrop = random.nextDouble() * 100 <= URConfig.getConfig().blockDropChance;
-                    getWorld().breakBlock(blockPos, shouldDrop, this);
-                } else {
-                    FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(getWorld(), blockPos, blockState);
-                    Vec3d velocity = getBlockPos().toCenterPos().subtract(blockPos.toCenterPos()).add(0, 1, 0).normalize().multiply(harnessLimit/30);
-                    fallingBlockEntity.setVelocity(velocity);
-                }
-
-                discard();
+                FallingBlockEntity fallingBlockEntity = FallingBlockEntity.spawnFromBlock(getWorld(), blockPos, blockState);
+                fallingBlockEntities.add(fallingBlockEntity);
             }
+            List<FallingBlockEntity> sorted = new ArrayList<>();
+            while (!fallingBlockEntities.isEmpty()) {
+                int maxY = -1000;
+                FallingBlockEntity toAdd = null;
+                for (FallingBlockEntity fallingBlockEntity : fallingBlockEntities) {
+                    if (fallingBlockEntity.getBlockY() > maxY) {
+                        maxY = fallingBlockEntity.getBlockY();
+                        toAdd = fallingBlockEntity;
+                    }
+                }
+                if (toAdd != null) {
+                    sorted.add(toAdd);
+                    fallingBlockEntities.remove(toAdd);
+                }
+            }
+            sorted.forEach(fallingBlockEntity -> {
+                Vec3d velocity = getBlockPos().toCenterPos().subtract(fallingBlockEntity.getBlockPos().toCenterPos()).add(0, 1, 0).normalize();
+                fallingBlockEntity.setVelocity(velocity);
+            });
+            discard();
         } else discard();
     }
 

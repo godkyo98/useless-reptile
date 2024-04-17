@@ -30,7 +30,7 @@ public class LightningChaserRoamAroundGoal extends Goal {
 
     private BlockPos getRoamingSpot() {
         BlockPos pos = entity.roamingSpot != null ? entity.roamingSpot : entity.getBlockPos();
-        return new BlockPos(pos.getX(), entity.getWorld().getTopY(Heightmap.Type.WORLD_SURFACE, pos.getX(), pos.getZ()) + 48, pos.getZ());
+        return new BlockPos(pos.getX(), entity.getWorld().getTopY(Heightmap.Type.WORLD_SURFACE, pos.getX(), pos.getZ()) + 40, pos.getZ());
     }
 
     @Override

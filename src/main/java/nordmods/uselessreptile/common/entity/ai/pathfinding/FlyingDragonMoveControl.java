@@ -19,6 +19,10 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
         this.state = MoveControl.State.STRAFE;
     }
 
+    public void notMove() {
+        this.state = State.WAIT;
+    }
+
     @Override
     public void tick() {
         if (entity.hasControllingPassenger() || entity.hasVehicle()) return;
@@ -53,7 +57,7 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
                 }
             } else speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
 
-            entity.setMovementSpeed(-speed * entity.getSpeedMod());
+            entity.setMovementSpeed(-speed * entity.getSpeedMod() * 0.5f);
 
         } else if (state == State.MOVE_TO) {
             state = State.WAIT;

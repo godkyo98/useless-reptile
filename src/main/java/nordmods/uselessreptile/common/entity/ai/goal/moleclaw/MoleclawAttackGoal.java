@@ -59,8 +59,7 @@ public class MoleclawAttackGoal extends Goal {
     @Override
     public void tick() {
         entity.setSprinting(true);
-        float yawChange = entity.getRotationSpeed();
-        entity.lookAtEntity(target, yawChange, entity.getPitchLimit());
+        entity.lookAt(target);
         entity.getNavigation().startMovingTo(target, 1);
 
         if (!entity.isMoving()) notMovingTimer++;

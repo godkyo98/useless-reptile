@@ -75,8 +75,8 @@ public abstract class URFlyingDragonEntity extends URDragonEntity implements Fly
 
     @Override
     public float getRotationSpeed() {
-        if (isFlying()) return rotationSpeedAir * calcSpeedMod();
-        return rotationSpeedGround * calcSpeedMod();
+        if (isFlying()) return rotationSpeedAir * calcSpeedMod() / 2f;
+        return super.getRotationSpeed();
     }
 
     @Override
