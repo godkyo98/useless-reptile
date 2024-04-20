@@ -267,6 +267,15 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.blockDropChance = val)
                 .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
                 .build();
+        Option<Boolean> dragonMadness = Option.<Boolean>createBuilder()
+                .name(key("option.dragonMadness"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.dragonMadness.@Tooltip")).build())
+                .binding(config.dragonMadness,
+                        () -> config.dragonMadness,
+                        val -> config.dragonMadness = val)
+                .customController(TickBoxController::new)
+                .build();
 
         spawnWeightGroup.option(wyvernSpawnWeight);
         spawnWeightGroup.option(moleclawSpawnWeight);

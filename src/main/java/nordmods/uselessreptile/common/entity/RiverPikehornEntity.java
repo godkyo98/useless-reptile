@@ -2,6 +2,7 @@ package nordmods.uselessreptile.common.entity;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.SitGoal;
+import net.minecraft.entity.ai.goal.UntamedActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -255,6 +256,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         targetSelector.add(4, new DragonAttackWithOwnerGoal<>(this));
         targetSelector.add(4, new PikehornFluteTargetGoal<>(this, LivingEntity.class));
         targetSelector.add(5, new DragonTrackOwnerAttackerGoal(this));
+        if (URConfig.getConfig().dragonMadness) targetSelector.add(4, new UntamedActiveTargetGoal<>(this, PlayerEntity.class, true, null));
     }
 
     @Override

@@ -55,6 +55,8 @@ public class URConfig {
     public DragonGriefing allowDragonGriefing = DragonGriefing.ALL;
     @SerialEntry
     public int blockDropChance = 100;
+    @SerialEntry
+    public boolean dragonMadness = false;
 
     public static URConfig getConfig() {
         return CONFIG.instance();

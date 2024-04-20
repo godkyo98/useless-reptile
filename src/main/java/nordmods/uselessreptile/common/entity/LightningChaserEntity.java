@@ -3,6 +3,7 @@ package nordmods.uselessreptile.common.entity;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.ai.goal.UntamedActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -110,7 +111,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     protected void initGoals() {
         goalSelector.add(1, new LightningChaserRoamAroundGoal(this));
         goalSelector.add(2, new LightningChaserAttackGoal(this));
-        goalSelector.add(1, new LightningChaserRevengeGoal(this));
+        targetSelector.add(1, new LightningChaserRevengeGoal(this));
+        if (URConfig.getConfig().dragonMadness) targetSelector.add(2, new UntamedActiveTargetGoal<>(this, PlayerEntity.class, true, null));
     }
 
     @Override
