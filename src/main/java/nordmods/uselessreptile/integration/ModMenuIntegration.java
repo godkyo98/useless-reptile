@@ -120,33 +120,33 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.pikehornSpawnWeight = val)
                 .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
                 .build();
-        Option<Integer> lightningChaserSpawnWeight = Option.<Integer>createBuilder()
-                .name(key("option.lightningChaserSpawnWeight"))
-                .description(OptionDescription.createBuilder()
-                        .text(key("option.dragonSpawnWeight.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.lightningChaserSpawnWeight,
-                        () -> config.lightningChaserSpawnWeight,
-                        val -> config.lightningChaserSpawnWeight = val)
-                .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
-                .build();
-        Option<Integer> lightningChaserThunderstormSpawnChance = Option.<Integer>createBuilder()
-                .name(key("option.lightningChaserThunderstormSpawnChance"))
-                .description(OptionDescription.createBuilder()
-                        .text(key("option.lightningChaserThunderstormSpawnChance.@Tooltip")).build())
-                .binding(defaults.lightningChaserThunderstormSpawnChance,
-                        () -> config.lightningChaserThunderstormSpawnChance,
-                        val -> config.lightningChaserThunderstormSpawnChance = val)
-                .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
-                .build();
-        Option<Integer> lightningChaserThunderstormSpawnTimerCooldown = Option.<Integer>createBuilder()
-                .name(key("option.lightningChaserThunderstormSpawnTimerCooldown"))
-                .description(OptionDescription.createBuilder()
-                        .text(key("option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip")).build())
-                .binding(defaults.lightningChaserThunderstormSpawnTimerCooldown,
-                        () -> config.lightningChaserThunderstormSpawnTimerCooldown,
-                        val -> config.lightningChaserThunderstormSpawnTimerCooldown = val)
-                .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
-                .build();
+        //Option<Integer> lightningChaserSpawnWeight = Option.<Integer>createBuilder()
+        //        .name(key("option.lightningChaserSpawnWeight"))
+        //        .description(OptionDescription.createBuilder()
+        //                .text(key("option.dragonSpawnWeight.@Tooltip"), requiresRestart()).build())
+        //        .binding(defaults.lightningChaserSpawnWeight,
+        //                () -> config.lightningChaserSpawnWeight,
+        //                val -> config.lightningChaserSpawnWeight = val)
+        //        .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
+        //        .build();
+        //Option<Integer> lightningChaserThunderstormSpawnChance = Option.<Integer>createBuilder()
+        //        .name(key("option.lightningChaserThunderstormSpawnChance"))
+        //        .description(OptionDescription.createBuilder()
+        //                .text(key("option.lightningChaserThunderstormSpawnChance.@Tooltip")).build())
+        //        .binding(defaults.lightningChaserThunderstormSpawnChance,
+        //                () -> config.lightningChaserThunderstormSpawnChance,
+        //                val -> config.lightningChaserThunderstormSpawnChance = val)
+        //        .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
+        //        .build();
+        //Option<Integer> lightningChaserThunderstormSpawnTimerCooldown = Option.<Integer>createBuilder()
+        //        .name(key("option.lightningChaserThunderstormSpawnTimerCooldown"))
+        //        .description(OptionDescription.createBuilder()
+        //                .text(key("option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip")).build())
+        //        .binding(defaults.lightningChaserThunderstormSpawnTimerCooldown,
+        //                () -> config.lightningChaserThunderstormSpawnTimerCooldown,
+        //                val -> config.lightningChaserThunderstormSpawnTimerCooldown = val)
+        //        .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
+        //        .build();
 
         Option<Integer> dragonSpawnGroupCapacity = Option.<Integer>createBuilder()
                 .name(key("option.dragonSpawnGroupCapacity"))
@@ -230,24 +230,24 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.pikehornMaxGroupSize = val)
                 .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
                 .build();
-        Option<Integer> lightningChaserMinGroupSize = Option.<Integer>createBuilder()
-                .name(key("option.lightningChaserMinGroupSize"))
-                .description(OptionDescription.createBuilder()
-                        .text(key("option.dragonMinGroupSize.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.lightningChaserMinGroupSize,
-                        () -> config.lightningChaserMinGroupSize,
-                        val -> config.lightningChaserMinGroupSize = val)
-                .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
-                .build();
-        Option<Integer> lightningChaserMaxGroupSize = Option.<Integer>createBuilder()
-                .name(key("option.lightningChaserMaxGroupSize"))
-                .description(OptionDescription.createBuilder()
-                        .text(key("option.dragonMaxGroupSize.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.lightningChaserMaxGroupSize,
-                        () -> config.lightningChaserMaxGroupSize,
-                        val -> config.lightningChaserMaxGroupSize = val)
-                .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
-                .build();
+        //Option<Integer> lightningChaserMinGroupSize = Option.<Integer>createBuilder()
+        //        .name(key("option.lightningChaserMinGroupSize"))
+        //        .description(OptionDescription.createBuilder()
+        //                .text(key("option.dragonMinGroupSize.@Tooltip"), requiresRestart()).build())
+        //        .binding(defaults.lightningChaserMinGroupSize,
+        //                () -> config.lightningChaserMinGroupSize,
+        //                val -> config.lightningChaserMinGroupSize = val)
+        //        .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
+        //        .build();
+        //Option<Integer> lightningChaserMaxGroupSize = Option.<Integer>createBuilder()
+        //        .name(key("option.lightningChaserMaxGroupSize"))
+        //        .description(OptionDescription.createBuilder()
+        //                .text(key("option.dragonMaxGroupSize.@Tooltip"), requiresRestart()).build())
+        //        .binding(defaults.lightningChaserMaxGroupSize,
+        //                () -> config.lightningChaserMaxGroupSize,
+        //                val -> config.lightningChaserMaxGroupSize = val)
+        //        .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
+        //        .build();
 
         Option<URConfig.DragonGriefing> allowDragonGriefing = Option.<URConfig.DragonGriefing>createBuilder()
                 .name(key("option.allowDragonGriefing"))
@@ -280,9 +280,9 @@ public class ModMenuIntegration implements ModMenuApi {
         spawnWeightGroup.option(wyvernSpawnWeight);
         spawnWeightGroup.option(moleclawSpawnWeight);
         spawnWeightGroup.option(pikehornSpawnWeight);
-        spawnWeightGroup.option(lightningChaserSpawnWeight);
-        spawnWeightGroup.option(lightningChaserThunderstormSpawnChance);
-        spawnWeightGroup.option(lightningChaserThunderstormSpawnTimerCooldown);
+        //spawnWeightGroup.option(lightningChaserSpawnWeight);
+        //spawnWeightGroup.option(lightningChaserThunderstormSpawnChance);
+        //spawnWeightGroup.option(lightningChaserThunderstormSpawnTimerCooldown);
 
         spawnGroupsGroup.option(dragonSpawnGroupCapacity);
         spawnGroupsGroup.option(undergroundDragonSpawnGroupCapacity);
@@ -294,11 +294,12 @@ public class ModMenuIntegration implements ModMenuApi {
         groupSizeGroup.option(moleclawMaxGroupSize);
         groupSizeGroup.option(pikehornMinGroupSize);
         groupSizeGroup.option(pikehornMaxGroupSize);
-        groupSizeGroup.option(lightningChaserMinGroupSize);
-        groupSizeGroup.option(lightningChaserMaxGroupSize);
+        //groupSizeGroup.option(lightningChaserMinGroupSize);
+        //groupSizeGroup.option(lightningChaserMaxGroupSize);
 
         dragonBehaviourGroup.option(allowDragonGriefing);
         dragonBehaviourGroup.option(blockDropChance);
+        dragonBehaviourGroup.option(dragonMadness);
 
         gameplayCategory.group(spawnWeightGroup.build());
         gameplayCategory.group(spawnGroupsGroup.build());

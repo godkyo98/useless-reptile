@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "uselessreptile:moleclaw_spawn_egg"
+      "id": "uselessreptile:moleclaw_spawn_egg"
     },
     "title": {
       "translate": "advancement.uselessreptile.tame_moleclaw"
@@ -21,5 +21,12 @@
         }
       }
     }
+  },
+  "rewards": {
+    "recipes": [
+      "uselessreptile:moleclaw_helmet_iron",
+      "uselessreptile:moleclaw_helmet_gold",
+      "uselessreptile:moleclaw_helmet_diamond"
+    ]
   }
 }

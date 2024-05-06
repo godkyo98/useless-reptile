@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "uselessreptile:lightning_chaser_spawn_egg"
+      "id": "uselessreptile:lightning_chaser_spawn_egg"
     },
     "title": {
       "translate": "advancement.uselessreptile.tame_lightning_chaser"
@@ -9,7 +9,8 @@
     "description": {
       "translate": "advancement.uselessreptile.tame_lightning_chaser.desc"
     },
-    "frame": "task"
+    "frame": "task",
+    "hidden": true
   },
   "parent": "uselessreptile:dragon/root",
   "criteria": {

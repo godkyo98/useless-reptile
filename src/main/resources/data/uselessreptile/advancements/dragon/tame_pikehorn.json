@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "uselessreptile:river_pikehorn_spawn_egg"
+      "id": "uselessreptile:river_pikehorn_spawn_egg"
     },
     "title": {
       "translate": "advancement.uselessreptile.tame_pikehorn"
@@ -21,5 +21,10 @@
         }
       }
     }
+  },
+  "rewards": {
+    "recipes": [
+      "uselessreptile:flute"
+    ]
   }
 }

@@ -23,6 +23,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -39,11 +40,11 @@ import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.items.FluteItem;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.keyframe.event.SoundKeyframeEvent;
-import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
 public class RiverPikehornEntity extends URFlyingDragonEntity {
 
@@ -76,9 +77,9 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        dataTracker.startTracking(IS_HUNTING, false);
+    protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
+        builder.add(IS_HUNTING, false);
     }
     public static final TrackedData<Boolean> IS_HUNTING = DataTracker.registerData(RiverPikehornEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public boolean isHunting() {return dataTracker.get(IS_HUNTING);}
@@ -201,7 +202,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             if (huntTimer > 0 && !isHunting()) huntTimer--;
             else setIsHunting(true);
 
-            if (getMainHandStack().isFood()) {
+            if (getMainHandStack().isIn(ItemTags.FISHES)) {
                 if (eatTimer <= 0 || getMaxHealth() > getHealth()) {
                     eatFood(getWorld(), getMainHandStack());
                     heal(getHealthRegenFromFood());
@@ -215,8 +216,8 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             if (owner != null) {
                 ItemStack main = owner.getMainHandStack();
                 ItemStack offhand = owner.getOffHandStack();
-                boolean mainCanTarget = main.hasNbt() && main.getNbt().getInt(FluteItem.MODE_TAG) == 1;
-                boolean offhandCanTarget = offhand.hasNbt() && offhand.getNbt().getInt(FluteItem.MODE_TAG) == 1;
+                boolean mainCanTarget = main.getItem() instanceof FluteItem fluteItem && fluteItem.getFluteMode(main) == 1;
+                boolean offhandCanTarget = offhand.getItem() instanceof FluteItem fluteItem && fluteItem.getFluteMode(offhand) == 1;
                 if (owner.getItemCooldownManager().isCoolingDown(URItems.FLUTE) && (mainCanTarget || offhandCanTarget)) setIsHunting(true);
             }
         }
@@ -348,6 +349,11 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     @Override
     public boolean isTamingItem(ItemStack itemStack) {
         return itemStack.isOf(Items.TROPICAL_FISH_BUCKET);
+    }
+
+    @Override
+    public Box getAttackBox() {
+        return getBoundingBox().expand(getScale(), 0, getScale());
     }
 
     @Override

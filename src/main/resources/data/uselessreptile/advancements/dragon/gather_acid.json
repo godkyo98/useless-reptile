@@ -1,8 +1,12 @@
 {
   "display": {
     "icon": {
-      "item": "minecraft:potion",
-      "nbt": "{Potion:\"uselessreptile:acid\"}"
+      "id": "minecraft:potion",
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "uselessreptile:acid"
+        }
+      }
     },
     "title": {
       "translate": "advancement.uselessreptile.gather_acid"
