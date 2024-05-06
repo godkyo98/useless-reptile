@@ -46,7 +46,6 @@ import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
 import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
-import nordmods.uselessreptile.common.items.DragonArmorItem;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -238,35 +237,6 @@ public class MoleclawEntity extends URRideableDragonEntity {
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
         if (!getWorld().isClient()) GUIEntityToRenderS2CPacket.send((ServerPlayerEntity) player, this);
         return MoleclawScreenHandler.createScreenHandler(syncId, inv, inventory);
-    }
-
-
-    @Override
-    protected void updateEquipment() {
-        super.updateEquipment();
-        updateBanner();
-
-        int armorBonus = 0;
-
-        ItemStack head = inventory.getStack(1);
-        ItemStack body = inventory.getStack(2);
-        ItemStack tail = inventory.getStack(3);
-
-        if (head.getItem() instanceof DragonArmorItem helmet) {
-            equipStack(EquipmentSlot.HEAD, head);
-            armorBonus += helmet.getArmorBonus();
-        }
-        if (body.getItem() instanceof DragonArmorItem chestplate) {
-            equipStack(EquipmentSlot.CHEST, body);
-            armorBonus += chestplate.getArmorBonus();
-        }
-        if (tail.getItem() instanceof DragonArmorItem tailArmor) {
-            equipStack(EquipmentSlot.LEGS, tail);
-            armorBonus += tailArmor.getArmorBonus();
-        }
-
-
-        updateArmorBonus(armorBonus);
     }
 
     @Override

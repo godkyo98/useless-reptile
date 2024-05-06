@@ -360,12 +360,6 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     }
 
     @Override
-    protected void updateEquipment() {
-        updateSaddle();
-        updateBanner();
-    }
-
-    @Override
     public boolean isFavoriteFood(ItemStack itemStack){
         return itemStack.isOf(Items.CHICKEN);
     }
