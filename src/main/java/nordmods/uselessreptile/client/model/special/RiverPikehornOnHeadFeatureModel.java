@@ -8,7 +8,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.RiverPikehornEntity;
-import org.joml.Vector3f;
 
 public class RiverPikehornOnHeadFeatureModel extends SinglePartEntityModel<RiverPikehornEntity> {
     private final ModelPart Tdragon;

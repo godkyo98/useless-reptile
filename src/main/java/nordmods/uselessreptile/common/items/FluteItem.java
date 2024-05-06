@@ -23,8 +23,7 @@ import nordmods.uselessreptile.common.init.URSounds;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FluteItem extends Item {
-    public static final String MODE_TAG = "Mode";
+public class FluteItem extends Item { ;
     public FluteItem(Settings settings) {
         super(settings);
         ItemStack itemStack = getDefaultStack();
