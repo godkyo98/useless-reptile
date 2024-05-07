@@ -53,6 +53,7 @@ import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonNavigation;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 import nordmods.uselessreptile.common.network.InstrumentSoundBoundMessageS2CPacket;
+import nordmods.uselessreptile.common.network.URPacketHelper;
 import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantUtil;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -325,6 +326,16 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             ItemStack tail = inventory.getStack(3);
             equipStack(EquipmentSlot.LEGS, tail);
         }
+    }
+
+    @Override
+    public void onEquipStack(EquipmentSlot slot, ItemStack oldStack, ItemStack newStack) {
+        boolean empty = newStack.isEmpty() && oldStack.isEmpty();
+        if (!empty && !ItemStack.areItemsAndComponentsEqual(oldStack, newStack) && !firstUpdate) {
+            if (!getWorld().isClient() && isArmorSlot(slot))
+                URPacketHelper.playSound(this, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC.value(), getSoundCategory(), 1, 1, 6);
+        }
+        super.onEquipStack(slot, oldStack, newStack);
     }
 
     @Override

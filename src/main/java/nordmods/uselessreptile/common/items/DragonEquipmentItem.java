@@ -2,13 +2,12 @@ package nordmods.uselessreptile.common.items;
 
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.Equipment;
 import net.minecraft.item.Item;
 
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class DragonEquipmentItem extends Item implements Equipment {
+public class DragonEquipmentItem extends Item {
 
     private final Supplier<AttributeModifiersComponent> dragonEquipmentAttributes;
     private final EquipmentSlot equipmentSlot;
@@ -36,7 +35,6 @@ public class DragonEquipmentItem extends Item implements Equipment {
         };
     }
 
-    @Override
     public EquipmentSlot getSlotType() {
         return equipmentSlot;
     }
