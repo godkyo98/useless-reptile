@@ -9,23 +9,27 @@ import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.item.*;
-import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.dynamic.Codecs;
 import nordmods.uselessreptile.UselessReptile;
-import nordmods.uselessreptile.common.items.DragonEquipmentItem;
-import nordmods.uselessreptile.common.items.FluteItem;
+import nordmods.uselessreptile.common.item.DragonEquipmentItem;
+import nordmods.uselessreptile.common.item.FluteItem;
+import nordmods.uselessreptile.common.item.component.FluteComponent;
 
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 public class URItems {
+    public static final DataComponentType<FluteComponent> FLUTE_MODE_COMPONENT = register("flute_mode", builder -> builder.codec(FluteComponent.CODEC).packetCodec(FluteComponent.PACKET_CODEC));
+
     public static final Item WYVERN_SKIN = new Item(new Item.Settings());
     public static final DragonEquipmentItem DRAGON_HELMET_IRON = createDragonArmorItem(EquipmentSlot.HEAD, 2, 0);
     public static final DragonEquipmentItem DRAGON_HELMET_GOLD = createDragonArmorItem(EquipmentSlot.HEAD,3, 0);
@@ -43,7 +47,7 @@ public class URItems {
     public static final Item MOLECLAW_SPAWN_EGG = new SpawnEggItem(UREntities.MOLECLAW_ENTITY,2105119, 458752, new Item.Settings());
     public static final Item RIVER_PIKEHORN_SPAWN_EGG = new SpawnEggItem(UREntities.RIVER_PIKEHORN_ENTITY,2910895, 1457243, new Item.Settings());
     public static final Item LIGHTNING_CHASER_SPAWN_EGG = new SpawnEggItem(UREntities.LIGHTNING_CHASER_ENTITY,4145472, 10922151, new Item.Settings());
-    public static final FluteItem FLUTE = new FluteItem(new Item.Settings().maxCount(1));
+    public static final FluteItem FLUTE = new FluteItem(new Item.Settings().maxCount(1).component(FLUTE_MODE_COMPONENT, FluteComponent.DEFAULT));
 
     public static final RegistryKey<ItemGroup> UR_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(UselessReptile.MODID, "item_group"));
 
@@ -110,8 +114,6 @@ public class URItems {
     private static void register(Item item, String id) {
         Registry.register(Registries.ITEM, new Identifier(UselessReptile.MODID, id), item);
     }
-
-    public static final DataComponentType<Integer> FLUTE_MODE_COMPONENT = register("flute_mode", builder -> builder.codec(Codecs.rangedInt(0, 2)).packetCodec(PacketCodecs.INTEGER).cache());
 
     private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
         return Registry.register(Registries.DATA_COMPONENT_TYPE, new Identifier(UselessReptile.MODID, id), (builderOperator.apply(DataComponentType.builder())).build());

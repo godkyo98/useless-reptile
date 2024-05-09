@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.items;
+package nordmods.uselessreptile.common.item;
 
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;

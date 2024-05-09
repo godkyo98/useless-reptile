@@ -12,7 +12,7 @@ import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.init.URTags;
-import nordmods.uselessreptile.common.items.DragonEquipmentItem;
+import nordmods.uselessreptile.common.item.DragonEquipmentItem;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class URDragonScreenHandler extends ScreenHandler {
