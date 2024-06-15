@@ -1,4 +1,2 @@
-- Updated flute and dragon armor item textures
-- Added triggers for unlocking dragon armor and flute recipes
-- Fixed issue when you could hit multipart dragon while riding it
-- 1.20.6 port
+- 1.21 port
+- Added Hungarian translation (bombadil6870)

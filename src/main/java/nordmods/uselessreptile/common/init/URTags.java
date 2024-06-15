@@ -6,7 +6,6 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import nordmods.uselessreptile.UselessReptile;
 
@@ -32,6 +31,6 @@ public class URTags {
     public static final TagKey<Item> COMMON_DRAGON_ARMOR_DIAMOND = register(RegistryKeys.ITEM, "common_dragon_armor_diamond");
 
     private static<T> TagKey<T> register(RegistryKey<? extends Registry<T>> registryKey, String id) {
-        return TagKey.of(registryKey, new Identifier(UselessReptile.MODID ,id));
+        return TagKey.of(registryKey, UselessReptile.id(id));
     }
 }

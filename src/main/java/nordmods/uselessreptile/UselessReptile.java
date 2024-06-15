@@ -3,6 +3,7 @@ package nordmods.uselessreptile;
 import com.mojang.logging.LogUtils;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
+import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantLoader;
@@ -12,7 +13,7 @@ import org.slf4j.Logger;
 
 public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
     public static final Logger LOGGER = LogUtils.getLogger();
-    public static final String MODID = "uselessreptile";
+    private static final String MODID = "uselessreptile";
 
     @Override
     public void onInitialize() {
@@ -34,5 +35,9 @@ public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
     public void onPreLaunch() {
         URConfig.init();
         URMobAttributesConfig.init();
+    }
+
+    public static Identifier id(String id) {
+        return Identifier.of(MODID, id);
     }
 }

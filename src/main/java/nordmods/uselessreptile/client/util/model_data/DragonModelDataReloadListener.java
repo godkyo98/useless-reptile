@@ -38,7 +38,7 @@ public class DragonModelDataReloadListener extends JsonDataLoader implements Ide
 
     @Override
     public Identifier getFabricId() {
-        return new Identifier(UselessReptile.MODID, "dragon_model_data");
+        return UselessReptile.id("dragon_model_data");
     }
 
     private void add(String dragon, String variant, DragonModelData modelData) {

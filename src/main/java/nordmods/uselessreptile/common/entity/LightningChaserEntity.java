@@ -27,6 +27,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LocalDifficulty;
@@ -35,6 +36,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
+import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserAttackGoal;
@@ -60,7 +62,6 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class LightningChaserEntity extends URRideableFlyingDragonEntity implements MultipartEntity {
     private int shockwaveDelay = -1;
@@ -69,9 +70,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     private boolean shouldBailOut = false;
     private boolean isChallenger = false;
     public BlockPos roamingSpot;
-    private static final UUID STORM_SPEED_BONUS = UUID.fromString("978d5bd2-71b5-4e50-8439-7c1dfa3b5089");
-    private static final UUID STORM_FLYING_SPEED_BONUS = UUID.fromString("bc035ebb-3950-4001-b205-61bb4aa012f8");
-    private static final UUID STORM_ARMOR_BONUS = UUID.fromString("88a1b075-ba20-436b-89ae-a564acecf338");
+    private static final Identifier THUNDERSTORM_BONUS = UselessReptile.id("thunderstorm_bonus");
     private final URDragonPart wing1Left = new URDragonPart(this);
     private final URDragonPart wing1Right = new URDragonPart(this);
     private final URDragonPart wing2Left = new URDragonPart(this);
@@ -337,16 +336,16 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         }
 
         if (!getWorld().isClient()) {
-            getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(STORM_ARMOR_BONUS);
-            getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED).removeModifier(STORM_FLYING_SPEED_BONUS);
-            getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(STORM_SPEED_BONUS);
+            getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(THUNDERSTORM_BONUS);
+            getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED).removeModifier(THUNDERSTORM_BONUS);
+            getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(THUNDERSTORM_BONUS);
             if (getWorld().getLevelProperties().isThundering()) {
                 getAttributeInstance(EntityAttributes.GENERIC_ARMOR)
-                        .addTemporaryModifier(new EntityAttributeModifier(STORM_ARMOR_BONUS, "Thunderstorm bonus", 4, EntityAttributeModifier.Operation.ADD_VALUE));
+                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 4, EntityAttributeModifier.Operation.ADD_VALUE));
                 getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(STORM_FLYING_SPEED_BONUS, "Thunderstorm bonus", 0.2, EntityAttributeModifier.Operation.ADD_VALUE));
+                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.2, EntityAttributeModifier.Operation.ADD_VALUE));
                 getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(STORM_SPEED_BONUS, "Thunderstorm bonus", 0.05, EntityAttributeModifier.Operation.ADD_VALUE));
+                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.05, EntityAttributeModifier.Operation.ADD_VALUE));
             }
         }
 
@@ -464,6 +463,11 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     @Override
     protected int getTicksUntilHeal() {
         return getWorld().isThundering() ? (int) (super.getTicksUntilHeal() * 0.5) : super.getTicksUntilHeal();
+    }
+
+    @Override
+    public String getDefaultVariant() {
+        return "grey";
     }
 
     @Override

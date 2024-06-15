@@ -49,7 +49,7 @@ public class DragonVariantUtil {
 
         boolean isIn = false;
         for (String s : id) {
-            Identifier name = new Identifier(s);
+            Identifier name = Identifier.of(s);
             if (biome.matchesId(name)) {
                 isIn = true;
                 break;
@@ -57,7 +57,7 @@ public class DragonVariantUtil {
         }
 
         if (!isIn) for (String tag : tags) {
-            Identifier name = new Identifier(tag);
+            Identifier name = Identifier.of(tag);
             if (biome.isIn(TagKey.of(RegistryKeys.BIOME, name))) {
                 isIn = true;
                 break;
@@ -91,8 +91,11 @@ public class DragonVariantUtil {
     public static void assignVariantFromList(URDragonEntity entity, List<DragonVariant> variants) {
         int totalWeight = 0;
         for (DragonVariant variant : variants) totalWeight += variant.weight();
-        if (totalWeight <= 0)
-            throw new RuntimeException("Failed to assign dragon variant due impossible total weight of all variants for " + entity);
+        if (totalWeight <= 0) {
+            UselessReptile.LOGGER.warn("Failed to set variant for {} at {} as none can spawn there. Setting default", entity.getName().getString(), entity.getBlockPos());
+            entity.setVariant(entity.getDefaultVariant());
+            return;
+        }
 
         int roll = entity.getRandom().nextInt(totalWeight);
         int previousBound = 0;

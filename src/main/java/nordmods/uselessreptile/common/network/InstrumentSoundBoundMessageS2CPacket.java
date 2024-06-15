@@ -12,7 +12,7 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 
 public record InstrumentSoundBoundMessageS2CPacket(Text message) implements CustomPayload {
-    public static final Identifier ID = new Identifier(UselessReptile.MODID, "instrument_sound_bound_packet");
+    public static final Identifier ID = UselessReptile.id("instrument_sound_bound_packet");
     public static final CustomPayload.Id<InstrumentSoundBoundMessageS2CPacket> PACKET_ID = new CustomPayload.Id<>(ID);
     public static final PacketCodec<RegistryByteBuf, InstrumentSoundBoundMessageS2CPacket> PACKET_CODEC = TextCodecs.PACKET_CODEC.xmap(InstrumentSoundBoundMessageS2CPacket::new, InstrumentSoundBoundMessageS2CPacket::message).cast();
 

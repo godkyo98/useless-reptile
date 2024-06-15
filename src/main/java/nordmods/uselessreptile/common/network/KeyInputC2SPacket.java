@@ -10,7 +10,7 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 
 public record KeyInputC2SPacket(boolean jump, boolean forward, boolean back, boolean sprint, boolean secondaryAttack, boolean primaryAttack, boolean down, int id) implements CustomPayload{
-    public static final Identifier ID = new Identifier(UselessReptile.MODID, "key_input");
+    public static final Identifier ID = UselessReptile.id("key_input");
     public static final CustomPayload.Id<KeyInputC2SPacket> PACKET_ID = new CustomPayload.Id<>(ID);
     public static final PacketCodec<RegistryByteBuf, KeyInputC2SPacket> PACKET_CODEC =
             PacketCodec.ofStatic(KeyInputC2SPacket::write, KeyInputC2SPacket::read);

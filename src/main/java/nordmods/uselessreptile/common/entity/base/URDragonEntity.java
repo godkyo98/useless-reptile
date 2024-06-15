@@ -4,6 +4,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
+import net.minecraft.component.type.FoodComponents;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -64,7 +66,6 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner, InventoryChangedListener {
@@ -90,7 +91,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             (new EntityPositionSource
                     (this, getStandingEyeHeight()), GameEvent.JUKEBOX_PLAY.value().notificationRadius()));
     protected @Nullable BlockPos jukeboxPos;
-    private static final UUID DRAGON_ARMOR_BONUS_ID = UUID.fromString("c9e68951-e06e-4f5d-8aeb-cf3a09c2638e");
     protected SimpleInventory inventory = new SimpleInventory(URDragonScreenHandler.maxStorageSize);
 
     protected URDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
@@ -225,8 +225,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             }
             inventory.addListener(this);
         }
-
-        getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(DRAGON_ARMOR_BONUS_ID);
     }
 
     @Override
@@ -255,7 +253,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return null;
     }
 
-    //I can't believe that this yarn bug is still a thing
+    //now we wait
     @Override
     public EntityView method_48926() {
         return getWorld();
@@ -348,7 +346,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         ItemStack itemStack = player.getStackInHand(hand);
         if (isTamed()) {
             if (isFavoriteFood(itemStack) && getHealth() != getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH)) {
-                eatFood(getWorld(), itemStack);
+                eatFood(getWorld(), itemStack, itemStack.getComponents().getOrDefault(DataComponentTypes.FOOD, FoodComponents.SALMON));
                 heal(regenerationFromFood);
                 return ActionResult.SUCCESS;
             }
@@ -365,7 +363,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
                 }
                 if (hasBeneficial || !hasHarmful) {
                     //we make the copy cuz else for some fucking reason minecraft will subtract effect time from potion itself too
-                    //делаем копию т.к. иначе по какой-то ебейшей причине кубач будет убавлять время действия эффектов самого зелья также
                     for (StatusEffectInstance effect : potionItem.getComponents().get(DataComponentTypes.POTION_CONTENTS).customEffects()) addStatusEffect(new StatusEffectInstance(effect));
                     if (!player.isCreative()) player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
                     playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
@@ -604,7 +601,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         if (inventory != null) {
             for(int i = 0; i < inventory.size(); ++i) {
                 ItemStack itemStack = inventory.getStack(i);
-                if (!itemStack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemStack)) {
+                if (!itemStack.isEmpty() && !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_EQUIPMENT_DROP)) {
                     dropStack(itemStack);
                 }
             }
@@ -720,6 +717,13 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     protected int getTicksUntilHeal() {
         return ticksUntilHeal;
+    }
+
+    public abstract String getDefaultVariant();
+
+    @Override
+    public boolean canBeLeashed() {
+        return isTamed();
     }
 
     @Override

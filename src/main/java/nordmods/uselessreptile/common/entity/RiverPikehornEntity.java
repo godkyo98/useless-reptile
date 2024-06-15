@@ -1,5 +1,6 @@
 package nordmods.uselessreptile.common.entity;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.UntamedActiveTargetGoal;
@@ -28,8 +29,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import nordmods.uselessreptile.common.config.URConfig;
 import net.minecraft.world.WorldAccess;
+import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.*;
@@ -42,8 +43,8 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animation.AnimatableManager;
 import software.bernie.geckolib.animation.AnimationController;
-import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.AnimationState;
+import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
 public class RiverPikehornEntity extends URFlyingDragonEntity {
@@ -202,9 +203,10 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             if (huntTimer > 0 && !isHunting()) huntTimer--;
             else setIsHunting(true);
 
-            if (getMainHandStack().isIn(ItemTags.FISHES)) {
+            ItemStack itemStack = getMainHandStack();
+            if (itemStack.isIn(ItemTags.FISHES) && itemStack.getComponents().contains(DataComponentTypes.FOOD)) {
                 if (eatTimer <= 0 || getMaxHealth() > getHealth()) {
-                    eatFood(getWorld(), getMainHandStack());
+                    eatFood(getWorld(), itemStack, itemStack.getComponents().get(DataComponentTypes.FOOD));
                     heal(getHealthRegenFromFood());
                     stopHunt();
                 } else eatTimer--;
@@ -354,6 +356,11 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     @Override
     public Box getAttackBox() {
         return getBoundingBox().expand(getScale(), 0, getScale());
+    }
+
+    @Override
+    public String getDefaultVariant() {
+        return "blue";
     }
 
     @Override

@@ -9,7 +9,7 @@ import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
 
 public record SyncLightningBreathRotationsS2CPacket(int[] beamIDs, float pitch, float yaw) implements CustomPayload {
-    public static final Identifier ID = new Identifier(UselessReptile.MODID, "sync_lightning_beam_rotations_packet");
+    public static final Identifier ID = UselessReptile.id("sync_lightning_beam_rotations_packet");
     public static final CustomPayload.Id<SyncLightningBreathRotationsS2CPacket> PACKET_ID = new CustomPayload.Id<>(ID);
     public static final PacketCodec<RegistryByteBuf, SyncLightningBreathRotationsS2CPacket> PACKET_CODEC = PacketCodec.ofStatic(SyncLightningBreathRotationsS2CPacket::write, SyncLightningBreathRotationsS2CPacket::read);
 

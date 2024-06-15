@@ -11,7 +11,7 @@ import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 
 public record PosSyncS2CPacket(Vec3d pos, int id) implements CustomPayload {
-    public static final Identifier ID = new Identifier(UselessReptile.MODID, "pos_sync_packet");
+    public static final Identifier ID = UselessReptile.id("pos_sync_packet");
     public static final CustomPayload.Id<PosSyncS2CPacket> PACKET_ID = new CustomPayload.Id<>(ID);
     public static final PacketCodec<RegistryByteBuf, PosSyncS2CPacket> PACKET_CODEC = PacketCodec.ofStatic(PosSyncS2CPacket::write, PosSyncS2CPacket::read);
 

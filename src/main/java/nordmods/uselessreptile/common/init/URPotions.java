@@ -15,19 +15,19 @@ import nordmods.uselessreptile.UselessReptile;
 public class URPotions extends Potions {
 
     public static final RegistryEntry.Reference<Potion> ACID = Registry.registerReference(Registries.POTION,
-            new Identifier(UselessReptile.MODID,"acid"),
+            UselessReptile.id("acid"),
             new Potion(new StatusEffectInstance(URStatusEffects.ACID, 200, 1)) {
                 @Override
                 public boolean hasInstantEffect() {return false;}
             });
     public static final RegistryEntry.Reference<Potion> LONG_ACID = Registry.registerReference(Registries.POTION,
-            new Identifier(UselessReptile.MODID,"long_acid"),
+            UselessReptile.id("long_acid"),
             new Potion(new StatusEffectInstance(URStatusEffects.ACID, 400, 1)) {
                 @Override
                 public boolean hasInstantEffect() {return false;}
             });
     public static final RegistryEntry.Reference<Potion> STRONG_ACID = Registry.registerReference(Registries.POTION,
-            new Identifier(UselessReptile.MODID,"strong_acid"),
+            UselessReptile.id("strong_acid"),
             new Potion(new StatusEffectInstance(URStatusEffects.ACID, 200, 3)) {
                 @Override
                 public boolean hasInstantEffect() {return false;}

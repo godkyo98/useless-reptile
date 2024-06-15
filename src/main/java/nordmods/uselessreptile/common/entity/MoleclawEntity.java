@@ -330,6 +330,11 @@ public class MoleclawEntity extends URRideableDragonEntity {
                 getPos().getX() + x + 1.25, getPos().getY() + getHeight() + 1 + y, getPos().getZ() + z + 1.25);
     }
 
+    @Override
+    public String getDefaultVariant() {
+        return "black";
+    }
+
     public void tryPanic() {
         playPanicSound();
         if (!hasHelmet()) setIsPanicking(isTooBrightAtPos(getBlockPos()));

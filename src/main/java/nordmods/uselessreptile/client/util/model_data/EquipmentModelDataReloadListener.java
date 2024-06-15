@@ -34,7 +34,7 @@ public class EquipmentModelDataReloadListener extends JsonDataLoader implements 
 
     @Override
     public Identifier getFabricId() {
-        return new Identifier(UselessReptile.MODID, "dragon_model_data/equipment_model_data");
+        return UselessReptile.id("dragon_model_data/equipment_model_data");
     }
 
     private void add(String dragon, EquipmentModelData equipmentModelData) {

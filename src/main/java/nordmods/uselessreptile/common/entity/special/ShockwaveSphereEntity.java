@@ -73,7 +73,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
             target.playSound(URSounds.SHOCKWAVE_HIT, 1, 1 / exposure);
             Vec3d vec3d = target.getPos().subtract(getEyePos());
             double lengthMod = currentRadius / vec3d.length();
-            target.addVelocity(vec3d.normalize().multiply(POWER * lengthMod * exposure));
+            target.addVelocityInternal(vec3d.normalize().multiply(POWER * lengthMod * exposure));
             if (target instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new StatusEffectInstance(URStatusEffects.SHOCK, (int) (100 * MathHelper.clamp(lengthMod, 1, 2) * exposure), 0, false, false), getOwner());
                 livingEntity.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), (float) (2.5 * MathHelper.clamp(lengthMod, 1, 2)));

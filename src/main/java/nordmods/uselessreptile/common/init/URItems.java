@@ -3,7 +3,7 @@ package nordmods.uselessreptile.common.init;
 import com.google.common.base.Suppliers;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.component.DataComponentType;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.type.AttributeModifierSlot;
 import net.minecraft.component.type.AttributeModifiersComponent;
 import net.minecraft.entity.EquipmentSlot;
@@ -24,11 +24,10 @@ import nordmods.uselessreptile.common.item.DragonEquipmentItem;
 import nordmods.uselessreptile.common.item.FluteItem;
 import nordmods.uselessreptile.common.item.component.FluteComponent;
 
-import java.util.UUID;
 import java.util.function.UnaryOperator;
 
 public class URItems {
-    public static final DataComponentType<FluteComponent> FLUTE_MODE_COMPONENT = register("flute_mode", builder -> builder.codec(FluteComponent.CODEC).packetCodec(FluteComponent.PACKET_CODEC));
+    public static final ComponentType<FluteComponent> FLUTE_MODE_COMPONENT = register("flute_mode", builder -> builder.codec(FluteComponent.CODEC).packetCodec(FluteComponent.PACKET_CODEC));
 
     public static final Item WYVERN_SKIN = new Item(new Item.Settings());
     public static final DragonEquipmentItem DRAGON_HELMET_IRON = createDragonArmorItem(EquipmentSlot.HEAD, 2, 0);
@@ -49,7 +48,7 @@ public class URItems {
     public static final Item LIGHTNING_CHASER_SPAWN_EGG = new SpawnEggItem(UREntities.LIGHTNING_CHASER_ENTITY,4145472, 10922151, new Item.Settings());
     public static final FluteItem FLUTE = new FluteItem(new Item.Settings().maxCount(1).component(FLUTE_MODE_COMPONENT, FluteComponent.DEFAULT));
 
-    public static final RegistryKey<ItemGroup> UR_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, new Identifier(UselessReptile.MODID, "item_group"));
+    public static final RegistryKey<ItemGroup> UR_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, UselessReptile.id("item_group"));
 
     public static void init(){
         register(WYVERN_SKIN, "wyvern_skin");
@@ -103,20 +102,20 @@ public class URItems {
                 Suppliers.memoize(() -> {
                     AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
                     AttributeModifierSlot attributeModifierSlot = AttributeModifierSlot.forEquipmentSlot(equipmentSlot);
-                    UUID uuid = DragonEquipmentItem.equipmentModifierUUID(equipmentSlot);
-                    if (armor > 0) builder.add(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(uuid, "Dragon armor modifier", armor, EntityAttributeModifier.Operation.ADD_VALUE), attributeModifierSlot);
-                    if (toughness > 0) builder.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(uuid, "Dragon armor modifier", toughness, EntityAttributeModifier.Operation.ADD_VALUE), attributeModifierSlot);
+                    Identifier id = DragonEquipmentItem.equipmentModifierID(equipmentSlot);
+                    if (armor > 0) builder.add(EntityAttributes.GENERIC_ARMOR, new EntityAttributeModifier(id, armor, EntityAttributeModifier.Operation.ADD_VALUE), attributeModifierSlot);
+                    if (toughness > 0) builder.add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, new EntityAttributeModifier(id, toughness, EntityAttributeModifier.Operation.ADD_VALUE), attributeModifierSlot);
                     return builder.build();
                 }),
                 new Item.Settings().maxCount(1));
     }
 
     private static void register(Item item, String id) {
-        Registry.register(Registries.ITEM, new Identifier(UselessReptile.MODID, id), item);
+        Registry.register(Registries.ITEM, UselessReptile.id(id), item);
     }
 
-    private static <T> DataComponentType<T> register(String id, UnaryOperator<DataComponentType.Builder<T>> builderOperator) {
-        return Registry.register(Registries.DATA_COMPONENT_TYPE, new Identifier(UselessReptile.MODID, id), (builderOperator.apply(DataComponentType.builder())).build());
+    private static <T> ComponentType<T> register(String id, UnaryOperator<ComponentType.Builder<T>> builderOperator) {
+        return Registry.register(Registries.DATA_COMPONENT_TYPE, UselessReptile.id(id), (builderOperator.apply(ComponentType.builder())).build());
     }
 }
 

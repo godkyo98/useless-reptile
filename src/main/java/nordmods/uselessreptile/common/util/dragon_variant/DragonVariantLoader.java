@@ -67,7 +67,7 @@ public class DragonVariantLoader {
 
             @Override
             public Identifier getFabricId() {
-                return new Identifier(UselessReptile.MODID, "dragon_variants");
+                return UselessReptile.id("dragon_variants");
             }
         });
     }

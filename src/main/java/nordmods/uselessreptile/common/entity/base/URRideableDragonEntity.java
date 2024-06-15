@@ -131,11 +131,6 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     }
 
     @Override
-    public boolean canBeLeashedBy(PlayerEntity player) {
-        return player.getAbilities().creativeMode && super.canBeLeashedBy(player);
-    }
-
-    @Override
     public void openInventory(PlayerEntity player) {
         if (!getWorld().isClient() && canBeControlledByRider() && isOwnerOrCreative(player)) {
             GUIEntityToRenderS2CPacket.send((ServerPlayerEntity) player, this);

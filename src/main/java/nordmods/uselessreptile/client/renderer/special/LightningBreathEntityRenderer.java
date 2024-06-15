@@ -24,7 +24,7 @@ public class LightningBreathEntityRenderer extends EntityRenderer<LightningBreat
 
     @Override
     public Identifier getTexture(LightningBreathEntity entity) {
-        return new Identifier(UselessReptile.MODID, "textures/entity/lightning_breath/beam.png");
+        return UselessReptile.id("textures/entity/lightning_breath/beam.png");
     }
 
     @Override

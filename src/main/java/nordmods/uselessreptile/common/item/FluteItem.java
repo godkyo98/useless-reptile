@@ -2,12 +2,12 @@ package nordmods.uselessreptile.common.item;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.TooltipType;
 import net.minecraft.client.resource.language.I18n;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.MutableText;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FluteItem extends Item { ;
-    public FluteItem(Settings settings) {
+    public FluteItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
         ItemStack itemStack = getDefaultStack();
         itemStack.set(URItems.FLUTE_MODE_COMPONENT, FluteComponent.DEFAULT);

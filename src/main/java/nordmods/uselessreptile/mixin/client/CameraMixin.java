@@ -14,19 +14,19 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 @Mixin(Camera.class)
 public abstract class CameraMixin {
 
-    @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;moveBy(DDD)V"))
+    @ModifyArgs(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;moveBy(FFF)V"))
     public void offset(Args args) {
         if (!URClientConfig.getConfig().enableCameraOffset) return;
 
         PlayerEntity player = MinecraftClient.getInstance().player;
         if (player.getVehicle() instanceof URRideableDragonEntity dragonEntity) {
             args.set(1, URClientConfig.getConfig().cameraVerticalOffset * dragonEntity.getScale());
-            args.set(2, URClientConfig.getConfig().cameraHorizontalOffset * dragonEntity.getScale());
+            args.set(2, -URClientConfig.getConfig().cameraHorizontalOffset * dragonEntity.getScale());
         }
     }
 
-    @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;clipToSpace(D)D"))
-    public double offsetCameraDistance(double desiredCameraDistance) {
+    @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Camera;clipToSpace(F)F"))
+    public float offsetCameraDistance(float desiredCameraDistance) {
         if (!URClientConfig.getConfig().enableCameraOffset) return desiredCameraDistance;
 
         PlayerEntity player = MinecraftClient.getInstance().player;

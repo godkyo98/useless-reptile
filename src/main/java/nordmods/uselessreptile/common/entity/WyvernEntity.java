@@ -345,6 +345,11 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     }
 
     @Override
+    public String getDefaultVariant() {
+        return "green";
+    }
+
+    @Override
     public float getHeightModTransSpeed() {
         return (float) (0.13 * animationSpeed * getScale());
     }

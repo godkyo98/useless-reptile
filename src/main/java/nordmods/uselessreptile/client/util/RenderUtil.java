@@ -7,6 +7,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class RenderUtil {
+    public static int WHITE = 16777215;
+
     public static void renderQuad(
             Matrix4f positionMatrix, MatrixStack.Entry normalMatrix, VertexConsumer vertices,
             Vector3f v0, Vector3f v1, Vector3f v2, Vector3f v3,
@@ -17,25 +19,21 @@ public class RenderUtil {
                 .color(r, g, b, a).texture(minU, minV)
                 .overlay(OverlayTexture.DEFAULT_UV)
                 .light(light)
-                .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
-                .next();
+                .normal(normalMatrix, 0.0F, 1.0F, 0.0F);
         vertices.vertex(positionMatrix, v1.x, v1.y, v1.z) //10
                 .color(r, g, b, a).texture(maxU, minV)
                 .overlay(OverlayTexture.DEFAULT_UV)
                 .light(light)
-                .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
-                .next();
+                .normal(normalMatrix, 0.0F, 1.0F, 0.0F);
         vertices.vertex(positionMatrix, v2.x, v2.y, v2.z) //11
                 .color(r, g, b, a).texture(maxU, maxV)
                 .overlay(OverlayTexture.DEFAULT_UV)
                 .light(light)
-                .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
-                .next();
+                .normal(normalMatrix, 0.0F, 1.0F, 0.0F);
         vertices.vertex(positionMatrix, v3.x, v3.y, v3.z) //01
                 .color(r, g, b, a).texture(minU, maxV)
                 .overlay(OverlayTexture.DEFAULT_UV)
                 .light(light)
-                .normal(normalMatrix, 0.0F, 1.0F, 0.0F)
-                .next();
+                .normal(normalMatrix, 0.0F, 1.0F, 0.0F);
     }
 }

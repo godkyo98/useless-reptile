@@ -25,7 +25,7 @@ public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSpher
 
     @Override
     public Identifier getTexture(ShockwaveSphereEntity entity) {
-        return new Identifier(UselessReptile.MODID, "textures/entity/shockwave_sphere/shockwave.png");
+        return UselessReptile.id("textures/entity/shockwave_sphere/shockwave.png");
     }
 
     @Override

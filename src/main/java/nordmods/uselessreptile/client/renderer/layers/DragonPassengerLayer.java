@@ -57,6 +57,7 @@ public class DragonPassengerLayer<T extends DragonEquipmentAnimatable> extends G
             float yaw = MathHelper.lerpAngleDegrees(partialTick, animatable.owner.prevBodyYaw, animatable.owner.bodyYaw);
             matrixStackIn.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(180f - yaw));
             matrixStackIn.scale(1/animatable.owner.getScale(), 1/animatable.owner.getScale(),1/animatable.owner.getScale());
+
             renderEntity(passenger, partialTick, matrixStackIn, bufferSource, packedLight);
             buffer = bufferSource.getBuffer(renderType);
 

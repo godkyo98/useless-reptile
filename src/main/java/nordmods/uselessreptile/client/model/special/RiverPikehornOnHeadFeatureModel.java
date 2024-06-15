@@ -5,13 +5,12 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.RiverPikehornEntity;
 
 public class RiverPikehornOnHeadFeatureModel extends SinglePartEntityModel<RiverPikehornEntity> {
     private final ModelPart Tdragon;
-    public static final EntityModelLayer PIKEHORN_ON_HEAD_MODEL = new EntityModelLayer(new Identifier(UselessReptile.MODID, "river_pikehorn"), "dragon");
+    public static final EntityModelLayer PIKEHORN_ON_HEAD_MODEL = new EntityModelLayer(UselessReptile.id("river_pikehorn"), "dragon");
 
     public RiverPikehornOnHeadFeatureModel(ModelPart root) {
         this.Tdragon = root.getChild("Tdragon");
@@ -108,8 +107,8 @@ public class RiverPikehornOnHeadFeatureModel extends SinglePartEntityModel<River
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
-        Tdragon.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
+    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        Tdragon.render(matrices, vertexConsumer, light, overlay, color);
     }
 
     @Override

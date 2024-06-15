@@ -12,7 +12,7 @@ import nordmods.uselessreptile.common.entity.base.FlyingDragon;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 
 public record LiftoffParticlesS2CPacket(int id) implements CustomPayload {
-    public static final Identifier ID = new Identifier(UselessReptile.MODID, "liftoff_particles");
+    public static final Identifier ID = UselessReptile.id("liftoff_particles");
     public static final CustomPayload.Id<LiftoffParticlesS2CPacket> PACKET_ID = new CustomPayload.Id<>(ID);
     public static final PacketCodec<RegistryByteBuf, LiftoffParticlesS2CPacket> PACKET_CODEC = PacketCodecs.INTEGER.xmap(LiftoffParticlesS2CPacket::new, LiftoffParticlesS2CPacket::id).cast();
 

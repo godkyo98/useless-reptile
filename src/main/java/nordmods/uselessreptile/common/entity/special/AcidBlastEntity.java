@@ -31,11 +31,11 @@ public class AcidBlastEntity extends PersistentProjectileEntity implements GeoEn
     private static final int COLOR = 10085398;
 
     public AcidBlastEntity(EntityType<? extends AcidBlastEntity> entityType, World world) {
-        super(entityType, world, ItemStack.EMPTY);
+        super(entityType, world);
     }
 
     public AcidBlastEntity(World world, LivingEntity owner) {
-        super(UREntities.ACID_BLAST_ENTITY, world, ItemStack.EMPTY);
+        super(UREntities.ACID_BLAST_ENTITY, world);
         setOwner(owner);
     }
 

@@ -5,7 +5,7 @@ import com.terraformersmc.modmenu.api.ModMenuApi;
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.gui.controllers.TickBoxController;
 import dev.isxander.yacl3.gui.controllers.cycling.EnumController;
-import dev.isxander.yacl3.gui.controllers.slider.DoubleSliderController;
+import dev.isxander.yacl3.gui.controllers.slider.FloatSliderController;
 import dev.isxander.yacl3.gui.controllers.slider.IntegerSliderController;
 import dev.isxander.yacl3.gui.controllers.string.number.FloatFieldController;
 import dev.isxander.yacl3.gui.controllers.string.number.IntegerFieldController;
@@ -329,26 +329,26 @@ public class ModMenuIntegration implements ModMenuApi {
                         .text(key("group.dragonAppearance.@Tooltip")).build());
 
 
-        Option<Double> cameraDistanceOffset = Option.<Double>createBuilder()
+        Option<Float> cameraDistanceOffset = Option.<Float>createBuilder()
                 .name(key("option.cameraDistanceOffset"))
                 .binding(clientDefaults.cameraDistanceOffset,
                         () -> clientConfig.cameraDistanceOffset,
                         val -> clientConfig.cameraDistanceOffset = val)
-                .customController(opt -> new DoubleSliderController(opt, -5, 5, 0.05))
+                .customController(opt -> new FloatSliderController(opt, -5, 5, 0.05f))
                 .build();
-        Option<Double> cameraVerticalOffset = Option.<Double>createBuilder()
+        Option<Float> cameraVerticalOffset = Option.<Float>createBuilder()
                 .name(key("option.cameraVerticalOffset"))
                 .binding(clientDefaults.cameraVerticalOffset,
                         () -> clientConfig.cameraVerticalOffset,
                         val -> clientConfig.cameraVerticalOffset = val)
-                .customController(opt -> new DoubleSliderController(opt, -5, 5, 0.05))
+                .customController(opt -> new FloatSliderController(opt, -5, 5, 0.05f))
                 .build();
-        Option<Double> cameraHorizontalOffset = Option.<Double>createBuilder()
+        Option<Float> cameraHorizontalOffset = Option.<Float>createBuilder()
                 .name(key("option.cameraHorizontalOffset"))
                 .binding(clientDefaults.cameraHorizontalOffset,
                         () -> clientConfig.cameraHorizontalOffset,
                         val -> clientConfig.cameraHorizontalOffset = val)
-                .customController(opt -> new DoubleSliderController(opt, -5, 5, 0.05))
+                .customController(opt -> new FloatSliderController(opt, -5, 5, 0.05f))
                 .build();
         Option<Boolean> enableCameraOffset = Option.<Boolean>createBuilder()
                 .name(key("option.enableCameraOffset"))

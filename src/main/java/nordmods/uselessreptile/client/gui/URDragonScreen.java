@@ -20,7 +20,7 @@ import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 
 public abstract class URDragonScreen<T extends ScreenHandler> extends HandledScreen<T> {
-    protected static final Identifier TEXTURE = new Identifier(UselessReptile.MODID,"textures/gui/dragon_inventory.png");
+    protected static final Identifier TEXTURE = UselessReptile.id("textures/gui/dragon_inventory.png");
     private int mouseX;
     private int mouseY;
     private final URDragonEntity entity;
@@ -83,7 +83,7 @@ public abstract class URDragonScreen<T extends ScreenHandler> extends HandledScr
         float centerY = (y1 + y2) / 2f;
         float dx = (float)Math.atan((centerX - mouseX) / 40f);
         float dy = (float) Math.atan((centerY - mouseY) / 40f);
-        float tickDelta = MinecraftClient.getInstance().getTickDelta();
+        float tickDelta = MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(true);
 
         context.getMatrices().push();
         context.enableScissor(x1, y1, x2, y2);
