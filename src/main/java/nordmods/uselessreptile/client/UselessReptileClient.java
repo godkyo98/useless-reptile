@@ -17,7 +17,6 @@ public class UselessReptileClient implements ClientModInitializer {
         EquipmentModelDataReloadListener.init();
         URModelPredicates.init();
         URRenderers.init();
-        //URClientEvents.init();
         URKeybinds.init();
         URScreens.init();
         URPacketEvents.init();

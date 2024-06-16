@@ -3,9 +3,6 @@ package nordmods.uselessreptile.common.init;
 import net.minecraft.entity.damage.DamageType;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import nordmods.uselessreptile.UselessReptile;
 
 public class URDamageTypes {

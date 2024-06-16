@@ -9,7 +9,6 @@ import net.minecraft.potion.Potions;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.UselessReptile;
 
 public class URPotions extends Potions {

@@ -35,6 +35,7 @@ public abstract class GameRendererMixin {
         } else prevStrength = 1f;
     }
 
+    @Unique
     private void renderShockOverlay(DrawContext context, float strength, float tickDelta) {
         int width = context.getScaledWindowWidth();
         int height = context.getScaledWindowHeight();

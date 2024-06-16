@@ -24,7 +24,7 @@ import nordmods.uselessreptile.common.item.component.FluteComponent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FluteItem extends Item { ;
+public class FluteItem extends Item {
     public FluteItem(net.minecraft.item.Item.Settings settings) {
         super(settings);
         ItemStack itemStack = getDefaultStack();

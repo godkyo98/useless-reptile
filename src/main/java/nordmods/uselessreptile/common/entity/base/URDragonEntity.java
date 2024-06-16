@@ -16,6 +16,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,6 +40,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.*;
@@ -56,7 +58,8 @@ import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 import nordmods.uselessreptile.common.network.InstrumentSoundBoundMessageS2CPacket;
 import nordmods.uselessreptile.common.network.URPacketHelper;
-import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantUtil;
+import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawn;
+import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnUtil;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -66,6 +69,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner, InventoryChangedListener {
@@ -238,7 +242,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData) {
         entityData = new PassiveData(false);
         setTamingProgress(baseTamingProgress);
-        DragonVariantUtil.assignVariant(world, this);
+        DragonSpawnUtil.assignVariantFromList(this, DragonSpawnUtil.getAvailableVariants(world, this));
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
@@ -324,6 +328,11 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             ItemStack tail = inventory.getStack(3);
             equipStack(EquipmentSlot.LEGS, tail);
         }
+    }
+
+    public static boolean canDragonSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
+        List<DragonSpawn> availableVariants = DragonSpawnUtil.getAvailableVariants(world, pos, EntityType.getId(type).getPath());
+        return !availableVariants.isEmpty();
     }
 
     @Override

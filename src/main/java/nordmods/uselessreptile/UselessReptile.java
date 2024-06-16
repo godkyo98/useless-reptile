@@ -6,18 +6,18 @@ import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint;
 import net.minecraft.util.Identifier;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
-import nordmods.uselessreptile.common.util.dragon_variant.DragonVariantLoader;
+import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawnReloadListener;
 import nordmods.uselessreptile.common.init.*;
 import nordmods.uselessreptile.common.network.KeyInputC2SPacket;
 import org.slf4j.Logger;
 
 public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
     public static final Logger LOGGER = LogUtils.getLogger();
-    private static final String MODID = "uselessreptile";
+    public static final String MODID = "uselessreptile";
 
     @Override
     public void onInitialize() {
-        DragonVariantLoader.init();
+        DragonSpawnReloadListener.init();
         URMobAttributesConfig.init();
         URSounds.init();
         UREntities.init();
@@ -26,7 +26,7 @@ public class UselessReptile implements ModInitializer, PreLaunchEntrypoint {
         URStatusEffects.init();
         URPotions.init();
         URScreenHandlers.init();
-        //UREvents.init();
+        UREvents.init();
         URPackets.init();
         KeyInputC2SPacket.init();
     }

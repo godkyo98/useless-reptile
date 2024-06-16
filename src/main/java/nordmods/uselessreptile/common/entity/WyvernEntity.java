@@ -149,7 +149,6 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         return loopAnim("blink", event);
     }
     private <A extends GeoEntity> PlayState main(AnimationState<A> event) {
-        //MinecraftClient.getInstance().inGameHud.setOverlayMessage(Text.literal(event.getController().getAnimationState().toString()), false);
         if (event.getController().hasAnimationFinished()) event.getController().forceAnimationReset();
         event.getController().setAnimationSpeed(animationSpeed);
         if (isFlying()) {
@@ -487,6 +486,5 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
 
         tail3.setRelativePos(tail3Pos);
         tail3.setScale(1 ,1);
-
     }
 }

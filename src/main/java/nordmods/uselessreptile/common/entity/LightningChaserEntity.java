@@ -42,6 +42,7 @@ import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserAttackGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserRevengeGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserRoamAroundGoal;
+import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URDragonPart;
 import nordmods.uselessreptile.common.entity.base.URRideableFlyingDragonEntity;
 import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
@@ -49,7 +50,6 @@ import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
 import nordmods.uselessreptile.common.gui.LightningChaserScreenHandler;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
-import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.SyncLightningBreathRotationsS2CPacket;
 import org.jetbrains.annotations.Nullable;
@@ -118,8 +118,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     }
 
     public static boolean canDragonSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
-        BlockPos blockPos = pos.down();
-        return spawnReason == SpawnReason.SPAWNER || world.getBlockState(blockPos).isIn(URTags.LIGHTNING_CHASER_SPAWNABLE_ON);
+        if (world.getChunk(pos).getInhabitedTime() > 12000) return false;
+        return URDragonEntity.canDragonSpawn(type, world, spawnReason, pos, random);
     }
 
     @Nullable

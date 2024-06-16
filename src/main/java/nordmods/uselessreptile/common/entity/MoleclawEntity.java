@@ -41,6 +41,7 @@ import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawAttackGoal
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawEscapeLightGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawUntamedTargetGoal;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.MoleclawNavigation;
+import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
 import nordmods.uselessreptile.common.init.URItems;
@@ -80,7 +81,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
     public static boolean canDragonSpawn(EntityType<? extends MobEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random) {
         if (world.getChunk(pos).getInhabitedTime() > 12000) return false;
         if (world.getLightLevel(LightType.SKY, pos) > 7 || world.getLightLevel(LightType.BLOCK, pos) > 7) return false;
-        return spawnReason == SpawnReason.SPAWNER || world.getBlockState(pos.down()).isIn(URTags.MOLECLAW_SPAWNABLE_ON);
+        return URDragonEntity.canDragonSpawn(type, world, spawnReason, pos, random);
     }
 
     @Override
