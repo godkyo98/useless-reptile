@@ -18,7 +18,6 @@ import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.BlockTags;
@@ -44,7 +43,6 @@ import nordmods.uselessreptile.common.entity.ai.pathfinding.MoleclawNavigation;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
-import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
@@ -338,17 +336,16 @@ public class MoleclawEntity extends URRideableDragonEntity {
 
     public void tryPanic() {
         playPanicSound();
-        if (!hasHelmet()) setIsPanicking(isTooBrightAtPos(getBlockPos()));
+        if (!hasLightProtection()) setIsPanicking(isTooBrightAtPos(getBlockPos()));
         else setIsPanicking(false);
     }
 
-    public boolean hasHelmet() {
-        Item head = getEquippedStack(EquipmentSlot.HEAD).getItem();
-        return head == URItems.MOLECLAW_HELMET_IRON || head == URItems.MOLECLAW_HELMET_GOLD || head == URItems.MOLECLAW_HELMET_DIAMOND;
+    public boolean hasLightProtection() {
+        return getEquippedStack(EquipmentSlot.HEAD).isIn(URTags.MOLECLAW_PROTECTS_FROM_LIGHT);
     }
 
     public boolean isTooBrightAtPos(BlockPos blockPos) {
-        return getLightAtPos(blockPos, this) > 7 && !hasHelmet();
+        return getLightAtPos(blockPos, this) > 7 && !hasLightProtection();
     }
 
     public static int getLightAtPos(BlockPos blockPos, LivingEntity entity) {

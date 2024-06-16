@@ -61,6 +61,16 @@ java {
     withSourcesJar()
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs += [
+                    'src/main/generated'
+            ]
+        }
+    }
+}
+
 loom {
     accessWidenerPath = file("src/main/resources/uselessreptile.accesswidener")
     runs {
@@ -72,9 +82,22 @@ loom {
             client()
             vmArg "-Dgeckolib.disable_examples=true"
             vmArg '-Dfabric-tag-conventions-v2.missingTagTranslationWarning=VERBOSE'
+
+            name "Data Generation Client"
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
+            vmArg "-Dfabric-api.datagen.modid=uselessreptile"
+
+            ideConfigGenerated = true
+            runDir "build/datagen"
+
             programArgs "--username", "Nord_Act"
         }
     }
+}
+
+fabricApi {
+    configureDataGeneration()
 }
 
 publishMods {
@@ -83,7 +106,7 @@ publishMods {
     type = BETA
     displayName = "Useless Reptile ${project.version}"
     modLoaders.add("fabric")
-    //dryRun = true
+    dryRun = true
 
     curseforge {
         projectId = "677634"

@@ -28,6 +28,9 @@
     ],
     "preLaunch": [
       "nordmods.uselessreptile.UselessReptile"
+    ],
+    "fabric-datagen": [
+      "nordmods.uselessreptile.datagen.UselessReptileDataGenerator"
     ]
   },
   "mixins": [

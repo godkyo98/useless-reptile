@@ -3,10 +3,8 @@ package nordmods.uselessreptile.common.util.dragon_spawn;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import nordmods.uselessreptile.UselessReptile;
@@ -21,7 +19,8 @@ public class DragonSpawnReloadListener extends JsonDataLoader implements Identif
     }
 
     public static void init() {
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DragonSpawnReloadListener());
+        //todo
+        //ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DragonSpawnReloadListener());
     }
 
     @Override

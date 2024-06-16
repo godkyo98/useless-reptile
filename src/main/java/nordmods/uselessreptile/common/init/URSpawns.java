@@ -14,8 +14,8 @@ import nordmods.uselessreptile.common.util.URSpawnGroup;
 public class URSpawns {
     public static void init() {
         BiomeModifications.addSpawn(BiomeSelectors
-                        .tag(URTags.SWAMP_WYVERN_SPAWN_WHITELIST)
-                        .and(BiomeSelectors.tag(URTags.SWAMP_WYVERN_SPAWN_BLACKLIST).negate()),
+                        .tag(URTags.WYVERN_SPAWN_WHITELIST)
+                        .and(BiomeSelectors.tag(URTags.WYVERN_SPAWN_BLACKLIST).negate()),
                 URSpawnGroup.DRAGON.spawnGroup,
                 UREntities.WYVERN_ENTITY,
                 URConfig.getConfig().wyvernSpawnWeight,
