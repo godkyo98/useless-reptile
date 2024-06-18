@@ -1,0 +1,15 @@
+{
+  "conditions": {
+    "allowed_biomes": [
+      "#c:is_ocean"
+    ],
+    "allowed_blocks": [
+      "#uselessreptile:lightning_chaser_spawnable_on"
+    ],
+    "altitude": {
+      "min": 64
+    },
+    "weight": 9
+  },
+  "variant": "blue"
+}

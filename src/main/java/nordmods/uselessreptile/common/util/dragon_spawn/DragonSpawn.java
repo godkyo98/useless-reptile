@@ -1,128 +1,269 @@
 package nordmods.uselessreptile.common.util.dragon_spawn;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.util.JsonHelper;
-import org.jetbrains.annotations.Nullable;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.world.biome.Biome;
+import nordmods.uselessreptile.UselessReptile;
+import nordmods.uselessreptile.common.entity.base.URDragonEntity;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public record DragonSpawn(String variant, SpawnCondition condition) {
-    public static final Map<String, List<DragonSpawn>> dragonSpawnsHolder = new HashMap<>();
+public class DragonSpawn {
+    private final String variant;
+    private final SpawnConditions conditions;
+    public static final Codec<DragonSpawn> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                    Codecs.NON_EMPTY_STRING.fieldOf("variant").forGetter(DragonSpawn::variant),
+                    SpawnConditions.CODEC.fieldOf("conditions").forGetter(DragonSpawn::conditions))
+            .apply(instance, DragonSpawn::new));
+    private static final Map<String, List<DragonSpawn>> dragonSpawnsHolder = new HashMap<>();
 
-    public static DragonSpawn deserialize(JsonElement element) throws JsonParseException {
-        JsonObject input = element.getAsJsonObject();
-        String name = input.get("variant").getAsString();
-        SpawnCondition spawnCondition = SpawnCondition.deserialize(input.get("conditions"));
-        return new DragonSpawn(name, spawnCondition);
+    private DragonSpawn(String variant, SpawnConditions conditions) {
+        this.variant = variant;
+        this.conditions = conditions;
     }
 
-    public record SpawnCondition(int weight,
-                                 @Nullable BiomeRestrictions allowedBiomes,
-                                 @Nullable BiomeRestrictions bannedBiomes,
-                                 @Nullable BlockRestrictions allowedBlocks,
-                                 @Nullable BlockRestrictions bannedBlocks,
-                                 AltitudeRestriction altitudeRestriction
-                                 ) {
-        //allowed - works as whitelist if presented
-        //banned - works as blacklist if presented
-        public boolean hasAllowedBiomes() {
-            return allowedBiomes != null && (allowedBiomes.hasBiomesByIdList() || allowedBiomes.hasBiomesByTagList());
-        }
+    public String variant() {
+        return variant;
+    }
 
-        public boolean hasBannedBiomes() {
-            return bannedBiomes != null && (bannedBiomes.hasBiomesByIdList() || bannedBiomes.hasBiomesByTagList());
-        }
+    public SpawnConditions conditions() {
+        return conditions;
+    }
 
-        public boolean hasAllowedBlocks() {
-            return allowedBlocks != null && (allowedBlocks.hasBlocksByIdList() || allowedBlocks.hasBlocksByTagList());
-        }
+    public static List<DragonSpawn> getAllVariants(String name) {
+        return dragonSpawnsHolder.get(name);
+    }
 
-        public boolean hasBannedBlocks() {
-            return bannedBlocks != null && (bannedBlocks.hasBlocksByIdList() || bannedBlocks.hasBlocksByTagList());
-        }
+    public static List<DragonSpawn> getAllVariants(URDragonEntity entity) {
+        return getAllVariants(entity.getDragonID());
+    }
 
-        public record BiomeRestrictions(List<String> biomesById, List<String> biomesByTag) {
-            public boolean hasBiomesByIdList() {
-                return biomesById != null && !biomesById.isEmpty();
-            }
+    public static DragonSpawn deserialize(JsonObject input) throws JsonParseException {
+        DataResult<DragonSpawn> result = CODEC.parse(JsonOps.INSTANCE, input);
+        return result.getOrThrow();
+    }
 
-            public boolean hasBiomesByTagList() {
-                return biomesByTag != null && !biomesByTag.isEmpty();
-            }
-        }
+    public static void clearSpawns() {
+        dragonSpawnsHolder.clear();
+    }
 
-        public record BlockRestrictions(List<String> blocksById, List<String> blocksByTag) {
-            public boolean hasBlocksByIdList() {
-                return blocksById != null && !blocksById.isEmpty();
-            }
+    public static void addSpawn(EntityType<? extends URDragonEntity> type, DragonSpawn data) {
+        addSpawn(EntityType.getId(type).getPath(), data);
+    }
 
-            public boolean hasBlocksByTagList() {
-                return blocksByTag != null && !blocksByTag.isEmpty();
+    public static void addSpawn(String name, DragonSpawn data) {
+        List<DragonSpawn> content = DragonSpawn.dragonSpawnsHolder.get(name);
+        if (content == null) content = new ArrayList<>();
+        content.add(data);
+        DragonSpawn.dragonSpawnsHolder.put(name, content);
+    }
+
+    public static void debugPrint() {
+        for (Map.Entry<String, List<DragonSpawn>> entry : DragonSpawn.dragonSpawnsHolder.entrySet()) {
+            for (DragonSpawn spawn : entry.getValue()) {
+                UselessReptile.LOGGER.debug("{}: added spawn for variant {} with conditions {}", entry.getKey(), spawn.variant(), spawn.conditions());
             }
         }
+    }
 
-        private static SpawnCondition deserialize(JsonElement element) throws JsonParseException {
-            JsonObject input = element.getAsJsonObject();
-            int weight = input.get("weight").getAsInt();
+    public static Set<Map.Entry<String, List<DragonSpawn>>> getEntries() {
+        return DragonSpawn.dragonSpawnsHolder.entrySet();
+    }
 
-            SpawnCondition.BiomeRestrictions allowedBiomes = getBiomes("allowed_biomes", input);
-            SpawnCondition.BiomeRestrictions bannedBiomes = getBiomes("banned_biomes", input);
-            SpawnCondition.BlockRestrictions allowedBlocks = getBlocks("allowed_blocks", input);
-            SpawnCondition.BlockRestrictions bannedBlocks = getBlocks("banned_blocks", input);
-            SpawnCondition.AltitudeRestriction altitudeRestriction = getAltitude(input);
+    //allowed - works as whitelist if presented and not empty
+    //banned - works as blacklist if presented and not empty
+    public static class SpawnConditions {
+        private final int weight;
+        @NotNull private final Optional<List<Codecs.TagEntryId>> allowedBiomes;
+        @NotNull private final Optional<List<Codecs.TagEntryId>> bannedBiomes;
+        @NotNull private final Optional<List<Codecs.TagEntryId>> allowedBlocks;
+        @NotNull private final Optional<List<Codecs.TagEntryId>> bannedBlocks;
+        @NotNull private final Optional<AltitudeRestriction> altitudeRestriction;
 
-            return new SpawnCondition(weight, allowedBiomes, bannedBiomes, allowedBlocks, bannedBlocks, altitudeRestriction);
+        private SpawnConditions(int weight, @NotNull Optional<List<Codecs.TagEntryId>> allowedBiomes, @NotNull Optional<List<Codecs.TagEntryId>> bannedBiomes, @NotNull Optional<List<Codecs.TagEntryId>> allowedBlocks, @NotNull Optional<List<Codecs.TagEntryId>> bannedBlocks, @NotNull Optional<AltitudeRestriction> altitudeRestriction) {
+            this.weight = weight;
+            this.allowedBiomes = allowedBiomes;
+            this.bannedBiomes = bannedBiomes;
+            this.allowedBlocks = allowedBlocks;
+            this.bannedBlocks = bannedBlocks;
+            this.altitudeRestriction = altitudeRestriction;
         }
 
-        private static SpawnCondition.BiomeRestrictions getBiomes(String list, JsonObject input) {
-            SpawnCondition.BiomeRestrictions restrictions = null;
-            if (input.has(list)) {
-                JsonArray entries = JsonHelper.getArray(input, list);
-                List<String> ids = new ArrayList<>();
-                List<String> tags = new ArrayList<>();
-                entries.forEach(c -> {
-                    String entry = c.getAsString();
-                    if (entry.startsWith("#")) tags.add(entry.replaceFirst("#",""));
-                    else ids.add(entry);
-                });
-                restrictions = new SpawnCondition.BiomeRestrictions(ids, tags);
+        public static final Codec<SpawnConditions> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                Codecs.NONNEGATIVE_INT.fieldOf("weight").forGetter(SpawnConditions::weight),
+                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("allowed_biomes").forGetter(SpawnConditions::allowedBiomes),
+                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("banned_biomes").forGetter(SpawnConditions::bannedBiomes),
+                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("allowed_blocks").forGetter(SpawnConditions::allowedBlocks),
+                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("banned_blocks").forGetter(SpawnConditions::bannedBlocks),
+                AltitudeRestriction.CODEC.optionalFieldOf("altitude").forGetter(SpawnConditions::altitudeRestriction))
+                .apply(instance, (SpawnConditions::new)));
+
+        public int weight() {
+            return weight;
+        }
+
+        public Optional<List<Codecs.TagEntryId>> allowedBiomes() {
+            return allowedBiomes;
+        }
+
+        public Optional<List<Codecs.TagEntryId>> bannedBiomes() {
+            return bannedBiomes;
+        }
+
+        public Optional<List<Codecs.TagEntryId>> allowedBlocks() {
+            return allowedBlocks;
+        }
+
+        public Optional<List<Codecs.TagEntryId>> bannedBlocks() {
+            return bannedBlocks;
+        }
+
+        public Optional<AltitudeRestriction> altitudeRestriction() {
+            return altitudeRestriction;
+        }
+
+
+        public static class AltitudeRestriction {
+            private final Optional<Integer> min;
+            private final Optional<Integer> max;
+
+            private AltitudeRestriction(Optional<Integer> min, Optional<Integer> max) {
+                this.min = min;
+                this.max = max;
             }
-            return restrictions;
-        }
 
-        private static SpawnCondition.BlockRestrictions getBlocks(String list, JsonObject input) {
-            SpawnCondition.BlockRestrictions restrictions = null;
-            if (input.has(list)) {
-                JsonArray entries = JsonHelper.getArray(input, list);
-                List<String> ids = new ArrayList<>();
-                List<String> tags = new ArrayList<>();
-                entries.forEach(c -> {
-                    String entry = c.getAsString();
-                    if (entry.startsWith("#")) tags.add(entry.replaceFirst("#",""));
-                    else ids.add(entry);
-                });
-                restrictions = new SpawnCondition.BlockRestrictions(ids, tags);
+            public static final Codec<AltitudeRestriction> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                            Codec.INT.optionalFieldOf("min").forGetter(altitudeRestriction -> altitudeRestriction.min),
+                            Codec.INT.optionalFieldOf("max").forGetter(altitudeRestriction -> altitudeRestriction.max))
+                    .apply(instance, AltitudeRestriction::new));
+
+            public int min() {
+                return min.orElse(Integer.MIN_VALUE);
             }
-            return restrictions;
-        }
 
-        private static SpawnCondition.AltitudeRestriction getAltitude(JsonObject input) {
-            int min = -1000;
-            int max = 1000;
-            if (input.has("altitude")) {
-                JsonObject object = JsonHelper.getObject(input, "altitude");
-                if (object.has("min")) min = object.get("min").getAsInt();
-                if (object.has("max")) max = object.get("max").getAsInt();
+            public int max() {
+                return max.orElse(Integer.MAX_VALUE);
             }
-            return new SpawnCondition.AltitudeRestriction(min, max);
+        }
+    }
+
+    public static class Builder {
+        private String variant;
+        private Integer weight;
+        private List<Codecs.TagEntryId> allowedBiomes;
+        private List<Codecs.TagEntryId> bannedBiomes;
+        private List<Codecs.TagEntryId> allowedBlocks;
+        private List<Codecs.TagEntryId> bannedBlocks;
+        private Integer minAltitude;
+        private Integer maxAltitude;
+
+        private Builder() {}
+
+        public static Builder create() {
+            return new Builder();
         }
 
-        public record AltitudeRestriction(int min, int max) {}
+        public DragonSpawn build() {
+            if (variant == null) throw new IllegalStateException("Variant must be specified");
+            if (weight == null) throw new IllegalStateException("Weight must be specified");
+            Optional<List<Codecs.TagEntryId>> allowedBiomes = this.allowedBiomes != null ? Optional.of(this.allowedBiomes) : Optional.empty();
+            Optional<List<Codecs.TagEntryId>> bannedBiomes = this.bannedBiomes != null ? Optional.of(this.bannedBiomes) : Optional.empty();
+            Optional<List<Codecs.TagEntryId>> allowedBlocks = this.allowedBlocks != null ? Optional.of(this.allowedBlocks) : Optional.empty();
+            Optional<List<Codecs.TagEntryId>> bannedBlocks = this.bannedBlocks != null ? Optional.of(this.bannedBlocks) : Optional.empty();
+            Optional<SpawnConditions.AltitudeRestriction> altitudeRestriction;
+            if (this.minAltitude != null || this.maxAltitude != null) {
+                Optional<Integer> minAltitude = this.minAltitude != null ? Optional.of(this.minAltitude) : Optional.empty();
+                Optional<Integer> maxAltitude = this.maxAltitude != null ? Optional.of(this.maxAltitude) : Optional.empty();
+                altitudeRestriction = Optional.of(new SpawnConditions.AltitudeRestriction(minAltitude, maxAltitude));
+            }
+            else altitudeRestriction = Optional.empty();
+
+            return new DragonSpawn(variant, new SpawnConditions(weight, allowedBiomes, bannedBiomes, allowedBlocks, bannedBlocks, altitudeRestriction));
+        }
+
+        //mandatory
+        public Builder setVariant(String variant) {
+            this.variant = variant;
+            return this;
+        }
+
+        public Builder setWeight(Integer weight) {
+            this.weight = weight;
+            return this;
+        }
+
+        //altitude
+        public Builder setMinAltitude(Integer minAltitude) {
+            this.minAltitude = minAltitude;
+            return this;
+        }
+
+        public Builder setMaxAltitude(Integer maxAltitude) {
+            this.maxAltitude = maxAltitude;
+            return this;
+        }
+
+        //allowed biomes
+        public Builder addAllowedBiome(RegistryKey<Biome> biomeRegistryKey) {
+            if (allowedBiomes == null) allowedBiomes = new ArrayList<>();
+            allowedBiomes.add(new Codecs.TagEntryId(biomeRegistryKey.getValue(), false));
+            return this;
+        }
+
+        public Builder addAllowedBiomeTag(TagKey<Biome> biomeTagKey) {
+            if (allowedBiomes == null) allowedBiomes = new ArrayList<>();
+            allowedBiomes.add(new Codecs.TagEntryId(biomeTagKey.id(), true));
+            return this;
+        }
+
+
+        //banned biomes
+        public Builder addBannedBiome(RegistryKey<Biome> biomeRegistryKey) {
+            if (bannedBiomes == null) bannedBiomes = new ArrayList<>();
+            bannedBiomes.add(new Codecs.TagEntryId(biomeRegistryKey.getValue(), false));
+            return this;
+        }
+
+        public Builder addBannedBiomeTag(TagKey<Biome> biomeTagKey) {
+            if (bannedBiomes == null) bannedBiomes = new ArrayList<>();
+            bannedBiomes.add(new Codecs.TagEntryId(biomeTagKey.id(), true));
+            return this;
+        }
+
+        //allowed blocks
+        public Builder addAllowedBlock(RegistryKey<Block> blockRegistryKey) {
+            if (allowedBlocks == null) allowedBlocks = new ArrayList<>();
+            allowedBlocks.add(new Codecs.TagEntryId(blockRegistryKey.getValue(), false));
+            return this;
+        }
+
+        public Builder addAllowedBlockTag(TagKey<Block> blockTagKey) {
+            if (allowedBlocks == null) allowedBlocks = new ArrayList<>();
+            allowedBlocks.add(new Codecs.TagEntryId(blockTagKey.id(), true));
+            return this;
+        }
+
+        //banned blocks
+        public Builder addBannedBlock(RegistryKey<Block> blockRegistryKey) {
+            if (bannedBlocks == null) bannedBlocks = new ArrayList<>();
+            bannedBlocks.add(new Codecs.TagEntryId(blockRegistryKey.getValue(), false));
+            return this;
+        }
+
+        public Builder addBannedBlockTag(TagKey<Block> blockTagKey) {
+            if (bannedBlocks == null) bannedBlocks = new ArrayList<>();
+            bannedBlocks.add(new Codecs.TagEntryId(blockTagKey.id(), true));
+            return this;
+        }
     }
 }

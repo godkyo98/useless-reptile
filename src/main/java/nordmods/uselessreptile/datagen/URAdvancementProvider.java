@@ -25,8 +25,8 @@ import nordmods.uselessreptile.common.init.URTags;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-public class AdvancementGenerator extends FabricAdvancementProvider {
-    protected AdvancementGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+public class URAdvancementProvider extends FabricAdvancementProvider {
+    protected URAdvancementProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
         super(output, registryLookup);
     }
 

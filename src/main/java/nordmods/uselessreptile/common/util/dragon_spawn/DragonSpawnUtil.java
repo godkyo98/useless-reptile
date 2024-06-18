@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.biome.Biome;
@@ -16,67 +16,33 @@ import java.util.List;
 
 public class DragonSpawnUtil {
 
-    public static List<DragonSpawn> getAllVariants(String name) {
-        return DragonSpawn.dragonSpawnsHolder.get(name);
-    }
-
-    public static List<DragonSpawn> getAllVariants(URDragonEntity entity) {
-        return DragonSpawnUtil.getAllVariants(entity.getDragonID());
-    }
-
-    public static boolean isBiomeInList(DragonSpawn.SpawnCondition.BiomeRestrictions list, WorldAccess world, BlockPos blockPos) {
+    public static boolean isBiomeInList(List<Codecs.TagEntryId> list, WorldAccess world, BlockPos blockPos) {
         RegistryEntry<Biome> biome = world.getBiome(blockPos);
-        List<String> id = list.hasBiomesByIdList() ? list.biomesById() : List.of();
-        List<String> tags = list.hasBiomesByTagList() ?list.biomesByTag() : List.of();
 
-        boolean isIn = false;
-        for (String s : id) {
-            Identifier name = Identifier.of(s);
-            if (biome.matchesId(name)) {
-                isIn = true;
-                break;
-            }
+        for (Codecs.TagEntryId tagEntryId : list) {
+            if (tagEntryId.tag())
+                if (biome.isIn(TagKey.of(RegistryKeys.BIOME, tagEntryId.id()))) return true;
+            else if (biome.matchesId(tagEntryId.id())) return true;
         }
 
-        if (!isIn) for (String tag : tags) {
-            Identifier name = Identifier.of(tag);
-            if (biome.isIn(TagKey.of(RegistryKeys.BIOME, name))) {
-                isIn = true;
-                break;
-            }
-        }
-
-        return isIn;
+        return false;
     }
 
-    public static boolean isBlockInList(DragonSpawn.SpawnCondition.BlockRestrictions list, WorldAccess world, BlockPos blockPos) {
+    public static boolean isBlockInList(List<Codecs.TagEntryId> list, WorldAccess world, BlockPos blockPos) {
         RegistryEntry<Block> block = world.getBlockState(blockPos.down()).getRegistryEntry();
-        List<String> id = list.hasBlocksByIdList() ? list.blocksById() : List.of();
-        List<String> tags = list.hasBlocksByTagList() ?list.blocksById() : List.of();
 
-        boolean isIn = false;
-        for (String s : id) {
-            Identifier name = Identifier.of(s);
-            if (block.matchesId(name)) {
-                isIn = true;
-                break;
-            }
+        for (Codecs.TagEntryId tagEntryId : list) {
+            if (tagEntryId.tag())
+                if (block.isIn(TagKey.of(RegistryKeys.BLOCK, tagEntryId.id()))) return true;
+                else if (block.matchesId(tagEntryId.id())) return true;
         }
 
-        if (!isIn) for (String tag : tags) {
-            Identifier name = Identifier.of(tag);
-            if (block.isIn(TagKey.of(RegistryKeys.BLOCK, name))) {
-                isIn = true;
-                break;
-            }
-        }
-
-        return isIn;
+        return false;
     }
 
     public static void assignVariantFromList(URDragonEntity entity, List<DragonSpawn> variants) {
         int totalWeight = 0;
-        for (DragonSpawn variant : variants) totalWeight += variant.condition().weight();
+        for (DragonSpawn variant : variants) totalWeight += variant.conditions().weight();
         if (totalWeight <= 0) {
             UselessReptile.LOGGER.warn("Failed to set variant for {} at {} as none can spawn there. Setting default", entity.getName().getString(), entity.getBlockPos());
             entity.setVariant(entity.getDefaultVariant());
@@ -87,11 +53,11 @@ public class DragonSpawnUtil {
         int previousBound = 0;
 
         for (DragonSpawn variant : variants) {
-            if (roll >= previousBound && roll < previousBound + variant.condition().weight()) {
+            if (roll >= previousBound && roll < previousBound + variant.conditions().weight()) {
                 entity.setVariant(variant.variant());
                 break;
             }
-            previousBound += variant.condition().weight();
+            previousBound += variant.conditions().weight();
         }
     }
 
@@ -100,26 +66,36 @@ public class DragonSpawnUtil {
     }
 
     public static List<DragonSpawn> getAvailableVariants(WorldAccess world, BlockPos pos, String name) {
-        List<DragonSpawn> variants = getAllVariants(name);
+        List<DragonSpawn> variants = DragonSpawn.getAllVariants(name);
         if (variants == null) throw new RuntimeException("Failed to get variants for " + name);
 
         List<DragonSpawn> allowedVariants = new ArrayList<>(variants.size());
         variants.forEach(variant -> {
             //altitude check
-            if (variant.condition().altitudeRestriction().min() > pos.getY()
-                    || pos.getY() > variant.condition().altitudeRestriction().max()) return;
-            //banned biomes check (blacklist)
-            if (variant.condition().hasBannedBiomes()
-                    && isBiomeInList(variant.condition().bannedBiomes(), world, pos)) return;
-            //allowed biomes check (whitelist)
-            if (variant.condition().hasAllowedBiomes())
-                if (!isBiomeInList(variant.condition().allowedBiomes(), world, pos)) return;
+            if (variant.conditions().altitudeRestriction().isPresent()) {
+                DragonSpawn.SpawnConditions.AltitudeRestriction restriction = variant.conditions().altitudeRestriction().get();
+                if (restriction.min() > pos.getY() || restriction.max() <= pos.getY()) return;
+            }
+            //banned tagEntries check (blacklist)
+            if (variant.conditions().bannedBiomes().isPresent()) {
+                List <Codecs.TagEntryId> list = variant.conditions().bannedBiomes().get();
+                if (!list.isEmpty() && isBiomeInList(list, world, pos)) return;
+            }
+            //allowed tagEntries check (whitelist)
+            if (variant.conditions().allowedBiomes().isPresent()) {
+                List <Codecs.TagEntryId> list = variant.conditions().allowedBiomes().get();
+                if (!list.isEmpty() && !isBiomeInList(list, world, pos)) return;
+            }
             //banned blocks check (blacklist)
-            if (variant.condition().hasBannedBlocks()
-                    && isBlockInList(variant.condition().bannedBlocks(), world, pos)) return;
+            if (variant.conditions().bannedBlocks().isPresent()) {
+                List <Codecs.TagEntryId> list = variant.conditions().bannedBlocks().get();
+                if (!list.isEmpty() && isBlockInList(list, world, pos)) return;
+            }
             //allowed blocks check (whitelist)
-            if (variant.condition().hasAllowedBlocks())
-                if (!isBlockInList(variant.condition().allowedBlocks(), world, pos)) return;
+            if (variant.conditions().allowedBlocks().isPresent()) {
+                List <Codecs.TagEntryId> list = variant.conditions().allowedBlocks().get();
+                if (!list.isEmpty() && !isBlockInList(list, world, pos)) return;
+            }
 
             allowedVariants.add(variant);
         });

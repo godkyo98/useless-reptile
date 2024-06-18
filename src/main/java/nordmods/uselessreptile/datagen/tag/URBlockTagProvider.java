@@ -10,8 +10,8 @@ import nordmods.uselessreptile.common.init.URTags;
 
 import java.util.concurrent.CompletableFuture;
 
-public class BlockTagGenerator extends FabricTagProvider.BlockTagProvider {
-    public BlockTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class URBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+    public URBlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 

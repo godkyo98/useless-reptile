@@ -11,8 +11,8 @@ import nordmods.uselessreptile.common.init.URTags;
 
 import java.util.concurrent.CompletableFuture;
 
-public class BiomeTagGenerator extends FabricTagProvider<Biome>{
-    public BiomeTagGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class URBiomeTagProvider extends FabricTagProvider<Biome>{
+    public URBiomeTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, RegistryKeys.BIOME, registriesFuture);
     }
 

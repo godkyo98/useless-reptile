@@ -1,0 +1,15 @@
+{
+  "conditions": {
+    "allowed_biomes": [
+      "#uselessreptile:moleclaw_spawn_whitelist"
+    ],
+    "allowed_blocks": [
+      "#uselessreptile:moleclaw_spawnable_on"
+    ],
+    "banned_biomes": [
+      "#uselessreptile:moleclaw_spawn_blacklist"
+    ],
+    "weight": 13
+  },
+  "variant": "black"
+}

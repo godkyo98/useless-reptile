@@ -1,0 +1,15 @@
+{
+  "conditions": {
+    "allowed_biomes": [
+      "#uselessreptile:river_pikehorn_spawn_whitelist"
+    ],
+    "allowed_blocks": [
+      "#uselessreptile:river_pikehorn_spawnable_on"
+    ],
+    "banned_biomes": [
+      "#uselessreptile:river_pikehorn_spawn_blacklist"
+    ],
+    "weight": 1
+  },
+  "variant": "green"
+}

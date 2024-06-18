@@ -16,8 +16,8 @@ import nordmods.uselessreptile.common.init.URItems;
 
 import java.util.concurrent.CompletableFuture;
 
-public class RecipeGenerator extends FabricRecipeProvider {
-    public RecipeGenerator(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
+public class URRecipeProvider extends FabricRecipeProvider {
+    public URRecipeProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture) {
         super(output, registriesFuture);
     }
 

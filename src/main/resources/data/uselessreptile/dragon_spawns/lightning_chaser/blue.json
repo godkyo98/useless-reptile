@@ -1,9 +1,0 @@
-{
-  "variant": "blue",
-  "conditions": {
-    "weight": 9,
-    "allowed_biomes": [
-      "#c:is_ocean"
-    ]
-  }
-}

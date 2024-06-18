@@ -1,0 +1,15 @@
+{
+  "conditions": {
+    "allowed_biomes": [
+      "#uselessreptile:wyvern_spawn_whitelist"
+    ],
+    "allowed_blocks": [
+      "#uselessreptile:wyvern_spawnable_on"
+    ],
+    "banned_biomes": [
+      "#uselessreptile:wyvern_spawn_blacklist"
+    ],
+    "weight": 1
+  },
+  "variant": "brown"
+}
