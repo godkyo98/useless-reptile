@@ -22,7 +22,7 @@ public class DragonSpawnUtil {
         for (Codecs.TagEntryId tagEntryId : list) {
             if (tagEntryId.tag())
                 if (biome.isIn(TagKey.of(RegistryKeys.BIOME, tagEntryId.id()))) return true;
-            else if (biome.matchesId(tagEntryId.id())) return true;
+                else if (biome.matchesId(tagEntryId.id())) return true;
         }
 
         return false;

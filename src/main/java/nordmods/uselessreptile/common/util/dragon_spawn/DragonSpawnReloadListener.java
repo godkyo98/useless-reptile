@@ -19,7 +19,6 @@ public class DragonSpawnReloadListener extends JsonDataLoader implements Identif
     }
 
     public static void init() {
-        //todo
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new DragonSpawnReloadListener());
     }
 

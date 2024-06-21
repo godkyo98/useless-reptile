@@ -12,7 +12,6 @@ import net.minecraft.util.profiler.Profiler;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.model_data.base.DragonModelData;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class DragonModelDataReloadListener extends JsonDataLoader implements IdentifiableResourceReloadListener {
@@ -22,7 +21,7 @@ public class DragonModelDataReloadListener extends JsonDataLoader implements Ide
 
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
-        DragonModelData.dragonModelDataHolder.clear();
+        DragonModelData.reset();
         for (Map.Entry<Identifier, JsonElement> entry : prepared.entrySet()) {
             String path = entry.getKey().getPath();
             if (path.contains("equipment_model_data")) continue;
@@ -31,33 +30,14 @@ public class DragonModelDataReloadListener extends JsonDataLoader implements Ide
             String variant = path.substring(path.indexOf("/") + 1);
             JsonElement element = entry.getValue();
             DragonModelData data = DragonModelData.deserialize(element);
-            add(dragon, variant, data);
+            DragonModelData.add(dragon, variant, data);
         }
-        debugPrint();
+        DragonModelData.debugPrint();
     }
 
     @Override
     public Identifier getFabricId() {
         return UselessReptile.id("dragon_model_data");
-    }
-
-    private void add(String dragon, String variant, DragonModelData modelData) {
-        Map<String, DragonModelData> content = DragonModelData.dragonModelDataHolder.get(dragon);
-        if (content != null) {
-            if (!content.containsKey(variant)) content.put(variant, modelData);
-        } else {
-            content = new HashMap<>();
-            content.put(variant, modelData);
-            DragonModelData.dragonModelDataHolder.put(dragon, content);
-        }
-    }
-
-    public void debugPrint() {
-        for (Map.Entry<String, Map<String, DragonModelData>> entry : DragonModelData.dragonModelDataHolder.entrySet()) {
-            for ( Map.Entry<String, DragonModelData> data : entry.getValue().entrySet()) {
-                UselessReptile.LOGGER.debug("{}: {}, {}", entry.getKey(), data.getKey(), data.getValue());
-            }
-        }
     }
 
     public static void init () {

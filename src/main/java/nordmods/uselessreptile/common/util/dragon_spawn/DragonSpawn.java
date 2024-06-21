@@ -44,8 +44,8 @@ public class DragonSpawn {
         return dragonSpawnsHolder.get(name);
     }
 
-    public static List<DragonSpawn> getAllVariants(URDragonEntity entity) {
-        return getAllVariants(entity.getDragonID());
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static DragonSpawn deserialize(JsonObject input) throws JsonParseException {
@@ -100,12 +100,12 @@ public class DragonSpawn {
         }
 
         public static final Codec<SpawnConditions> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-                Codecs.NONNEGATIVE_INT.fieldOf("weight").forGetter(SpawnConditions::weight),
-                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("allowed_biomes").forGetter(SpawnConditions::allowedBiomes),
-                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("banned_biomes").forGetter(SpawnConditions::bannedBiomes),
-                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("allowed_blocks").forGetter(SpawnConditions::allowedBlocks),
-                Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("banned_blocks").forGetter(SpawnConditions::bannedBlocks),
-                AltitudeRestriction.CODEC.optionalFieldOf("altitude").forGetter(SpawnConditions::altitudeRestriction))
+                        Codecs.NONNEGATIVE_INT.fieldOf("weight").forGetter(SpawnConditions::weight),
+                        Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("allowed_biomes").forGetter(SpawnConditions::allowedBiomes),
+                        Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("banned_biomes").forGetter(SpawnConditions::bannedBiomes),
+                        Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("allowed_blocks").forGetter(SpawnConditions::allowedBlocks),
+                        Codecs.TAG_ENTRY_ID.listOf().optionalFieldOf("banned_blocks").forGetter(SpawnConditions::bannedBlocks),
+                        AltitudeRestriction.CODEC.optionalFieldOf("altitude").forGetter(SpawnConditions::altitudeRestriction))
                 .apply(instance, (SpawnConditions::new)));
 
         public int weight() {
@@ -168,10 +168,6 @@ public class DragonSpawn {
         private Integer maxAltitude;
 
         private Builder() {}
-
-        public static Builder create() {
-            return new Builder();
-        }
 
         public DragonSpawn build() {
             if (variant == null) throw new IllegalStateException("Variant must be specified");

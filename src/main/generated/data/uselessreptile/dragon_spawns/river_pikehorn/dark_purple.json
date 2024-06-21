@@ -6,6 +6,9 @@
     "allowed_blocks": [
       "#uselessreptile:river_pikehorn_spawnable_on"
     ],
+    "altitude": {
+      "min": 64
+    },
     "banned_biomes": [
       "#uselessreptile:river_pikehorn_spawn_blacklist"
     ],

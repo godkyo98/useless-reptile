@@ -13,8 +13,6 @@ import net.minecraft.util.profiler.Profiler;
 import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.client.util.model_data.base.EquipmentModelData;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class EquipmentModelDataReloadListener extends JsonDataLoader implements IdentifiableResourceReloadListener {
@@ -24,36 +22,17 @@ public class EquipmentModelDataReloadListener extends JsonDataLoader implements 
 
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler) {
-        EquipmentModelData.equipmentModelDataHolder.clear();
+        EquipmentModelData.reset();
         for (Map.Entry<Identifier, JsonElement> entry : prepared.entrySet()) {
             JsonArray array = entry.getValue().getAsJsonArray();
-            for (JsonElement elem : array) add(entry.getKey().getPath(), EquipmentModelData.deserialize(elem));
+            for (JsonElement elem : array) EquipmentModelData.add(entry.getKey().getPath(), EquipmentModelData.deserialize(elem));
         }
-        debugPrint();
+        EquipmentModelData.debugPrint();
     }
 
     @Override
     public Identifier getFabricId() {
         return UselessReptile.id("dragon_model_data/equipment_model_data");
-    }
-
-    private void add(String dragon, EquipmentModelData equipmentModelData) {
-        List<EquipmentModelData> content = EquipmentModelData.equipmentModelDataHolder.get(dragon);
-        if (content != null) {
-            if (content.stream().noneMatch(c -> c.item().equals(equipmentModelData.item()))) content.add(equipmentModelData);
-        } else {
-            content = new ArrayList<>();
-            content.add(equipmentModelData);
-            EquipmentModelData.equipmentModelDataHolder.put(dragon, content);
-        }
-    }
-
-    public void debugPrint() {
-        for (Map.Entry<String, List<EquipmentModelData>> entry : EquipmentModelData.equipmentModelDataHolder.entrySet()) {
-            for (EquipmentModelData data : entry.getValue()) {
-                UselessReptile.LOGGER.debug("{}: {}", entry.getKey(), data);
-            }
-        }
     }
 
     public static void init () {

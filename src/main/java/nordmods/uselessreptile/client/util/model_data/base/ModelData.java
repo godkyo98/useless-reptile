@@ -1,27 +1,17 @@
 package nordmods.uselessreptile.client.util.model_data.base;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import net.minecraft.client.render.RenderLayer;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
-import nordmods.uselessreptile.UselessReptile;
-import org.jetbrains.annotations.Nullable;
 
-public record ModelData(Identifier texture, @Nullable Identifier model, @Nullable Identifier animation, RenderLayer renderType) {
-    public static ModelData deserialize(JsonElement element) throws JsonParseException {
-        JsonObject object = element.getAsJsonObject();
-        Identifier texture = Identifier.of(JsonHelper.getString(object, "texture"));
-        Identifier model = JsonHelper.hasString( object,"model") ? Identifier.of(JsonHelper.getString(object, "model")) : null;
-        Identifier animation = JsonHelper.hasString( object,"animation") ? Identifier.of(JsonHelper.getString(object, "animation")) : UselessReptile.id("animations/entity/empty.animation.json");
+import java.util.Optional;
 
-        boolean cull = JsonHelper.hasBoolean( object,"cull") ? JsonHelper.getBoolean(object, "cull") : true;
-        boolean translucent = JsonHelper.hasBoolean( object,"translucent") ? JsonHelper.getBoolean(object, "translucent") : false;
-        RenderLayer renderType;
-        if (cull) renderType = translucent ? RenderLayer.getEntityTranslucentCull(texture) : RenderLayer.getEntityCutout(texture);
-        else renderType = translucent ? RenderLayer.getEntityTranslucent(texture) : RenderLayer.getEntityCutoutNoCull(texture);
-
-        return new ModelData(texture, model, animation, renderType);
-    }
+public record ModelData(Identifier texture, Optional<Identifier> model, Optional<Identifier> animation, boolean cull, boolean translucent) {
+    public static final Codec<ModelData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Identifier.CODEC.fieldOf("texture").forGetter(ModelData::texture),
+            Identifier.CODEC.optionalFieldOf("model").forGetter(ModelData::model),
+            Identifier.CODEC.optionalFieldOf("animation").forGetter(ModelData::animation),
+            Codec.BOOL.optionalFieldOf("cull", true).forGetter(ModelData::cull),
+            Codec.BOOL.optionalFieldOf("translucent", false).forGetter(ModelData::translucent))
+            .apply(instance, ModelData::new));
 }

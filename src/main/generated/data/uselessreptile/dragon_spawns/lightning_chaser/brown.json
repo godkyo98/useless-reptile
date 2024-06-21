@@ -1,7 +1,7 @@
 {
   "conditions": {
     "allowed_biomes": [
-      "#uselessreptile:lightning_chaser_spawn_whitelist"
+      "#c:is_dry"
     ],
     "allowed_blocks": [
       "#uselessreptile:lightning_chaser_spawnable_on"
@@ -9,11 +9,6 @@
     "altitude": {
       "min": 64
     },
-    "banned_biomes": [
-      "#uselessreptile:lightning_chaser_spawn_blacklist",
-      "#c:is_ocean",
-      "#c:is_dry"
-    ],
     "weight": 9
   },
   "variant": "brown"

@@ -18,7 +18,7 @@ public class ModelDataUtil {
         if (!ResourceUtil.isResourceReloadFinished) return null;
 
         String dragonID = dragon.getDragonID();
-        Map<String, DragonModelData> dragonModelDataMap = DragonModelData.dragonModelDataHolder.get(dragonID);
+        Map<String, DragonModelData> dragonModelDataMap = DragonModelData.getModelData(dragonID);
         DragonModelData dragonModelData;
         if (!viaNametag || URClientConfig.getConfig().disableNamedEntityModels) dragonModelData = dragonModelDataMap.get(dragon.getVariant());
         else {
@@ -43,8 +43,8 @@ public class ModelDataUtil {
 
         Identifier id = Registries.ITEM.getId(item);
         DragonModelData dragonModelData = getDragonModelData(dragon);
-        if (dragonModelData != null && dragonModelData.equipmentModelDataOverrides() != null)
-            for (EquipmentModelData data : dragonModelData.equipmentModelDataOverrides()) {
+        if (dragonModelData != null && dragonModelData.equipmentModelDataOverrides().isPresent())
+            for (EquipmentModelData data : dragonModelData.equipmentModelDataOverrides().get()) {
                 if (data.item().equals(id)) return data;
             }
         return getDefaultEquipmentModelData(dragon, id);
@@ -52,7 +52,7 @@ public class ModelDataUtil {
 
     @Nullable
     public static EquipmentModelData getDefaultEquipmentModelData(URDragonEntity dragon, Identifier id) {
-        for (EquipmentModelData data : EquipmentModelData.equipmentModelDataHolder.get(dragon.getDragonID())) {
+        for (EquipmentModelData data : EquipmentModelData.getModelData(dragon.getDragonID())) {
             if (data.item().equals(id)) return data;
         }
         return null;
