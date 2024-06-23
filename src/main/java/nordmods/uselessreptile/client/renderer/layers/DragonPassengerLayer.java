@@ -59,7 +59,6 @@ public class DragonPassengerLayer<T extends DragonEquipmentAnimatable> extends G
             matrixStackIn.scale(1/animatable.owner.getScale(), 1/animatable.owner.getScale(),1/animatable.owner.getScale());
 
             renderEntity(passenger, partialTick, matrixStackIn, bufferSource, packedLight);
-            buffer = bufferSource.getBuffer(renderType);
 
             passengers.add(passenger.getUuid());
             matrixStackIn.pop();

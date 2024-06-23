@@ -21,15 +21,10 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import java.util.Map;
 
 public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEntityRenderer<T> {
+    private final DragonEquipmentRenderer dragonEquipmentRenderer = new DragonEquipmentRenderer();
     public URDragonRenderer(EntityRendererFactory.Context renderManager, GeoModel<T> model) {
         super(renderManager, model);
         addRenderLayer(new URGlowingLayer<>(this));
-    }
-
-    @Override
-    public void preRender(MatrixStack poseStack, T animatable, BakedGeoModel model, @Nullable VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
-        scaleWidth = scaleHeight = animatable.getScale();
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
     }
 
     @Override
@@ -39,7 +34,7 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
 
     @Override
     public void postRender(MatrixStack poseStack, T dragon, BakedGeoModel model, VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
-        super.postRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
+        super.postRender(poseStack, dragon, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
         DragonAssetCache dragonAssetCache = dragon.getAssetCache();
 
         int i = 0;
@@ -51,7 +46,6 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
                 continue;
             }
 
-            DragonEquipmentRenderer dragonEquipmentRenderer = new DragonEquipmentRenderer();
             DragonEquipmentAnimatable dragonEquipmentAnimatable = dragonAssetCache.getEquipmentAnimatable(j);
             if (dragonEquipmentAnimatable == null || dragonEquipmentAnimatable.item != itemStack.getItem()) {
                 dragonEquipmentAnimatable = new DragonEquipmentAnimatable(dragon, itemStack.getItem());
@@ -65,7 +59,7 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
             if (id == null) continue;
 
             Map<String, GeoBone> equipmentBones = dragonEquipmentAnimatable.equipmentBones;
-            if (equipmentBones.isEmpty()) getSaddleBones(equipmentBones, bakedEquipmentModel);
+            if (equipmentBones.isEmpty()) getEquipmentBones(equipmentBones, bakedEquipmentModel);
 
             getGeoModel().getAnimationProcessor().getRegisteredBones().forEach(bone -> {
                 GeoBone equipmentBone = equipmentBones.get(bone.getName());
@@ -77,17 +71,16 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
             });
 
             RenderLayer cameo = dragonEquipmentRenderer.getGeoModel().getRenderType(dragonEquipmentAnimatable, id);
-            dragonEquipmentRenderer.render(poseStack, dragonEquipmentAnimatable, bufferSource, cameo, bufferSource.getBuffer(cameo), packedLight);
+            dragonEquipmentRenderer.render(poseStack, dragonEquipmentAnimatable, bufferSource, cameo, bufferSource.getBuffer(cameo), packedLight, partialTick);
         }
     }
 
-    private static void addChildren(Map<String, GeoBone> equipmentBones, GeoBone bone) {
+    private void addChildren(Map<String, GeoBone> equipmentBones, GeoBone bone) {
         equipmentBones.put(bone.getName(), bone);
         for (GeoBone child : bone.getChildBones()) addChildren(equipmentBones, child);
     }
 
-    private static void getSaddleBones(Map<String, GeoBone> equipmentBones, BakedGeoModel model) {
-        //equipmentBones.clear();
+    private void getEquipmentBones(Map<String, GeoBone> equipmentBones, BakedGeoModel model) {
         for (GeoBone bone : model.topLevelBones()) addChildren(equipmentBones, bone);
     }
 

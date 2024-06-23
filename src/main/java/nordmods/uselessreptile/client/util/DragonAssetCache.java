@@ -1,7 +1,7 @@
 package nordmods.uselessreptile.client.util;
 
 public class DragonAssetCache extends AssetCache {
-    private DragonEquipmentAnimatable[] equipmentAnimatables = {null, null, null, null};
+    private DragonEquipmentAnimatable[] equipmentAnimatables = new DragonEquipmentAnimatable[4];
 
     @Override
     public void cleanCache() {
@@ -12,7 +12,7 @@ public class DragonAssetCache extends AssetCache {
                 dragonEquipmentAnimatable.equipmentBones.clear();
             }
         }
-        equipmentAnimatables = new DragonEquipmentAnimatable[] {null, null, null, null};
+        equipmentAnimatables = new DragonEquipmentAnimatable[4];
     }
 
     public void setEquipmentAnimatable(int slot, DragonEquipmentAnimatable equipmentAnimatable) {
