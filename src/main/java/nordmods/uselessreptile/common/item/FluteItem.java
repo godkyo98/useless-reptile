@@ -34,7 +34,7 @@ public class FluteItem extends Item {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
-       int mode = getFluteMode(itemStack);
+        int mode = getFluteMode(itemStack);
         if (user.isSneaking()) {
             switch (mode) {
                 case 1 -> mode = 2;
@@ -90,7 +90,7 @@ public class FluteItem extends Item {
         return toReturn;
     }
 
-    public static int getFluteMode(ItemStack itemStack) {
+    public int getFluteMode(ItemStack itemStack) {
         return itemStack.getComponents().get(URItems.FLUTE_MODE_COMPONENT).mode();
     }
 }

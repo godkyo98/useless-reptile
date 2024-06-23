@@ -1,6 +1,6 @@
 package nordmods.uselessreptile.common.util;
 
 public interface LightningChaserSpawnTimer {
-    int getTimer();
-    void setTimer(int state);
+    int useless_reptile$getTimer();
+    void useless_reptile$setTimer(int state);
 }

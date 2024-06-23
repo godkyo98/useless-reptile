@@ -16,6 +16,6 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity>{
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "HEAD"), cancellable = true)
     private void cancelRender(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (entity.getVehicle() instanceof URRideableDragonEntity)
-            if (DragonPassengerLayer.passengers.contains(entity.getUuid())) ci.cancel();
+            if (DragonPassengerLayer.PASSENGERS.contains(entity.getUuid())) ci.cancel();
     }
 }

@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class DragonPassengerLayer<T extends DragonEquipmentAnimatable> extends GeoRenderLayer<T> {
-    public static Set<UUID> passengers = new HashSet<>();
+    public static final Set<UUID> PASSENGERS = new HashSet<>();
     private final String passengerBone;
     private final int passengerNumber;
 
@@ -49,7 +49,7 @@ public class DragonPassengerLayer<T extends DragonEquipmentAnimatable> extends G
         Entity passenger = animatable.owner.getPassengerList().size() > passengerNumber ? animatable.owner.getPassengerList().get(passengerNumber) : null;
         if (passenger != null) {
             matrixStackIn.push();
-            passengers.remove(passenger.getUuid());
+            PASSENGERS.remove(passenger.getUuid());
 
             Vec3d vec3d = passenger.getVehicleAttachmentPos(animatable.owner);
             matrixStackIn.translate(vec3d.x * 1/animatable.owner.getScale(), -vec3d.y * 1/animatable.owner.getScale(), vec3d.z * 1/animatable.owner.getScale());
@@ -60,7 +60,7 @@ public class DragonPassengerLayer<T extends DragonEquipmentAnimatable> extends G
 
             renderEntity(passenger, partialTick, matrixStackIn, bufferSource, packedLight);
 
-            passengers.add(passenger.getUuid());
+            PASSENGERS.add(passenger.getUuid());
             matrixStackIn.pop();
         }
     }

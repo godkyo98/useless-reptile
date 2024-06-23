@@ -16,14 +16,14 @@ public class UREvents {
         //Lightning Chaser spawn event
         ServerTickEvents.START_WORLD_TICK.register(world -> {
             if (world instanceof LightningChaserSpawnTimer worldTimer && world.isThundering()) {
-                if (worldTimer.getTimer() > 0) {
-                    worldTimer.setTimer(worldTimer.getTimer() - 1);
+                if (worldTimer.useless_reptile$getTimer() > 0) {
+                    worldTimer.useless_reptile$setTimer(worldTimer.useless_reptile$getTimer() - 1);
                     return;
                 }
                 for (ServerPlayerEntity player : world.getPlayers()) {
                     if (!(player instanceof LightningChaserSpawnTimer playerTimer)) continue;
                     if (player.getY() < 60) continue;
-                    if (playerTimer.getTimer() > 0) continue;
+                    if (playerTimer.useless_reptile$getTimer() > 0) continue;
                     if (URConfig.getConfig().lightningChaserThunderstormSpawnChance >= player.getRandom().nextFloat() * 100) {
                         double cos = Math.cos(Math.toRadians(player.getHeadYaw() + 180));
                         double sin = Math.sin(Math.toRadians(player.getHeadYaw() + 180));
@@ -40,11 +40,11 @@ public class UREvents {
                                     pos.getZ());
                             URPacketHelper.playSound(lightningChaser, URSounds.LIGHTNING_CHASER_DISTANT_ROAR, lightningChaser.getSoundCategory(), 1, 1, 1);
                         }
-                        playerTimer.setTimer(URConfig.getConfig().lightningChaserThunderstormSpawnTimerCooldown);
+                        playerTimer.useless_reptile$setTimer(URConfig.getConfig().lightningChaserThunderstormSpawnTimerCooldown);
                         break;
                     }
                 }
-                worldTimer.setTimer(1200);
+                worldTimer.useless_reptile$setTimer(1200);
             }
         });
     }

@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+@SuppressWarnings("WrongEntityDataParameterClass")
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements LightningChaserSpawnTimer {
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -31,23 +32,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Lightnin
 
     @Inject(method = "writeCustomDataToNbt(Lnet/minecraft/nbt/NbtCompound;)V", at = @At("TAIL"))
     private void writeToNbt(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putInt("LightningChaserSpawnCooldown", getTimer());
+        nbt.putInt("LightningChaserSpawnCooldown", useless_reptile$getTimer());
     }
 
     @Inject(method = "readCustomDataFromNbt(Lnet/minecraft/nbt/NbtCompound;)V", at = @At("TAIL"))
     private void readFromNbt(NbtCompound nbt, CallbackInfo ci) {
-        setTimer(nbt.getInt("LightningChaserSpawnCooldown"));
+        useless_reptile$setTimer(nbt.getInt("LightningChaserSpawnCooldown"));
     }
 
-    public int getTimer() {
+    public int useless_reptile$getTimer() {
         return dataTracker.get(LIGHTNING_CHASER_SPAWN_COOLDOWN);
     }
-    public void setTimer(int state) {
+    public void useless_reptile$setTimer(int state) {
         dataTracker.set(LIGHTNING_CHASER_SPAWN_COOLDOWN, state);
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tickTimer(CallbackInfo ci) {
-        if (getTimer() > 0) setTimer(getTimer() - 1);
+        if (useless_reptile$getTimer() > 0) useless_reptile$setTimer(useless_reptile$getTimer() - 1);
     }
 }

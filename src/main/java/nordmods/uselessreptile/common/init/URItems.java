@@ -98,8 +98,7 @@ public class URItems {
     }
 
     private static DragonEquipmentItem createDragonArmorItem(EquipmentSlot equipmentSlot, int armor, int toughness) {
-        return new DragonEquipmentItem(equipmentSlot,
-                Suppliers.memoize(() -> {
+        return new DragonEquipmentItem(Suppliers.memoize(() -> {
                     AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
                     AttributeModifierSlot attributeModifierSlot = AttributeModifierSlot.forEquipmentSlot(equipmentSlot);
                     Identifier id = DragonEquipmentItem.equipmentModifierID(equipmentSlot);

@@ -29,7 +29,7 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
 
     @Override
     protected float getShadowRadius(T entity) {
-        return super.shadowRadius * entity.getScale();
+        return super.getShadowRadius(entity) * entity.getScale();
     }
 
     @Override
@@ -70,8 +70,8 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
                 }
             });
 
-            RenderLayer cameo = dragonEquipmentRenderer.getGeoModel().getRenderType(dragonEquipmentAnimatable, id);
-            dragonEquipmentRenderer.render(poseStack, dragonEquipmentAnimatable, bufferSource, cameo, bufferSource.getBuffer(cameo), packedLight, partialTick);
+            RenderLayer renderType = dragonEquipmentRenderer.getGeoModel().getRenderType(dragonEquipmentAnimatable, id);
+            dragonEquipmentRenderer.render(poseStack, dragonEquipmentAnimatable, bufferSource, renderType, bufferSource.getBuffer(renderType), packedLight, partialTick);
         }
     }
 

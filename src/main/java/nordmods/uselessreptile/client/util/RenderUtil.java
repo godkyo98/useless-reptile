@@ -7,7 +7,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public class RenderUtil {
-    public static int WHITE = 16777215;
+    public static final int WHITE = 16777215;
 
     public static void renderQuad(
             Matrix4f positionMatrix, MatrixStack.Entry normalMatrix, VertexConsumer vertices,

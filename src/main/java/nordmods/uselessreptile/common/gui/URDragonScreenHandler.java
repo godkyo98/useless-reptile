@@ -110,22 +110,22 @@ public abstract class URDragonScreenHandler extends ScreenHandler {
 
     @Override
     public boolean canUse(PlayerEntity player) {
-        return this.inventory.canPlayerUse(player);
+        return inventory.canPlayerUse(player);
     }
 
 
     @Override
     public ItemStack quickMove(PlayerEntity player, int invSlot) {
         ItemStack newStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(invSlot);
+        Slot slot = slots.get(invSlot);
         if (slot != null && slot.hasStack()) {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < this.inventory.size()) {
-                if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true)) return ItemStack.EMPTY;
+            if (invSlot < inventory.size()) {
+                if (!insertItem(originalStack, inventory.size(), this.slots.size(), true)) return ItemStack.EMPTY;
             } else {
                 for (int i = 0; i < maxStorageSize; i++)
-                    if (!this.insertItem(originalStack, i, this.inventory.size(), false)) return ItemStack.EMPTY;
+                    if (!insertItem(originalStack, i, inventory.size(), false)) return ItemStack.EMPTY;
             }
 
             if (originalStack.isEmpty()) slot.setStack(ItemStack.EMPTY);
@@ -137,6 +137,7 @@ public abstract class URDragonScreenHandler extends ScreenHandler {
 
     protected abstract boolean canEquip(EquipmentSlot equipmentSlot, ItemStack item);
 
+    @SuppressWarnings("unused")
     public enum StorageSize {
         NONE(0),
         SMALL(3),

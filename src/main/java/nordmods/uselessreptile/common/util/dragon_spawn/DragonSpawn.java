@@ -157,6 +157,7 @@ public class DragonSpawn {
         }
     }
 
+    @SuppressWarnings("unused")
     public static class Builder {
         private String variant;
         private Integer weight;

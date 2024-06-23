@@ -11,11 +11,9 @@ import java.util.function.Supplier;
 public class DragonEquipmentItem extends Item {
 
     private final Supplier<AttributeModifiersComponent> dragonEquipmentAttributes;
-    private final EquipmentSlot equipmentSlot;
 
-    public DragonEquipmentItem(EquipmentSlot equipmentSlot, Supplier<AttributeModifiersComponent> dragonEquipmentAttributes, net.minecraft.item.Item.Settings settings) {
+    public DragonEquipmentItem(Supplier<AttributeModifiersComponent> dragonEquipmentAttributes, net.minecraft.item.Item.Settings settings) {
         super(settings);
-        this.equipmentSlot = equipmentSlot;
         this.dragonEquipmentAttributes = dragonEquipmentAttributes;
     }
 
@@ -34,9 +32,5 @@ public class DragonEquipmentItem extends Item {
             case OFFHAND -> UselessReptile.id("dragon_offhand");
             case MAINHAND -> UselessReptile.id("dragon_mainhand");
         };
-    }
-
-    public EquipmentSlot getSlotType() {
-        return equipmentSlot;
     }
 }

@@ -11,12 +11,12 @@ public abstract class ServerWorldMixin implements LightningChaserSpawnTimer {
     private int spawnTimer = 600;
 
     @Override
-    public int getTimer() {
+    public int useless_reptile$getTimer() {
         return spawnTimer;
     }
 
     @Override
-    public void setTimer(int state) {
+    public void useless_reptile$setTimer(int state) {
         spawnTimer = state;
     }
 }

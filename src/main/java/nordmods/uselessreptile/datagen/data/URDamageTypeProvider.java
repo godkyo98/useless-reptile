@@ -31,7 +31,7 @@ public class URDamageTypeProvider implements DataProvider {
     @Override
     public CompletableFuture<?> run(DataWriter writer) {
         return registryLookupFuture.thenCompose((registryLookupFuture) -> {
-            addEntries(registryLookupFuture);
+            addEntries();
             List<CompletableFuture<?>> list = new ArrayList<>();
             damageTypes.forEach(entry -> {
                 Path path = this.pathResolver.resolveJson(UselessReptile.id(entry.msgId()));
@@ -41,7 +41,7 @@ public class URDamageTypeProvider implements DataProvider {
         });
     }
 
-    private static void addEntries(RegistryWrapper.WrapperLookup registryLookupFuture) {
+    private static void addEntries() {
         damageTypes.add(new DamageType("acid", DamageScaling.NEVER, 0));
     }
 

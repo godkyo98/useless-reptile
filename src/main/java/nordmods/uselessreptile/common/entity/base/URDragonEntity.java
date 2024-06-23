@@ -517,8 +517,8 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     protected float calcCooldownMod() {
         float mod = 1;
-        if (hasStatusEffect(StatusEffects.SLOWNESS)) mod *= 1 + 0.1 * (getStatusEffect(StatusEffects.SLOWNESS).getAmplifier() + 1);
-        if (hasStatusEffect(StatusEffects.SPEED)) mod *= 1 - 0.1 * MathHelper.clamp(getStatusEffect(StatusEffects.SPEED).getAmplifier() + 1, 1, 9);
+        if (hasStatusEffect(StatusEffects.SLOWNESS)) mod *= (float) (1 + 0.1 * (getStatusEffect(StatusEffects.SLOWNESS).getAmplifier() + 1));
+        if (hasStatusEffect(StatusEffects.SPEED)) mod *= (float) (1 - 0.1 * MathHelper.clamp(getStatusEffect(StatusEffects.SPEED).getAmplifier() + 1, 1, 9));
         if (hasStatusEffect(URStatusEffects.SHOCK)) mod /= 2;
         return mod;
     }

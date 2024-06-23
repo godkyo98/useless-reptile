@@ -62,7 +62,7 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
 
     @Override
     public LivingEntity getControllingPassenger() {
-        return getPassengerList().isEmpty() ? null : (LivingEntity) getPassengerList().get(0);
+        return getPassengerList().isEmpty() ? null : (LivingEntity) getPassengerList().getFirst();
     }
 
     public boolean canBeControlledByRider() {

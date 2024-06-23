@@ -134,10 +134,10 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar animationData) {
-        AnimationController<LightningChaserEntity> main = new AnimationController<>(this, "main", TRANSITION_TICKS, this::main);
-        AnimationController<LightningChaserEntity> turn = new AnimationController<>(this, "turn", TRANSITION_TICKS, this::turn);
-        AnimationController<LightningChaserEntity> attack = new AnimationController<>(this, "attack", 0, this::attack);
-        AnimationController<LightningChaserEntity> eye = new AnimationController<>(this, "eye", 0, this::eye);
+        AnimationController<LightningChaserEntity> main = new AnimationController<>(this, "main", TRANSITION_TICKS, this::mainController);
+        AnimationController<LightningChaserEntity> turn = new AnimationController<>(this, "turn", TRANSITION_TICKS, this::turnController);
+        AnimationController<LightningChaserEntity> attack = new AnimationController<>(this, "attack", 0, this::attackController);
+        AnimationController<LightningChaserEntity> eye = new AnimationController<>(this, "eye", 0, this::eyeController);
         main.setSoundKeyframeHandler(this::soundListenerMain);
         attack.setSoundKeyframeHandler(this::soundListenerAttack);
         animationData.add(main, turn, attack, eye);
@@ -160,10 +160,10 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             }
     }
 
-    private <A extends GeoEntity> PlayState eye(AnimationState<A> event) {
+    private <A extends GeoEntity> PlayState eyeController(AnimationState<A> event) {
         return loopAnim("blink", event);
     }
-    private <A extends GeoEntity> PlayState main(AnimationState<A> event) {
+    private <A extends GeoEntity> PlayState mainController(AnimationState<A> event) {
         event.getController().setAnimationSpeed(animationSpeed);
         if (isFlying()) {
             if (isSecondaryAttack()) {
@@ -189,7 +189,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         return loopAnim("idle", event);
     }
 
-    private <A extends GeoEntity> PlayState turn(AnimationState<A> event) {
+    private <A extends GeoEntity> PlayState turnController(AnimationState<A> event) {
         byte turnState = getTurningState();
         event.getController().setAnimationSpeed(animationSpeed);
         if (isFlying()) {
@@ -205,7 +205,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         return loopAnim("turn.none", event);
     }
 
-    private <A extends GeoEntity> PlayState attack(AnimationState<A> event) {
+    private <A extends GeoEntity> PlayState attackController(AnimationState<A> event) {
         event.getController().setAnimationSpeed(1/calcCooldownMod());
         if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + getAttackType(), event);
         if (isPrimaryAttack()) {

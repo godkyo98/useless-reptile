@@ -36,7 +36,7 @@ public class LightningBreathEntity extends ProjectileEntity {
     public static final int MAX_AGE = 10;
     public static final int MAX_LENGTH = 30;
     public float prevAlpha = 0.5f;
-    public LightningBreathBolt[] lightningBreathBolts = {null, null, null, null, null};
+    public final LightningBreathBolt[] lightningBreathBolts = new LightningBreathBolt[5];
 
     public LightningBreathEntity(EntityType<? extends ProjectileEntity> entityType, World world, Entity owner) {
         super(entityType, world);

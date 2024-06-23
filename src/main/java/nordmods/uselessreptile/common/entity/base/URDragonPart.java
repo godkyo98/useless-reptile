@@ -94,8 +94,9 @@ public class URDragonPart extends EntityPart {
         calculateDimensions();
     }
 
-    public void setScale(Vec2f vec2f) {
-        setScale(vec2f.x, vec2f.y);
+    @SuppressWarnings("SuspiciousNameCombination")
+    public void setScale(Vec2f scale) {
+        setScale(scale.x, scale.y);
     }
 
     public void setRelativePos(double x, double y, double z) {

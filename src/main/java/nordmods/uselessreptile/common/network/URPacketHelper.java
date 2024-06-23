@@ -9,8 +9,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.CheckedRandom;
 
-import java.util.Random;
-
 public class URPacketHelper {
     public static void playSound(LivingEntity entity, SoundEvent sound, SoundCategory category, float volume, float pitch, int span) {
         if (entity.getServer() == null) return;

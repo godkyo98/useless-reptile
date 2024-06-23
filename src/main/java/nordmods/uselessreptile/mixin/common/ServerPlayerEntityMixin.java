@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntityMixin{
-    protected ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    private ServerPlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
     @Inject(method = "copyFrom(Lnet/minecraft/server/network/ServerPlayerEntity;Z)V", at = @At("TAIL"))
     private void copySemaData(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         LightningChaserSpawnTimer oldData = (LightningChaserSpawnTimer) oldPlayer;
-        setTimer(oldData.getTimer());
+        useless_reptile$setTimer(oldData.useless_reptile$getTimer());
     }
 }

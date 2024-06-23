@@ -70,7 +70,7 @@ public class PikehornHuntGoal extends Goal {
                 return itemStack.isIn(ItemTags.FISHES) && item.isAlive() && !item.cannotPickup();
             });
 
-            if (!drops.isEmpty()) entity.getNavigation().startMovingTo(drops.get(0), 1);
+            if (!drops.isEmpty()) entity.getNavigation().startMovingTo(drops.getFirst(), 1);
             else {
                 //check if fish is valid
                 if (fish != null && (fish.isDead() || fish.isRemoved())) fish = null;

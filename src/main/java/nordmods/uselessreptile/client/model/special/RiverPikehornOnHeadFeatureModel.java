@@ -15,6 +15,7 @@ public class RiverPikehornOnHeadFeatureModel extends SinglePartEntityModel<River
     public RiverPikehornOnHeadFeatureModel(ModelPart root) {
         this.Tdragon = root.getChild("Tdragon");
     }
+    @SuppressWarnings("unused")
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
