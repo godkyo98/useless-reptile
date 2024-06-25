@@ -37,6 +37,7 @@
     "tooltip.uselessreptile.flute_mode0": "Flute mode: Call",
     "tooltip.uselessreptile.flute_mode1": "Flute mode: Gather Fish",
     "tooltip.uselessreptile.flute_mode2": "Flute mode: Attack Target",
+    "tooltip.uselessreptile.can_be_equipped_by": "Can be equipped by: %s",
 
     "entity.uselessreptile.wyvern": "Swamp Wyvern",
     "entity.uselessreptile.moleclaw": "Moleclaw",
@@ -217,10 +218,21 @@
     "advancement.uselessreptile.use_flute.desc": "Use Flute to command your River Pikehorns",
     "advancement.uselessreptile.tame_lightning_chaser.desc": "Tame Lightning Chaser by challenging it in a battle (Tip: you'll need a Trident with Channelling)",
 
-    "tag.item.uselessreptile.common_dragon_armor": "Dragon Armor",
-    "tag.item.uselessreptile.common_dragon_armor_iron": "Iron Dragon Armor",
-    "tag.item.uselessreptile.common_dragon_armor_gold": "Golden Dragon Armor",
-    "tag.item.uselessreptile.common_dragon_armor_diamond": "Diamond Dragon Armor",
-    "tag.item.uselessreptile.moleclaw_can_equip": "Moleclaw Can Equip",
-    "tag.item.uselessreptile.moleclaw_helmets": "Moleclaw Helmets"
+    "tag.item.uselessreptile.moleclaw_chestplates": "Moleclaw Chestplates",
+    "tag.item.uselessreptile.moleclaw_tail_armor": "Moleclaw Tail Armor",
+    "tag.item.uselessreptile.moleclaw_helmets": "Moleclaw Helmets",
+    "tag.item.uselessreptile.moleclaw_protects_from_light": "Protects Moleclaw From Light",
+    "tag.item.uselessreptile.lightning_chaser_chestplates": "Lightning Chaser Chestplates",
+    "tag.item.uselessreptile.lightning_chaser_tail_armor": "Lightning Chaser Tail Armor",
+    "tag.item.uselessreptile.lightning_chaser_helmets": "Lightning Chaser Helmets",
+
+    "attribute.name.dragon.ground_rotation_speed": "Rotation Speed on Ground",
+    "attribute.name.dragon.flying_rotation_speed": "Rotation Speed in Air",
+    "attribute.name.dragon.primary_attack_cooldown": "Primary Attack Cooldown",
+    "attribute.name.dragon.secondary_attack_cooldown": "Secondary Attack Cooldown",
+    "attribute.name.dragon.special_attack_cooldown": "Special Attack Cooldown",
+    "attribute.name.dragon.acceleration_duration": "Acceleration Duration",
+    "attribute.name.dragon.regeneration_from_food": "Regeneration from Food",
+    "attribute.name.dragon.vertical_speed": "Vertical Speed",
+    "attribute.name.moleclaw.mining_level": "Mining Level"
 }

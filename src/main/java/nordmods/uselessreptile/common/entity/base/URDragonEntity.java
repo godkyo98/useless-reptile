@@ -55,6 +55,7 @@ import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonLookControl;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonNavigation;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 import nordmods.uselessreptile.common.network.InstrumentSoundBoundMessageS2CPacket;
 import nordmods.uselessreptile.common.network.URPacketHelper;
@@ -78,16 +79,11 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     protected float heightMod = 1;
     protected float widthMod = 1;
     public static final int TRANSITION_TICKS = 10;
-    protected int baseSecondaryAttackCooldown = 20;
-    protected int basePrimaryAttackCooldown = 20;
-    protected int baseAccelerationDuration = 1;
     protected float pitchLimitGround = 90;
-    protected float rotationSpeedGround = 180;
     protected int primaryAttackDuration = 20;
     protected int secondaryAttackDuration = 20;
     protected int baseTamingProgress = 1;
     protected int eatFromInventoryTimer = 20;
-    protected float regenerationFromFood = 0;
     protected boolean canNavigateInFluids = false;
     protected int ticksUntilHeal = -1;
     private int healTimer = 0;
@@ -356,7 +352,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         if (isTamed()) {
             if (isFavoriteFood(itemStack) && getHealth() != getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH)) {
                 eatFood(getWorld(), itemStack, itemStack.getComponents().getOrDefault(DataComponentTypes.FOOD, FoodComponents.SALMON));
-                heal(regenerationFromFood);
+                heal(getHealthRegenerationFromFood());
                 return ActionResult.SUCCESS;
             }
         }
@@ -505,14 +501,19 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     //because rotation is called twice within one tick... somehow
     public float getRotationSpeed() {
-        return rotationSpeedGround * calcSpeedMod() / 2f;
+        return getGroundRotationSpeed() * calcSpeedMod() / 2f;
     }
+
+    public float getGroundRotationSpeed() {
+        return (float) getAttributeValue(URAttributes.DRAGON_GROUND_ROTATION_SPEED);
+    }
+
     public float getPitchLimit() {
         return pitchLimitGround;
     }
 
     public float getMaxAccelerationDuration() {
-        return baseAccelerationDuration * calcSpeedMod();
+        return (float) (getAttributeValue(URAttributes.DRAGON_ACCELERATION_DURATION) * calcSpeedMod());
     }
 
     protected float calcCooldownMod() {
@@ -529,10 +530,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     public int getMaxSecondaryAttackCooldown() {
-        return (int) (baseSecondaryAttackCooldown * calcCooldownMod());
+        return (int) (getAttributeValue(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN) * calcCooldownMod());
     }
     public int getMaxPrimaryAttackCooldown() {
-        return  (int) (basePrimaryAttackCooldown * calcCooldownMod());
+        return (int) (getAttributeValue(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN) * calcCooldownMod());
     }
 
     @Override
@@ -638,8 +639,8 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return isFavoriteFood(itemStack);
     }
 
-    public float getHealthRegenFromFood() {
-        return regenerationFromFood;
+    public float getHealthRegenerationFromFood() {
+        return (float) getAttributeValue(URAttributes.DRAGON_REGENERATION_FROM_FOOD);
     }
 
     public void tickEatFromInventoryTimer() {

@@ -39,16 +39,16 @@ public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSpher
         matrixStack.translate(0, entity.getCurrentRadius(), 0);
 
         matrixStack.push();
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha / 2 * 180));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha / 2f * 180f));
         renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha - 0.2f, 0, 1), entity.getCurrentRadius());
         matrixStack.pop();
 
         matrixStack.push();
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-alpha / 1.5f * 180));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-alpha / 1.5f * 180f));
         renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha/1.5f - 0.1f, 0, 1), entity.getCurrentRadius()/1.5f);
         matrixStack.pop();
         
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha * 180));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha * 180f));
         renderSphere(matrixStack, vertexConsumer, alpha/2f, entity.getCurrentRadius()/2f);
 
         entity.prevAlpha = alpha;

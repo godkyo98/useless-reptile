@@ -120,33 +120,33 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.pikehornSpawnWeight = val)
                 .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
                 .build();
-        //Option<Integer> lightningChaserSpawnWeight = Option.<Integer>createBuilder()
-        //        .variant(key("option.lightningChaserSpawnWeight"))
-        //        .description(OptionDescription.createBuilder()
-        //                .text(key("option.dragonSpawnWeight.@Tooltip"), requiresRestart()).build())
-        //        .binding(defaults.lightningChaserSpawnWeight,
-        //                () -> config.lightningChaserSpawnWeight,
-        //                val -> config.lightningChaserSpawnWeight = val)
-        //        .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
-        //        .build();
-        //Option<Integer> lightningChaserThunderstormSpawnChance = Option.<Integer>createBuilder()
-        //        .variant(key("option.lightningChaserThunderstormSpawnChance"))
-        //        .description(OptionDescription.createBuilder()
-        //                .text(key("option.lightningChaserThunderstormSpawnChance.@Tooltip")).build())
-        //        .binding(defaults.lightningChaserThunderstormSpawnChance,
-        //                () -> config.lightningChaserThunderstormSpawnChance,
-        //                val -> config.lightningChaserThunderstormSpawnChance = val)
-        //        .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
-        //        .build();
-        //Option<Integer> lightningChaserThunderstormSpawnTimerCooldown = Option.<Integer>createBuilder()
-        //        .variant(key("option.lightningChaserThunderstormSpawnTimerCooldown"))
-        //        .description(OptionDescription.createBuilder()
-        //                .text(key("option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip")).build())
-        //        .binding(defaults.lightningChaserThunderstormSpawnTimerCooldown,
-        //                () -> config.lightningChaserThunderstormSpawnTimerCooldown,
-        //                val -> config.lightningChaserThunderstormSpawnTimerCooldown = val)
-        //        .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
-        //        .build();
+        Option<Integer> lightningChaserSpawnWeight = Option.<Integer>createBuilder()
+                .name(key("option.lightningChaserSpawnWeight"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.dragonSpawnWeight.@Tooltip"), requiresRestart()).build())
+                .binding(defaults.lightningChaserSpawnWeight,
+                        () -> config.lightningChaserSpawnWeight,
+                        val -> config.lightningChaserSpawnWeight = val)
+                .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
+                .build();
+        Option<Integer> lightningChaserThunderstormSpawnChance = Option.<Integer>createBuilder()
+                .name(key("option.lightningChaserThunderstormSpawnChance"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.lightningChaserThunderstormSpawnChance.@Tooltip")).build())
+                .binding(defaults.lightningChaserThunderstormSpawnChance,
+                        () -> config.lightningChaserThunderstormSpawnChance,
+                        val -> config.lightningChaserThunderstormSpawnChance = val)
+                .customController(opt -> new IntegerSliderController(opt, 0, 100, 1))
+                .build();
+        Option<Integer> lightningChaserThunderstormSpawnTimerCooldown = Option.<Integer>createBuilder()
+                .name(key("option.lightningChaserThunderstormSpawnTimerCooldown"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.lightningChaserThunderstormSpawnTimerCooldown.@Tooltip")).build())
+                .binding(defaults.lightningChaserThunderstormSpawnTimerCooldown,
+                        () -> config.lightningChaserThunderstormSpawnTimerCooldown,
+                        val -> config.lightningChaserThunderstormSpawnTimerCooldown = val)
+                .customController(opt -> new IntegerFieldController(opt, 0, Integer.MAX_VALUE))
+                .build();
 
         Option<Integer> dragonSpawnGroupCapacity = Option.<Integer>createBuilder()
                 .name(key("option.dragonSpawnGroupCapacity"))
@@ -230,24 +230,24 @@ public class ModMenuIntegration implements ModMenuApi {
                         val -> config.pikehornMaxGroupSize = val)
                 .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
                 .build();
-        //Option<Integer> lightningChaserMinGroupSize = Option.<Integer>createBuilder()
-        //        .variant(key("option.lightningChaserMinGroupSize"))
-        //        .description(OptionDescription.createBuilder()
-        //                .text(key("option.dragonMinGroupSize.@Tooltip"), requiresRestart()).build())
-        //        .binding(defaults.lightningChaserMinGroupSize,
-        //                () -> config.lightningChaserMinGroupSize,
-        //                val -> config.lightningChaserMinGroupSize = val)
-        //        .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
-        //        .build();
-        //Option<Integer> lightningChaserMaxGroupSize = Option.<Integer>createBuilder()
-        //        .variant(key("option.lightningChaserMaxGroupSize"))
-        //        .description(OptionDescription.createBuilder()
-        //                .text(key("option.dragonMaxGroupSize.@Tooltip"), requiresRestart()).build())
-        //        .binding(defaults.lightningChaserMaxGroupSize,
-        //                () -> config.lightningChaserMaxGroupSize,
-        //                val -> config.lightningChaserMaxGroupSize = val)
-        //        .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
-        //        .build();
+        Option<Integer> lightningChaserMinGroupSize = Option.<Integer>createBuilder()
+                .name(key("option.lightningChaserMinGroupSize"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.dragonMinGroupSize.@Tooltip"), requiresRestart()).build())
+                .binding(defaults.lightningChaserMinGroupSize,
+                        () -> config.lightningChaserMinGroupSize,
+                        val -> config.lightningChaserMinGroupSize = val)
+                .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
+                .build();
+        Option<Integer> lightningChaserMaxGroupSize = Option.<Integer>createBuilder()
+                .name(key("option.lightningChaserMaxGroupSize"))
+                .description(OptionDescription.createBuilder()
+                        .text(key("option.dragonMaxGroupSize.@Tooltip"), requiresRestart()).build())
+                .binding(defaults.lightningChaserMaxGroupSize,
+                        () -> config.lightningChaserMaxGroupSize,
+                        val -> config.lightningChaserMaxGroupSize = val)
+                .customController(opt -> new IntegerFieldController(opt, 1, Integer.MAX_VALUE))
+                .build();
 
         Option<URConfig.DragonGriefing> allowDragonGriefing = Option.<URConfig.DragonGriefing>createBuilder()
                 .name(key("option.allowDragonGriefing"))
@@ -280,9 +280,9 @@ public class ModMenuIntegration implements ModMenuApi {
         spawnWeightGroup.option(wyvernSpawnWeight);
         spawnWeightGroup.option(moleclawSpawnWeight);
         spawnWeightGroup.option(pikehornSpawnWeight);
-        //spawnWeightGroup.option(lightningChaserSpawnWeight);
-        //spawnWeightGroup.option(lightningChaserThunderstormSpawnChance);
-        //spawnWeightGroup.option(lightningChaserThunderstormSpawnTimerCooldown);
+        spawnWeightGroup.option(lightningChaserSpawnWeight);
+        spawnWeightGroup.option(lightningChaserThunderstormSpawnChance);
+        spawnWeightGroup.option(lightningChaserThunderstormSpawnTimerCooldown);
 
         spawnGroupsGroup.option(dragonSpawnGroupCapacity);
         spawnGroupsGroup.option(undergroundDragonSpawnGroupCapacity);
@@ -294,8 +294,8 @@ public class ModMenuIntegration implements ModMenuApi {
         groupSizeGroup.option(moleclawMaxGroupSize);
         groupSizeGroup.option(pikehornMinGroupSize);
         groupSizeGroup.option(pikehornMaxGroupSize);
-        //groupSizeGroup.option(lightningChaserMinGroupSize);
-        //groupSizeGroup.option(lightningChaserMaxGroupSize);
+        groupSizeGroup.option(lightningChaserMinGroupSize);
+        groupSizeGroup.option(lightningChaserMaxGroupSize);
 
         dragonBehaviourGroup.option(allowDragonGriefing);
         dragonBehaviourGroup.option(blockDropChance);
@@ -792,117 +792,117 @@ public class ModMenuIntegration implements ModMenuApi {
                 .name(key("option.dragonDamage"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonDamage.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornDamage,
-                        () -> config.pikehornDamage,
-                        val -> config.pikehornDamage = val)
+                .binding(defaults.riverPikehornDamage,
+                        () -> config.riverPikehornDamage,
+                        val -> config.riverPikehornDamage = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornKnockback = Option.<Float>createBuilder()
                 .name(key("option.dragonKnockback"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonKnockback.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornKnockback,
-                        () -> config.pikehornKnockback,
-                        val -> config.pikehornKnockback = val)
+                .binding(defaults.riverPikehornKnockback,
+                        () -> config.riverPikehornKnockback,
+                        val -> config.riverPikehornKnockback = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornHealth = Option.<Float>createBuilder()
                 .name(key("option.dragonHealth"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonHealth.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornHealth,
-                        () -> config.pikehornHealth,
-                        val -> config.pikehornHealth = val)
+                .binding(defaults.riverPikehornHealth,
+                        () -> config.riverPikehornHealth,
+                        val -> config.riverPikehornHealth = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornArmor = Option.<Float>createBuilder()
                 .name(key("option.dragonArmor"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonArmor.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornArmor,
-                        () -> config.pikehornArmor,
-                        val -> config.pikehornArmor = val)
+                .binding(defaults.riverPikehornArmor,
+                        () -> config.riverPikehornArmor,
+                        val -> config.riverPikehornArmor = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornArmorToughness = Option.<Float>createBuilder()
                 .name(key("option.dragonArmorToughness"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonArmorToughness.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornArmorToughness,
-                        () -> config.pikehornArmorToughness,
-                        val -> config.pikehornArmorToughness = val)
+                .binding(defaults.riverPikehornArmorToughness,
+                        () -> config.riverPikehornArmorToughness,
+                        val -> config.riverPikehornArmorToughness = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornGroundSpeed = Option.<Float>createBuilder()
                 .name(key("option.dragonGroundSpeed"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonGroundSpeed.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornGroundSpeed,
-                        () -> config.pikehornGroundSpeed,
-                        val -> config.pikehornGroundSpeed = val)
+                .binding(defaults.riverPikehornGroundSpeed,
+                        () -> config.riverPikehornGroundSpeed,
+                        val -> config.riverPikehornGroundSpeed = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornFlyingSpeed = Option.<Float>createBuilder()
                 .name(key("option.dragonFlyingSpeed"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonFlyingSpeed.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornFlyingSpeed,
-                        () -> config.pikehornFlyingSpeed,
-                        val -> config.pikehornFlyingSpeed = val)
+                .binding(defaults.riverPikehornFlyingSpeed,
+                        () -> config.riverPikehornFlyingSpeed,
+                        val -> config.riverPikehornFlyingSpeed = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Integer> pikehornBasePrimaryAttackCooldown = Option.<Integer>createBuilder()
                 .name(key("option.dragonBasePrimaryAttackCooldown"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.pikehornBasePrimaryAttackCooldown.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornBasePrimaryAttackCooldown,
-                        () -> config.pikehornBasePrimaryAttackCooldown,
-                        val -> config.pikehornBasePrimaryAttackCooldown = val)
+                .binding(defaults.riverPikehornBasePrimaryAttackCooldown,
+                        () -> config.riverPikehornBasePrimaryAttackCooldown,
+                        val -> config.riverPikehornBasePrimaryAttackCooldown = val)
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> pikehornBaseAccelerationDuration = Option.<Integer>createBuilder()
                 .name(key("option.dragonBaseAccelerationDuration"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonBaseAccelerationDuration.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornBaseAccelerationDuration,
-                        () -> config.pikehornBaseAccelerationDuration,
-                        val -> config.pikehornBaseAccelerationDuration = val)
+                .binding(defaults.riverPikehornBaseAccelerationDuration,
+                        () -> config.riverPikehornBaseAccelerationDuration,
+                        val -> config.riverPikehornBaseAccelerationDuration = val)
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Float> pikehornRotationSpeedGround = Option.<Float>createBuilder()
                 .name(key("option.dragonRotationSpeedGround"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonRotationSpeedGround.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornRotationSpeedGround,
-                        () -> config.pikehornRotationSpeedGround,
-                        val -> config.pikehornRotationSpeedGround = val)
+                .binding(defaults.riverPikehornRotationSpeedGround,
+                        () -> config.riverPikehornRotationSpeedGround,
+                        val -> config.riverPikehornRotationSpeedGround = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornRotationSpeedAir = Option.<Float>createBuilder()
                 .name(key("option.dragonRotationSpeedAir"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonRotationSpeedAir.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornRotationSpeedAir,
-                        () -> config.pikehornRotationSpeedAir,
-                        val -> config.pikehornRotationSpeedAir = val)
+                .binding(defaults.riverPikehornRotationSpeedAir,
+                        () -> config.riverPikehornRotationSpeedAir,
+                        val -> config.riverPikehornRotationSpeedAir = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornVerticalSpeed = Option.<Float>createBuilder()
                 .name(key("option.dragonVerticalSpeed"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonVerticalSpeed.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornVerticalSpeed,
-                        () -> config.pikehornVerticalSpeed,
-                        val -> config.pikehornVerticalSpeed = val)
+                .binding(defaults.riverPikehornVerticalSpeed,
+                        () -> config.riverPikehornVerticalSpeed,
+                        val -> config.riverPikehornVerticalSpeed = val)
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornRegenerationFromFood = Option.<Float>createBuilder()
                 .name(key("option.dragonRegenerationFromFood"))
                 .description(OptionDescription.createBuilder()
                         .text(key("option.dragonRegenerationFromFood.@Tooltip"), requiresRestart()).build())
-                .binding(defaults.pikehornRegenerationFromFood,
-                        () -> config.pikehornRegenerationFromFood,
-                        val -> config.pikehornRegenerationFromFood = val)
+                .binding(defaults.riverPikehornRegenerationFromFood,
+                        () -> config.riverPikehornRegenerationFromFood,
+                        val -> config.riverPikehornRegenerationFromFood = val)
                 .customController(FloatFieldController::new)
                 .build();
 

@@ -31,6 +31,7 @@ import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.river_pikehorn.*;
 import nordmods.uselessreptile.common.entity.base.URFlyingDragonEntity;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URItems;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.item.FluteItem;
@@ -59,15 +60,9 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
         experiencePoints = 5;
         setCanPickUpLoot(true);
 
-        basePrimaryAttackCooldown = attributes().pikehornBasePrimaryAttackCooldown;
         secondaryAttackDuration = 12;
         primaryAttackDuration = 12;
-        baseAccelerationDuration = attributes().pikehornBaseAccelerationDuration;
-        rotationSpeedGround = attributes().pikehornRotationSpeedGround;
-        rotationSpeedAir = attributes().pikehornRotationSpeedAir;
         canNavigateInFluids = true;
-        regenerationFromFood = attributes().pikehornRegenerationFromFood;
-        verticalSpeed = attributes().pikehornVerticalSpeed;
         inventory = new SimpleInventory(0);
         ticksUntilHeal = 400;
     }
@@ -197,7 +192,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             if (itemStack.isIn(ItemTags.FISHES) && itemStack.getComponents().contains(DataComponentTypes.FOOD)) {
                 if (eatTimer <= 0 || getMaxHealth() > getHealth()) {
                     eatFood(getWorld(), itemStack, itemStack.getComponents().get(DataComponentTypes.FOOD));
-                    heal(getHealthRegenFromFood());
+                    heal(getHealthRegenerationFromFood());
                     stopHunt();
                 } else eatTimer--;
             }
@@ -223,14 +218,21 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
 
     public static DefaultAttributeContainer.Builder createPikehornAttributes() {
         return TameableEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().pikehornDamage * attributes().dragonDamageMultiplier)
-                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().pikehornKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().pikehornHealth * attributes().dragonHealthMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR, attributes().pikehornArmor * attributes().dragonArmorMultiplier)
-                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().pikehornArmorToughness * attributes().dragonArmorToughnessMultiplier)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().pikehornGroundSpeed * attributes().dragonGroundSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().pikehornFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0);
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().riverPikehornDamage * attributes().dragonDamageMultiplier)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().riverPikehornKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().riverPikehornHealth * attributes().dragonHealthMultiplier)
+                .add(EntityAttributes.GENERIC_ARMOR, attributes().riverPikehornArmor * attributes().dragonArmorMultiplier)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().riverPikehornArmorToughness * attributes().dragonArmorToughnessMultiplier)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().riverPikehornGroundSpeed * attributes().dragonGroundSpeedMultiplier)
+                .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().riverPikehornFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().riverPikehornVerticalSpeed)
+                .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().riverPikehornBaseAccelerationDuration)
+                .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().riverPikehornRotationSpeedGround)
+                .add(URAttributes.DRAGON_FLYING_ROTATION_SPEED, attributes().riverPikehornRotationSpeedAir)
+                .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().riverPikehornBasePrimaryAttackCooldown)
+                .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN)
+                .add(URAttributes.DRAGON_REGENERATION_FROM_FOOD, attributes().riverPikehornRegenerationFromFood);
     }
 
     @Override

@@ -93,31 +93,31 @@ public class URMobAttributesConfig {
     public float moleclawRegenerationFromFood = 2;
 
     @SerialEntry(comment = "RIVER PIKEHORN ATTRIBUTES")
-    public float pikehornDamage = 3.0f;
+    public float riverPikehornDamage = 3.0f;
     @SerialEntry
-    public float pikehornKnockback = 0f;
+    public float riverPikehornKnockback = 0f;
     @SerialEntry
-    public float pikehornHealth = 20.0f;
+    public float riverPikehornHealth = 20.0f;
     @SerialEntry
-    public float pikehornArmor = 0f;
+    public float riverPikehornArmor = 0f;
     @SerialEntry
-    public float pikehornArmorToughness = 0f;
+    public float riverPikehornArmorToughness = 0f;
     @SerialEntry
-    public float pikehornGroundSpeed = 0.2f;
+    public float riverPikehornGroundSpeed = 0.2f;
     @SerialEntry
-    public float pikehornFlyingSpeed = 0.8f;
+    public float riverPikehornFlyingSpeed = 0.8f;
     @SerialEntry
-    public int pikehornBasePrimaryAttackCooldown = 20;
+    public int riverPikehornBasePrimaryAttackCooldown = 20;
     @SerialEntry
-    public int pikehornBaseAccelerationDuration = 100;
+    public int riverPikehornBaseAccelerationDuration = 100;
     @SerialEntry
-    public float pikehornRotationSpeedGround = 10;
+    public float riverPikehornRotationSpeedGround = 10;
     @SerialEntry
-    public float pikehornRotationSpeedAir = 10;
+    public float riverPikehornRotationSpeedAir = 10;
     @SerialEntry
-    public float pikehornVerticalSpeed = 0.2f;
+    public float riverPikehornVerticalSpeed = 0.2f;
     @SerialEntry
-    public float pikehornRegenerationFromFood = 3;
+    public float riverPikehornRegenerationFromFood = 3;
 
     @SerialEntry(comment = "LIGHTNING CHASER ATTRIBUTES")
     public float lightningChaserDamage = 6.0f;

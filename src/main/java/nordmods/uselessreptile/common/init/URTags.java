@@ -28,7 +28,7 @@ public class URTags {
     public static final TagKey<Item> MOLECLAW_CHESTPLATES = register(RegistryKeys.ITEM, "moleclaw_chestplates");
     public static final TagKey<Item> MOLECLAW_TAIL_ARMOR = register(RegistryKeys.ITEM, "moleclaw_tail_armor");
     public static final TagKey<Item> MOLECLAW_HELMETS = register(RegistryKeys.ITEM, "moleclaw_helmets");
-    public static final TagKey<Item> MOLECLAW_PROTECTS_FROM_LIGHT = register(RegistryKeys.ITEM, "moleclaw_protects_from_light");
+    public static final TagKey<Item> PROTECTS_MOLECLAW_FROM_LIGHT = register(RegistryKeys.ITEM, "protects_moleclaw_from_light");
 
     public static final TagKey<Item> LIGHTNING_CHASER_CHESTPLATES = register(RegistryKeys.ITEM, "lightning_chaser_chestplates");
     public static final TagKey<Item> LIGHTNING_CHASER_TAIL_ARMOR = register(RegistryKeys.ITEM, "lightning_chaser_tail_armor");

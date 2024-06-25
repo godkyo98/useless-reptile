@@ -31,7 +31,7 @@ public class DragonConsumeFoodFromInventoryGoal extends Goal {
                 ItemStack itemStack = dragon.getStackFromSlot(i);
                 if (dragon.isFavoriteFood(itemStack)) {
                     itemStack.decrement(1);
-                    dragon.heal(dragon.getHealthRegenFromFood());
+                    dragon.heal(dragon.getHealthRegenerationFromFood());
                     break;
                 }
             }

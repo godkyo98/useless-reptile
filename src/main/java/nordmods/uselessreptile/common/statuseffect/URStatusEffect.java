@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.statuseffects;
+package nordmods.uselessreptile.common.statuseffect;
 
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;

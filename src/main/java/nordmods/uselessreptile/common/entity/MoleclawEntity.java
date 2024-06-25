@@ -43,6 +43,7 @@ import nordmods.uselessreptile.common.entity.ai.pathfinding.MoleclawNavigation;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
@@ -68,11 +69,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
         navigation = new MoleclawNavigation(this, world);
 
         pitchLimitGround = 50;
-        rotationSpeedGround = attributes().moleclawRotationSpeedGround;
-        basePrimaryAttackCooldown = attributes().moleclawBasePrimaryAttackCooldown;
-        baseSecondaryAttackCooldown = attributes().moleclawBaseSecondaryAttackCooldown;
         baseTamingProgress = 64;
-        regenerationFromFood = attributes().moleclawRegenerationFromFood;
         ticksUntilHeal = 400;
     }
 
@@ -116,7 +113,13 @@ public class MoleclawEntity extends URRideableDragonEntity {
                 .add(EntityAttributes.GENERIC_ARMOR, attributes().moleclawArmor * attributes().dragonArmorMultiplier)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().moleclawArmorToughness * attributes().dragonArmorToughnessMultiplier)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().moleclawGroundSpeed * attributes().dragonGroundSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0);
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(URAttributes.DRAGON_ACCELERATION_DURATION)
+                .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().moleclawRotationSpeedGround)
+                .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().moleclawBasePrimaryAttackCooldown)
+                .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN, attributes().moleclawBaseSecondaryAttackCooldown)
+                .add(URAttributes.DRAGON_REGENERATION_FROM_FOOD, attributes().moleclawRegenerationFromFood)
+                .add(URAttributes.MOLECLAW_MINING_LEVEL, 0);
 
     }
 
@@ -300,7 +303,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
             else if (blockState.isIn(BlockTags.INCORRECT_FOR_IRON_TOOL)) miningLevel = 3;
             else if (blockState.isIn(BlockTags.INCORRECT_FOR_STONE_TOOL)) miningLevel = 2;
             else if (blockState.isIn(BlockTags.INCORRECT_FOR_WOODEN_TOOL)) miningLevel = 1;
-            float maxMiningLevel = 0;
+            float maxMiningLevel = (float) getAttributeValue(URAttributes.MOLECLAW_MINING_LEVEL);
             if (hasStatusEffect(StatusEffects.STRENGTH)) maxMiningLevel += getStatusEffect(StatusEffects.STRENGTH).getAmplifier() + 1;
             if (hasStatusEffect(StatusEffects.WEAKNESS)) maxMiningLevel -= getStatusEffect(StatusEffects.WEAKNESS).getAmplifier() + 1;
 
@@ -341,7 +344,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
     }
 
     public boolean hasLightProtection() {
-        return getEquippedStack(EquipmentSlot.HEAD).isIn(URTags.MOLECLAW_PROTECTS_FROM_LIGHT);
+        return getEquippedStack(EquipmentSlot.HEAD).isIn(URTags.PROTECTS_MOLECLAW_FROM_LIGHT);
     }
 
     public boolean isTooBrightAtPos(BlockPos blockPos) {

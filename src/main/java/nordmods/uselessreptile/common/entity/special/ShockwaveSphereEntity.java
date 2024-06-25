@@ -11,6 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URStatusEffects;
@@ -22,7 +23,7 @@ import java.util.Random;
 public class ShockwaveSphereEntity extends ProjectileEntity {
     private float currentRadius = 0;
     public static final float MAX_RADIUS = 20;
-    public static final float RADIUS_CHANGE_SPEED = 0.4f;
+    public static final float RADIUS_CHANGE_SPEED = 0.6f;
     public static final float POWER = 1;
     private final List<Entity> affected = new ArrayList<>();
     private final List<Entity> prevAffected = new ArrayList<>();
@@ -86,6 +87,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
         if (prevAffected.contains(target)) return false;
         if (getEyePos().distanceTo(target.getPos()) > currentRadius + target.getWidth()/2) return false;
         if (target.isInvulnerableTo(getDamageSources().create(DamageTypes.LIGHTNING_BOLT))) return false;
+        if (target instanceof EntityPart part) target = part.owner;
         Entity owner = getOwner();
         LivingEntity ownerOwner = owner instanceof TameableEntity tameable ? tameable.getOwner() : null;
         if (target == ownerOwner) return false;

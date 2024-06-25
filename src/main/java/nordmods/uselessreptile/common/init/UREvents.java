@@ -1,18 +1,30 @@
 package nordmods.uselessreptile.common.init;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
+import nordmods.uselessreptile.common.event.DragonEquipmentTooltipEntryEvent;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import nordmods.uselessreptile.common.util.LightningChaserSpawnTimer;
 
-public class UREvents {
+import java.util.ArrayList;
+import java.util.List;
 
+public class UREvents {
     public static void init() {
+        spawnLightningChaser();
+        addDragonEquipmentTooltipEntries();
+    }
+
+    private static void spawnLightningChaser() {
         //Lightning Chaser spawn event
         ServerTickEvents.START_WORLD_TICK.register(world -> {
             if (world instanceof LightningChaserSpawnTimer worldTimer && world.isThundering()) {
@@ -49,7 +61,15 @@ public class UREvents {
         });
     }
 
-    private static void spawnLightningChaser() {
-
+    private static void addDragonEquipmentTooltipEntries() {
+        DragonEquipmentTooltipEntryEvent.EVENT.register(item -> {
+            List<EntityType<?>> entityTypes = new ArrayList<>();
+            RegistryEntry<Item> entry = Registries.ITEM.getEntry(item);
+            if (entry.isIn(URTags.MOLECLAW_TAIL_ARMOR) || entry.isIn(URTags.MOLECLAW_CHESTPLATES) || entry.isIn(URTags.MOLECLAW_HELMETS))
+                entityTypes.add(UREntities.MOLECLAW_ENTITY);
+            if (entry.isIn(URTags.LIGHTNING_CHASER_TAIL_ARMOR) || entry.isIn(URTags.LIGHTNING_CHASER_CHESTPLATES) || entry.isIn(URTags.LIGHTNING_CHASER_HELMETS))
+                entityTypes.add(UREntities.LIGHTNING_CHASER_ENTITY);
+            return entityTypes;
+        });
     }
 }

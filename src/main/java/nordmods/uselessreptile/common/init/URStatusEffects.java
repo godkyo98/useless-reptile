@@ -8,8 +8,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import nordmods.uselessreptile.UselessReptile;
-import nordmods.uselessreptile.common.statuseffects.AcidStatusEffect;
-import nordmods.uselessreptile.common.statuseffects.URStatusEffect;
+import nordmods.uselessreptile.common.statuseffect.AcidStatusEffect;
+import nordmods.uselessreptile.common.statuseffect.URStatusEffect;
 
 public class URStatusEffects {
 

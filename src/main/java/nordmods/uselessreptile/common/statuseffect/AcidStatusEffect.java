@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.statuseffects;
+package nordmods.uselessreptile.common.statuseffect;
 
 import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.entity.EquipmentSlot;

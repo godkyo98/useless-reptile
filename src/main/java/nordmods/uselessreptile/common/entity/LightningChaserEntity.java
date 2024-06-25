@@ -48,6 +48,7 @@ import nordmods.uselessreptile.common.entity.base.URRideableFlyingDragonEntity;
 import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
 import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
 import nordmods.uselessreptile.common.gui.LightningChaserScreenHandler;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
@@ -86,17 +87,9 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     public LightningChaserEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
         experiencePoints = 20;
-
-        baseSecondaryAttackCooldown = attributes().lightningChaserBaseSecondaryAttackCooldown;
-        basePrimaryAttackCooldown = attributes().lightningChaserBasePrimaryAttackCooldown;
-        baseAccelerationDuration = attributes().lightningChaserBaseAccelerationDuration;
         baseTamingProgress = 5;
         pitchLimitGround = 50;
         pitchLimitAir = 20;
-        rotationSpeedGround = attributes().lightningChaserRotationSpeedGround;
-        rotationSpeedAir = attributes().lightningChaserRotationSpeedAir;
-        verticalSpeed = attributes().lightningChaserVerticalSpeed;
-        regenerationFromFood = attributes().lightningChaserRegenerationFromFood;
         ticksUntilHeal = 500;
     }
 
@@ -165,8 +158,10 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     }
     private <A extends GeoEntity> PlayState mainController(AnimationState<A> event) {
         event.getController().setAnimationSpeed(animationSpeed);
+        event.getController().transitionLength(TRANSITION_TICKS);
         if (isFlying()) {
             if (isSecondaryAttack()) {
+                event.getController().transitionLength(TRANSITION_TICKS/2);
                 event.getController().setAnimationSpeed(calcCooldownMod());
                 return loopAnim("fly.shockwave", event);
             }
@@ -227,7 +222,14 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().lightningChaserArmorToughness * attributes().dragonArmorToughnessMultiplier)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().lightningChaserGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().lightningChaserFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0);
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().lightningChaserVerticalSpeed)
+                .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().lightningChaserBaseAccelerationDuration)
+                .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().lightningChaserRotationSpeedGround)
+                .add(URAttributes.DRAGON_FLYING_ROTATION_SPEED, attributes().lightningChaserRotationSpeedAir)
+                .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().lightningChaserBasePrimaryAttackCooldown)
+                .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN, attributes().lightningChaserBaseSecondaryAttackCooldown)
+                .add(URAttributes.DRAGON_REGENERATION_FROM_FOOD, attributes().lightningChaserRegenerationFromFood);
     }
 
     @Override
@@ -240,11 +242,6 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     public void setSurrendered(boolean state) {
         dataTracker.set(SURRENDERED, state);
         setIsSitting(state);
-    }
-
-    @Override
-    public float getMaxAccelerationDuration() {
-        return baseAccelerationDuration * calcSpeedMod() / (getWorld().isThundering() ? 1.5f : 1f);
     }
 
     @Override
@@ -339,6 +336,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(THUNDERSTORM_BONUS);
             getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED).removeModifier(THUNDERSTORM_BONUS);
             getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(THUNDERSTORM_BONUS);
+            getAttributeInstance(URAttributes.DRAGON_ACCELERATION_DURATION).removeModifier(THUNDERSTORM_BONUS);
             if (getWorld().getLevelProperties().isThundering()) {
                 getAttributeInstance(EntityAttributes.GENERIC_ARMOR)
                         .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 4, EntityAttributeModifier.Operation.ADD_VALUE));
@@ -346,6 +344,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                         .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.2, EntityAttributeModifier.Operation.ADD_VALUE));
                 getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
                         .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.05, EntityAttributeModifier.Operation.ADD_VALUE));
+                getAttributeInstance(URAttributes.DRAGON_ACCELERATION_DURATION)
+                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, -0.33, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
             }
         }
 
@@ -437,7 +437,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     public void triggerShockwave() {
         setSecondaryAttackCooldown(getMaxSecondaryAttackCooldown());
-        shockwaveDelay = TRANSITION_TICKS;
+        shockwaveDelay = TRANSITION_TICKS/2;
     }
 
     public void meleeAttack(LivingEntity target) {
@@ -457,8 +457,11 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     @Override
     public int getMaxSecondaryAttackCooldown() {
-        return isFlying() ? super.getMaxSecondaryAttackCooldown() * 4 : super.getMaxSecondaryAttackCooldown();
+        return isFlying() ? super.getMaxSecondaryAttackCooldown() * 3 : super.getMaxSecondaryAttackCooldown();
     }
+
+    @Override
+    public boolean isSecondaryAttack() {return isFlying() ? getSecondaryAttackCooldown() > getMaxSecondaryAttackCooldown() - 24 : super.isSecondaryAttack();}
 
     @Override
     protected int getTicksUntilHeal() {

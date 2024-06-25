@@ -12,4 +12,5 @@ public interface FlyingDragon {
     void setTiltState(byte state);
     void startToFly();
     float getVerticalSpeed();
+    float getFlyingRotationSpeed();
 }

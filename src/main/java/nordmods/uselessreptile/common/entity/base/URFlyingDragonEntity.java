@@ -16,17 +16,16 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.FlyingDragonMoveControl;
 import nordmods.uselessreptile.common.entity.ai.pathfinding.FlyingDragonNavigation;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.network.LiftoffParticlesS2CPacket;
 
 public abstract class URFlyingDragonEntity extends URDragonEntity implements FlyingDragon {
 
     protected final int maxInAirTimer = 600;
     protected float pitchLimitAir = 90;
-    protected float rotationSpeedAir = 180;
     protected float tiltProgress;
     protected boolean shouldGlide;
     private int glideTimer = 100;
-    protected float verticalSpeed;
 
     protected URFlyingDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -75,8 +74,13 @@ public abstract class URFlyingDragonEntity extends URDragonEntity implements Fly
 
     @Override
     public float getRotationSpeed() {
-        if (isFlying()) return rotationSpeedAir * calcSpeedMod() / 2f;
+        if (isFlying()) return getFlyingRotationSpeed() * calcSpeedMod() / 2f;
         return super.getRotationSpeed();
+    }
+
+    @Override
+    public float getFlyingRotationSpeed() {
+        return (float) getAttributeValue(URAttributes.DRAGON_FLYING_ROTATION_SPEED);
     }
 
     @Override
@@ -170,7 +174,7 @@ public abstract class URFlyingDragonEntity extends URDragonEntity implements Fly
 
     @Override
     public float getVerticalSpeed() {
-        return verticalSpeed;
+        return (float) getAttributeValue(URAttributes.DRAGON_VERTICAL_SPEED);
     }
 
     @Override

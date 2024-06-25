@@ -16,7 +16,7 @@ public class URItemTagProvider extends FabricTagProvider.ItemTagProvider{
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
         //Moleclaw armor items
-        getOrCreateTagBuilder(URTags.MOLECLAW_PROTECTS_FROM_LIGHT)
+        getOrCreateTagBuilder(URTags.PROTECTS_MOLECLAW_FROM_LIGHT)
                 .add(URItems.MOLECLAW_HELMET_IRON)
                 .add(URItems.MOLECLAW_HELMET_GOLD)
                 .add(URItems.MOLECLAW_HELMET_DIAMOND);
@@ -35,7 +35,7 @@ public class URItemTagProvider extends FabricTagProvider.ItemTagProvider{
                 .add(URItems.DRAGON_HELMET_IRON)
                 .add(URItems.DRAGON_HELMET_GOLD)
                 .add(URItems.DRAGON_HELMET_DIAMOND)
-                .addTag(URTags.MOLECLAW_PROTECTS_FROM_LIGHT);
+                .addTag(URTags.PROTECTS_MOLECLAW_FROM_LIGHT);
 
         //Lightning chaser armor items
         getOrCreateTagBuilder(URTags.LIGHTNING_CHASER_CHESTPLATES)

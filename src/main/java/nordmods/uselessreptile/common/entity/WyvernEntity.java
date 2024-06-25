@@ -44,6 +44,7 @@ import nordmods.uselessreptile.common.entity.base.URDragonPart;
 import nordmods.uselessreptile.common.entity.base.URRideableFlyingDragonEntity;
 import nordmods.uselessreptile.common.entity.special.AcidBlastEntity;
 import nordmods.uselessreptile.common.gui.WyvernScreenHandler;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URPotions;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URStatusEffects;
@@ -73,16 +74,9 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         super(entityType, world);
         experiencePoints = 20;
 
-        baseSecondaryAttackCooldown = attributes().wyvernBaseSecondaryAttackCooldown;
-        basePrimaryAttackCooldown = attributes().wyvernBasePrimaryAttackCooldown;
-        baseAccelerationDuration = attributes().wyvernBaseAccelerationDuration;
         baseTamingProgress = 128;
         pitchLimitGround = 50;
         pitchLimitAir = 20;
-        rotationSpeedGround = attributes().wyvernRotationSpeedGround;
-        rotationSpeedAir = attributes().wyvernRotationSpeedAir;
-        verticalSpeed = attributes().wyvernVerticalSpeed;
-        regenerationFromFood = attributes().wyvernRegenerationFromFood;
         ticksUntilHeal = 200;
     }
 
@@ -113,7 +107,14 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().wyvernGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().wyvernFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(EntityAttributes.GENERIC_JUMP_STRENGTH, 0.42 * 1.5);
+                .add(EntityAttributes.GENERIC_JUMP_STRENGTH, 0.42 * 1.5)
+                .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().wyvernVerticalSpeed)
+                .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().wyvernBaseAccelerationDuration)
+                .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().wyvernRotationSpeedGround)
+                .add(URAttributes.DRAGON_FLYING_ROTATION_SPEED, attributes().wyvernRotationSpeedAir)
+                .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().wyvernBasePrimaryAttackCooldown)
+                .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN, attributes().wyvernBaseSecondaryAttackCooldown)
+                .add(URAttributes.DRAGON_REGENERATION_FROM_FOOD, attributes().wyvernRegenerationFromFood);
     }
 
     @Override
