@@ -1,6 +1,7 @@
 package nordmods.uselessreptile.client.util;
 
 import net.minecraft.client.MinecraftClient;
+import nordmods.uselessreptile.UselessReptile;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import net.minecraft.util.Identifier;
 
@@ -21,8 +22,14 @@ public class ResourceUtil {
     }
 
     //note: very resource intense, try to avoid repetitive calls
+    public static boolean doesExist(Identifier id, boolean logWarning) {
+        boolean exists = id != null && MinecraftClient.getInstance().getResourceManager().getResource(id).isPresent();
+        if (!exists && logWarning) UselessReptile.LOGGER.warn("Unable to find {}. Are you sure it exists?", id);
+        return exists;
+    }
+
     public static boolean doesExist(Identifier id) {
-        return  id != null && MinecraftClient.getInstance().getResourceManager().getResource(id).isPresent();
+        return doesExist(id, true);
     }
 
     private static final Map<String, String> letters = new HashMap<>();

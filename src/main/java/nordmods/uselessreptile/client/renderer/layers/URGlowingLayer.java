@@ -31,7 +31,7 @@ public class URGlowingLayer<T extends GeoAnimatable & AssetCahceOwner> extends G
 
         if (!assetCache.hasGlowing()) return;
         Identifier id = getGlowingTexture(animatable);
-        if (!ResourceUtil.doesExist(id)) {
+        if (!ResourceUtil.doesExist(id, false)) {
             assetCache.setHasGlowing(false);
             return;
         }

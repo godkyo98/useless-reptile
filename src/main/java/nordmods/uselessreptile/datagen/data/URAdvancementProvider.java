@@ -71,7 +71,7 @@ public class URAdvancementProvider extends FabricAdvancementProvider {
                         true,
                         true,
                         false)
-                .criterion("obtain_item", AdvancementCriterions.obtainItem(URTags.MOLECLAW_HELMETS))
+                .criterion("obtain_item", AdvancementCriterions.obtainItem(URTags.PROTECTS_MOLECLAW_FROM_LIGHT))
                 .parent(tameMoleclaw)
                 .build(UselessReptile.id("dragon/moleclaw_helmet"));
 

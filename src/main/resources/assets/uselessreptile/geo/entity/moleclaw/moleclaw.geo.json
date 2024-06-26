@@ -1274,7 +1274,7 @@
 				{
 					"name": "blink",
 					"parent": "head",
-					"pivot": [0, -3, 0],
+					"pivot": [0, 33, -39],
 					"cubes": [
 						{
 							"origin": [-5.5, 30.5, -44],

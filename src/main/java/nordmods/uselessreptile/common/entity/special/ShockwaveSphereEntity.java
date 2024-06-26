@@ -16,9 +16,7 @@ import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URStatusEffects;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class ShockwaveSphereEntity extends ProjectileEntity {
     private float currentRadius = 0;
@@ -84,7 +82,10 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
     }
 
     private boolean canTarget(Entity target) {
-        if (prevAffected.contains(target)) return false;
+        if (prevAffected.contains(target)) {
+            affected.add(target);
+            return false;
+        }
         if (getEyePos().distanceTo(target.getPos()) > currentRadius + target.getWidth()/2) return false;
         if (target.isInvulnerableTo(getDamageSources().create(DamageTypes.LIGHTNING_BOLT))) return false;
         if (target instanceof EntityPart part) target = part.owner;
@@ -105,7 +106,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
 
     @Override
     public double getEyeY() {
-        return getPos().y + currentRadius;
+        return getPos().y + getHeight()/2f;
     }
 
     @Override
