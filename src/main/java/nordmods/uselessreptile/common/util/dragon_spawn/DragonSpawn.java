@@ -82,6 +82,7 @@ public class DragonSpawn {
 
     //allowed - works as whitelist if presented and not empty
     //banned - works as blacklist if presented and not empty
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     public static class SpawnConditions {
         private final int weight;
         @NotNull private final Optional<List<Codecs.TagEntryId>> allowedBiomes;

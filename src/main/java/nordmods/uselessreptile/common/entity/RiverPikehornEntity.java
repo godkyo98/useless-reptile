@@ -128,7 +128,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     }
 
     private <A extends GeoEntity> PlayState attackController(AnimationState<A> event) {
-        event.getController().setAnimationSpeed(1/calcCooldownMod());
+        event.getController().setAnimationSpeed(1/ getCooldownModifier());
         if (isPrimaryAttack()) return playAnim( "attack" + getAttackType(), event);
         return playAnim("attack.none", event);
     }
@@ -217,21 +217,18 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     }
 
     public static DefaultAttributeContainer.Builder createPikehornAttributes() {
-        return TameableEntity.createMobAttributes()
+        return createDragonAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().riverPikehornDamage * attributes().dragonDamageMultiplier)
                 .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().riverPikehornKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().riverPikehornHealth * attributes().dragonHealthMultiplier)
                 .add(EntityAttributes.GENERIC_ARMOR, attributes().riverPikehornArmor * attributes().dragonArmorMultiplier)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().riverPikehornArmorToughness * attributes().dragonArmorToughnessMultiplier)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().riverPikehornGroundSpeed * attributes().dragonGroundSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().riverPikehornFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().riverPikehornVerticalSpeed)
                 .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().riverPikehornBaseAccelerationDuration)
                 .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().riverPikehornRotationSpeedGround)
                 .add(URAttributes.DRAGON_FLYING_ROTATION_SPEED, attributes().riverPikehornRotationSpeedAir)
                 .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().riverPikehornBasePrimaryAttackCooldown)
-                .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN)
                 .add(URAttributes.DRAGON_REGENERATION_FROM_FOOD, attributes().riverPikehornRegenerationFromFood);
     }
 
@@ -324,8 +321,8 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     }
 
     @Override
-    protected float  calcSpeedMod() {
-        return super.calcSpeedMod() / (isTouchingWater() ? 2 : 1);
+    protected float getSpeedModifier() {
+        return super.getSpeedModifier() / (isTouchingWater() ? 2 : 1);
     }
 
     public void stopHunt() {

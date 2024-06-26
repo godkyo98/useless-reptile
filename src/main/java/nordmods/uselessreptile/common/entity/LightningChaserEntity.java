@@ -162,7 +162,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         if (isFlying()) {
             if (isSecondaryAttack()) {
                 event.getController().transitionLength(TRANSITION_TICKS/2);
-                event.getController().setAnimationSpeed(calcCooldownMod());
+                event.getController().setAnimationSpeed(getCooldownModifier());
                 return loopAnim("fly.shockwave", event);
             }
             if (isMoving() || event.isMoving()) {
@@ -201,7 +201,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     }
 
     private <A extends GeoEntity> PlayState attackController(AnimationState<A> event) {
-        event.getController().setAnimationSpeed(1/calcCooldownMod());
+        event.getController().setAnimationSpeed(1/ getCooldownModifier());
         if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + getAttackType(), event);
         if (isPrimaryAttack()) {
             if (isFlying()) {
@@ -214,7 +214,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     }
 
     public static DefaultAttributeContainer.Builder createLightningChaserAttributes() {
-        return TameableEntity.createMobAttributes()
+        return createDragonAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().lightningChaserDamage * attributes().dragonDamageMultiplier)
                 .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().lightningChaserKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().lightningChaserHealth * attributes().dragonHealthMultiplier)
@@ -222,7 +222,6 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().lightningChaserArmorToughness * attributes().dragonArmorToughnessMultiplier)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().lightningChaserGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().lightningChaserFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().lightningChaserVerticalSpeed)
                 .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().lightningChaserBaseAccelerationDuration)
                 .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().lightningChaserRotationSpeedGround)
@@ -337,6 +336,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED).removeModifier(THUNDERSTORM_BONUS);
             getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(THUNDERSTORM_BONUS);
             getAttributeInstance(URAttributes.DRAGON_ACCELERATION_DURATION).removeModifier(THUNDERSTORM_BONUS);
+            getAttributeInstance(URAttributes.DRAGON_VERTICAL_SPEED).removeModifier(THUNDERSTORM_BONUS);
             if (getWorld().getLevelProperties().isThundering()) {
                 getAttributeInstance(EntityAttributes.GENERIC_ARMOR)
                         .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 4, EntityAttributeModifier.Operation.ADD_VALUE));
@@ -346,6 +346,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                         .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.05, EntityAttributeModifier.Operation.ADD_VALUE));
                 getAttributeInstance(URAttributes.DRAGON_ACCELERATION_DURATION)
                         .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, -0.33, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+                getAttributeInstance(URAttributes.DRAGON_VERTICAL_SPEED)
+                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.1, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
             }
         }
 

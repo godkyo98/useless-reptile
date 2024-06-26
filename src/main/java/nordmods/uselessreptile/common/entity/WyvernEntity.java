@@ -106,7 +106,6 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().wyvernArmorToughness * attributes().dragonArmorToughnessMultiplier)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().wyvernGroundSpeed * attributes().dragonGroundSpeedMultiplier)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, attributes().wyvernFlyingSpeed * attributes().dragonFlyingSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.GENERIC_JUMP_STRENGTH, 0.42 * 1.5)
                 .add(URAttributes.DRAGON_VERTICAL_SPEED, attributes().wyvernVerticalSpeed)
                 .add(URAttributes.DRAGON_ACCELERATION_DURATION, attributes().wyvernBaseAccelerationDuration)
@@ -153,7 +152,7 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         event.getController().setAnimationSpeed(animationSpeed);
         if (isFlying()) {
             if (isSecondaryAttack()) {
-                event.getController().setAnimationSpeed(1/calcCooldownMod());
+                event.getController().setAnimationSpeed(1/ getCooldownModifier());
                 return loopAnim("fly.attack", event);
             }
             if (isMoving() || event.isMoving()) {
@@ -187,7 +186,7 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     }
 
     private <A extends GeoEntity> PlayState attackController(AnimationState<A> event) {
-        event.getController().setAnimationSpeed(1/calcCooldownMod());
+        event.getController().setAnimationSpeed(1/ getCooldownModifier());
         if (!isFlying() && isSecondaryAttack()) return playAnim( "attack.melee" + getAttackType(), event);
         if (isPrimaryAttack()) {
             if (isFlying() && (isMoving() || event.isMoving()) && !isMovingBackwards()) return playAnim("attack.fly.range", event);

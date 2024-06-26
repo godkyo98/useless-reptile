@@ -15,7 +15,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -106,15 +105,13 @@ public class MoleclawEntity extends URRideableDragonEntity {
     public void setIsPanicking (boolean state) {dataTracker.set(IS_PANICKING, state);}
 
     public static DefaultAttributeContainer.Builder createMoleclawAttributes() {
-        return TameableEntity.createMobAttributes()
+        return createDragonAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, attributes().moleclawDamage * attributes().dragonDamageMultiplier)
                 .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, attributes().moleclawKnockback * URMobAttributesConfig.getConfig().dragonKnockbackMultiplier)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, attributes().moleclawHealth * attributes().dragonHealthMultiplier)
                 .add(EntityAttributes.GENERIC_ARMOR, attributes().moleclawArmor * attributes().dragonArmorMultiplier)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, attributes().moleclawArmorToughness * attributes().dragonArmorToughnessMultiplier)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, attributes().moleclawGroundSpeed * attributes().dragonGroundSpeedMultiplier)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
-                .add(URAttributes.DRAGON_ACCELERATION_DURATION)
                 .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, attributes().moleclawRotationSpeedGround)
                 .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, attributes().moleclawBasePrimaryAttackCooldown)
                 .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN, attributes().moleclawBaseSecondaryAttackCooldown)
@@ -174,7 +171,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
     }
 
     private <A extends GeoEntity> PlayState attackController(AnimationState<A> event){
-        event.getController().setAnimationSpeed(1/calcCooldownMod());
+        event.getController().setAnimationSpeed(1/ getCooldownModifier());
         if (isSecondaryAttack()) return playAnim( "attack.normal" + getAttackType(), event);
         if (isPrimaryAttack()) {
             if (isPanicking()) return playAnim( "attack.strong.panic", event);

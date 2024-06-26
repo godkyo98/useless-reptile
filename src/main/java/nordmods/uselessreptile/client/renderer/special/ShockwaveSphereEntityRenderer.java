@@ -32,24 +32,24 @@ public class ShockwaveSphereEntityRenderer extends EntityRenderer<ShockwaveSpher
     public void render(ShockwaveSphereEntity entity, float yaw, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
         matrixStack.push();
 
-        float alpha = MathHelper.clamp(1f - entity.getCurrentRadius() / ShockwaveSphereEntity.MAX_RADIUS, 0f, 1f);
+        float radius = MathHelper.lerp(tickDelta, entity.getPrevRadius(), entity.getCurrentRadius());
+        float alpha = MathHelper.clamp(1f - radius / ShockwaveSphereEntity.MAX_RADIUS, 0f, 1f);
         alpha = MathHelper.lerp(tickDelta, entity.prevAlpha, alpha);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentEmissive(getTexture(entity), true));
-        matrixStack.translate(0, entity.getCurrentRadius(), 0);
 
         matrixStack.push();
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha / 2f * 180f));
-        renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha - 0.2f, 0, 1), entity.getCurrentRadius());
+        renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha - 0.2f, 0, 1), radius);
         matrixStack.pop();
 
         matrixStack.push();
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-alpha / 1.5f * 180f));
-        renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha/1.5f - 0.1f, 0, 1), entity.getCurrentRadius()/1.5f);
+        renderSphere(matrixStack, vertexConsumer, MathHelper.clamp(alpha/1.5f - 0.1f, 0, 1), radius/1.5f);
         matrixStack.pop();
         
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(alpha * 180f));
-        renderSphere(matrixStack, vertexConsumer, alpha/2f, entity.getCurrentRadius()/2f);
+        renderSphere(matrixStack, vertexConsumer, alpha/2f, radius/2f);
 
         entity.prevAlpha = alpha;
         matrixStack.pop();

@@ -22,8 +22,9 @@ import java.util.Random;
 
 public class ShockwaveSphereEntity extends ProjectileEntity {
     private float currentRadius = 0;
-    public static final float MAX_RADIUS = 20;
-    public static final float RADIUS_CHANGE_SPEED = 0.6f;
+    private float prevRadius = 0;
+    public static final float MAX_RADIUS = 40;
+    public static final float RADIUS_CHANGE_SPEED = 0.8f;
     public static final float POWER = 1;
     private final List<Entity> affected = new ArrayList<>();
     private final List<Entity> prevAffected = new ArrayList<>();
@@ -34,6 +35,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
         super(entityType, world);
         setNoGravity(true);
         setInvulnerable(true);
+        ignoreCameraFrustum = true;
         setYaw(new Random(getId()).nextInt(360));
     }
 
@@ -48,15 +50,13 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
     public void tick() {
         super.tick();
         tryPlaySpawnSound();
+        prevRadius = currentRadius;
         if (currentRadius <= MAX_RADIUS) {
-            setPosition(getPos().subtract(0, RADIUS_CHANGE_SPEED, 0));
-            calculateDimensions();
-            List<Entity> targets = getWorld().getOtherEntities(this, getBoundingBox(), this::canTarget);
+            List<Entity> targets = getWorld().getOtherEntities(this, getBoundingBox().expand(currentRadius + 3), this::canTarget);
             for (Entity target : targets) {
                 EntityHitResult entityHitResult = new EntityHitResult(target);
                 onEntityHit(entityHitResult);
             }
-
             currentRadius += RADIUS_CHANGE_SPEED;
             prevAffected.clear();
             prevAffected.addAll(affected);
@@ -96,11 +96,6 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
         return true;
     }
 
-    @Override
-    public EntityDimensions getDimensions(EntityPose pose) {
-        return super.getDimensions(pose).scaled(currentRadius * 2, currentRadius * 2);
-    }
-
     private void tryPlaySpawnSound() {
         if (!spawnSoundPlayed) {
             playSound(URSounds.SHOCKWAVE, 1, 1);
@@ -118,7 +113,16 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
         return false;
     }
 
+    @Override
+    public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
+        return true;
+    }
+
     public float getCurrentRadius() {
         return currentRadius;
+    }
+
+    public float getPrevRadius() {
+        return prevRadius;
     }
 }

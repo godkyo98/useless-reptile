@@ -3,7 +3,7 @@
     "animation": "uselessreptile:animations/entity/moleclaw/moleclaw.animation.json",
     "cull": false,
     "model": "uselessreptile:geo/entity/moleclaw/moleclaw.geo.json",
-    "texture": "uselessreptile:texture/entity/moleclaw/brown.png"
+    "texture": "uselessreptile:textures/entity/moleclaw/brown.png"
   },
   "nametag_accessible": false
 }

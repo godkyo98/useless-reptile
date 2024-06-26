@@ -2,7 +2,7 @@
   "model_data": {
     "animation": "uselessreptile:animations/entity/river_pikehorn/river_pikehorn.animation.json",
     "model": "uselessreptile:geo/entity/river_pikehorn/river_pikehorn.geo.json",
-    "texture": "uselessreptile:texture/entity/river_pikehorn/purple.png"
+    "texture": "uselessreptile:textures/entity/river_pikehorn/purple.png"
   },
   "nametag_accessible": false
 }

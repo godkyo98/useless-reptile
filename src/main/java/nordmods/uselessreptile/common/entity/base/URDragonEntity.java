@@ -244,7 +244,25 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     public static DefaultAttributeContainer.Builder createDragonAttributes() {
         return TameableEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1);
+                .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+                .add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH)
+                .add(EntityAttributes.GENERIC_ARMOR)
+                .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED)
+                .add(EntityAttributes.GENERIC_FLYING_SPEED)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32.0)
+                .add(EntityAttributes.GENERIC_JUMP_STRENGTH)
+                .add(URAttributes.DRAGON_VERTICAL_SPEED)
+                .add(URAttributes.DRAGON_ACCELERATION_DURATION)
+                .add(URAttributes.DRAGON_GROUND_ROTATION_SPEED)
+                .add(URAttributes.DRAGON_FLYING_ROTATION_SPEED)
+                .add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN)
+                .add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN)
+                .add(URAttributes.DRAGON_REGENERATION_FROM_FOOD)
+                .add(URAttributes.DRAGON_SPECIAL_ATTACK_COOLDOWN);
+
     }
 
     @Nullable
@@ -501,7 +519,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     //because rotation is called twice within one tick... somehow
     public float getRotationSpeed() {
-        return getGroundRotationSpeed() * calcSpeedMod() / 2f;
+        return getGroundRotationSpeed() * getSpeedModifier() / 2f;
     }
 
     public float getGroundRotationSpeed() {
@@ -513,10 +531,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     public float getMaxAccelerationDuration() {
-        return (float) (getAttributeValue(URAttributes.DRAGON_ACCELERATION_DURATION) * calcSpeedMod());
+        return (float) (getAttributeValue(URAttributes.DRAGON_ACCELERATION_DURATION) * getSpeedModifier());
     }
 
-    protected float calcCooldownMod() {
+    protected float getCooldownModifier() {
         float mod = 1;
         if (hasStatusEffect(StatusEffects.SLOWNESS)) mod *= (float) (1 + 0.1 * (getStatusEffect(StatusEffects.SLOWNESS).getAmplifier() + 1));
         if (hasStatusEffect(StatusEffects.SPEED)) mod *= (float) (1 - 0.1 * MathHelper.clamp(getStatusEffect(StatusEffects.SPEED).getAmplifier() + 1, 1, 9));
@@ -524,23 +542,23 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return mod;
     }
 
-    protected float calcSpeedMod() {
+    protected float getSpeedModifier() {
         double baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         return (float) (getMovementSpeed() / baseSpeed);
     }
 
     public int getMaxSecondaryAttackCooldown() {
-        return (int) (getAttributeValue(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN) * calcCooldownMod());
+        return (int) (getAttributeValue(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN) * getCooldownModifier());
     }
     public int getMaxPrimaryAttackCooldown() {
-        return (int) (getAttributeValue(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN) * calcCooldownMod());
+        return (int) (getAttributeValue(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN) * getCooldownModifier());
     }
 
     @Override
     public void tick() {
         super.tick();
         updateRotationProgress();
-        animationSpeed = calcSpeedMod();
+        animationSpeed = getSpeedModifier();
 
         if (getSecondaryAttackCooldown() > 0) setSecondaryAttackCooldown(getSecondaryAttackCooldown() - 1);
         if (getPrimaryAttackCooldown() > 0) setPrimaryAttackCooldown(getPrimaryAttackCooldown() - 1);

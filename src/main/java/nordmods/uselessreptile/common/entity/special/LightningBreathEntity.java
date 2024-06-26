@@ -41,6 +41,7 @@ public class LightningBreathEntity extends ProjectileEntity {
     public LightningBreathEntity(EntityType<? extends ProjectileEntity> entityType, World world, Entity owner) {
         super(entityType, world);
         age = 0;
+        ignoreCameraFrustum = true;
         setOwner(owner);
     }
 
