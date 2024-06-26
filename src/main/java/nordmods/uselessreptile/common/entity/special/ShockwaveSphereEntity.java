@@ -78,7 +78,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
                 livingEntity.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), (float) (2.5 * MathHelper.clamp(lengthMod, 1, 2)));
             }
         }
-        affected.add(target);
+        if (!(target instanceof ProjectileEntity)) affected.add(target);
     }
 
     private boolean canTarget(Entity target) {

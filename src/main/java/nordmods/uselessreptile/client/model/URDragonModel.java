@@ -12,13 +12,7 @@ import nordmods.uselessreptile.client.util.model_data.base.ModelData;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import software.bernie.geckolib.model.GeoModel;
 
-public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
-    private final String defaultVariant;
-
-    protected URDragonModel(String defaultVariant) {
-        this.defaultVariant = defaultVariant;
-    }
-
+public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
     @Override
     public Identifier getAnimationResource(T entity) {
         AssetCache assetCache = entity.getAssetCache();
@@ -93,7 +87,7 @@ public abstract class URDragonModel<T extends URDragonEntity> extends GeoModel<T
     }
 
     protected final Identifier getDefaultTexture(T entity) {
-        return UselessReptile.id("textures/entity/"+ entity.getDragonID() + "/" + defaultVariant + ".png");
+        return UselessReptile.id("textures/entity/"+ entity.getDragonID() + "/" + entity.getDefaultVariant() + ".png");
     }
 
     protected final Identifier getDefaultAnimation(T entity) {

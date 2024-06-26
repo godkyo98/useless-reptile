@@ -7,6 +7,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import nordmods.uselessreptile.client.model.URDragonModel;
 import nordmods.uselessreptile.client.renderer.layers.URGlowingLayer;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.client.util.DragonEquipmentAnimatable;
@@ -15,15 +16,14 @@ import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.cache.object.GeoBone;
-import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 import java.util.Map;
 
 public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEntityRenderer<T> {
     private final DragonEquipmentRenderer dragonEquipmentRenderer = new DragonEquipmentRenderer();
-    public URDragonRenderer(EntityRendererFactory.Context renderManager, GeoModel<T> model) {
-        super(renderManager, model);
+    public URDragonRenderer(EntityRendererFactory.Context renderManager) {
+        super(renderManager, new URDragonModel<>());
         addRenderLayer(new URGlowingLayer<>(this));
     }
 
