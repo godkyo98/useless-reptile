@@ -4,9 +4,7 @@
       "#c:is_ocean"
     ],
     "allowed_blocks": [
-      "#minecraft:animals_spawnable_on",
-      "#minecraft:base_stone_overworld",
-      "minecraft:gravel"
+      "#minecraft:air"
     ],
     "altitude": {
       "min": 64

@@ -13,33 +13,25 @@ import nordmods.uselessreptile.common.util.URSpawnGroup;
 
 public class URSpawns {
     public static void init() {
-        BiomeModifications.addSpawn(BiomeSelectors
-                        .tag(URTags.WYVERN_SPAWN_WHITELIST)
-                        .and(BiomeSelectors.tag(URTags.WYVERN_SPAWN_BLACKLIST).negate()),
+        BiomeModifications.addSpawn(BiomeSelectors.tag(URTags.WYVERN_SPAWN_BLACKLIST).negate(),
                 URSpawnGroup.DRAGON.spawnGroup,
                 UREntities.WYVERN_ENTITY,
                 URConfig.getConfig().wyvernSpawnWeight,
                 URConfig.getConfig().wyvernMinGroupSize, URConfig.getConfig().wyvernMaxGroupSize);
 
-        BiomeModifications.addSpawn(BiomeSelectors
-                        .tag(URTags.MOLECLAW_SPAWN_WHITELIST)
-                        .and(BiomeSelectors.tag(URTags.MOLECLAW_SPAWN_BLACKLIST).negate()),
+        BiomeModifications.addSpawn(BiomeSelectors.tag(URTags.MOLECLAW_SPAWN_BLACKLIST).negate(),
                 URSpawnGroup.UNDERGROUND_DRAGON.spawnGroup,
                 UREntities.MOLECLAW_ENTITY,
                 URConfig.getConfig().moleclawSpawnWeight,
                 URConfig.getConfig().moleclawMinGroupSize, URConfig.getConfig().moleclawMaxGroupSize);
 
-        BiomeModifications.addSpawn(BiomeSelectors
-                        .tag(URTags.RIVER_PIKEHORN_SPAWN_WHITELIST)
-                        .and(BiomeSelectors.tag(URTags.RIVER_PIKEHORN_SPAWN_BLACKLIST).negate()),
+        BiomeModifications.addSpawn(BiomeSelectors.tag(URTags.RIVER_PIKEHORN_SPAWN_BLACKLIST).negate(),
                 URSpawnGroup.SMALL_DRAGON.spawnGroup,
                 UREntities.RIVER_PIKEHORN_ENTITY,
                 URConfig.getConfig().pikehornSpawnWeight,
                 URConfig.getConfig().pikehornMinGroupSize, URConfig.getConfig().pikehornMaxGroupSize);
 
-        BiomeModifications.addSpawn(BiomeSelectors
-                        .tag(URTags.LIGHTNING_CHASER_SPAWN_WHITELIST)
-                        .and(BiomeSelectors.tag(URTags.LIGHTNING_CHASER_SPAWN_BLACKLIST).negate()),
+        BiomeModifications.addSpawn(BiomeSelectors.tag(URTags.LIGHTNING_CHASER_SPAWN_BLACKLIST).negate(),
                 URSpawnGroup.DRAGON.spawnGroup,
                 UREntities.LIGHTNING_CHASER_ENTITY,
                 URConfig.getConfig().lightningChaserSpawnWeight,

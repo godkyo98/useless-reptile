@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
 import nordmods.uselessreptile.common.init.URTags;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,27 +17,16 @@ public class URBiomeTagProvider extends FabricTagProvider<Biome>{
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
-        getOrCreateTagBuilder(URTags.LIGHTNING_CHASER_SPAWN_BLACKLIST);
-        getOrCreateTagBuilder(URTags.LIGHTNING_CHASER_SPAWN_WHITELIST)
-                .addOptionalTag(ConventionalBiomeTags.IS_OVERWORLD);
+        getOrCreateTagBuilder(URTags.LIGHTNING_CHASER_SPAWN_BLACKLIST)
+                .addOptionalTag(ConventionalBiomeTags.NO_DEFAULT_MONSTERS);
 
-        getOrCreateTagBuilder(URTags.MOLECLAW_SPAWN_BLACKLIST);
-        getOrCreateTagBuilder(URTags.MOLECLAW_SPAWN_WHITELIST)
-                .addOptionalTag(ConventionalBiomeTags.IS_OVERWORLD);
+        getOrCreateTagBuilder(URTags.MOLECLAW_SPAWN_BLACKLIST)
+                .addOptionalTag(ConventionalBiomeTags.NO_DEFAULT_MONSTERS);
 
         getOrCreateTagBuilder(URTags.WYVERN_SPAWN_BLACKLIST)
-                .add(BiomeKeys.MANGROVE_SWAMP);
-        getOrCreateTagBuilder(URTags.WYVERN_SPAWN_WHITELIST)
-                .addOptionalTag(ConventionalBiomeTags.IS_SWAMP);
+                .addOptionalTag(ConventionalBiomeTags.NO_DEFAULT_MONSTERS);
 
         getOrCreateTagBuilder(URTags.RIVER_PIKEHORN_SPAWN_BLACKLIST)
-                .addOptionalTag(ConventionalBiomeTags.IS_AQUATIC_ICY)
-                .addOptionalTag(ConventionalBiomeTags.IS_SNOWY)
-                .addOptionalTag(ConventionalBiomeTags.IS_COLD)
-                .addOptionalTag(ConventionalBiomeTags.IS_ICY);
-        getOrCreateTagBuilder(URTags.RIVER_PIKEHORN_SPAWN_WHITELIST)
-                .addOptionalTag(ConventionalBiomeTags.IS_BEACH)
-                .addOptionalTag(ConventionalBiomeTags.IS_RIVER)
-                .addOptionalTag(ConventionalBiomeTags.IS_OCEAN);
+                .addOptionalTag(ConventionalBiomeTags.NO_DEFAULT_MONSTERS);
     }
 }

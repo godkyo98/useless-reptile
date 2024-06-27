@@ -27,7 +27,7 @@ public class DragonSpawn {
             .apply(instance, DragonSpawn::new));
     private static final Map<String, List<DragonSpawn>> dragonSpawnsHolder = new HashMap<>();
 
-    private DragonSpawn(String variant, SpawnConditions conditions) {
+    protected DragonSpawn(String variant, SpawnConditions conditions) {
         this.variant = variant;
         this.conditions = conditions;
     }
@@ -71,7 +71,7 @@ public class DragonSpawn {
     public static void debugPrint() {
         for (Map.Entry<String, List<DragonSpawn>> entry : DragonSpawn.dragonSpawnsHolder.entrySet()) {
             for (DragonSpawn spawn : entry.getValue()) {
-                UselessReptile.LOGGER.debug("{}: added spawn for variant {} with conditions {}", entry.getKey(), spawn.variant(), spawn.conditions());
+                UselessReptile.LOGGER.debug("{}: added spawn entry for variant \"{}\" with conditions: {}", entry.getKey(), spawn.variant(), spawn.conditions());
             }
         }
     }
@@ -155,6 +155,71 @@ public class DragonSpawn {
             public int max() {
                 return max.orElse(Integer.MAX_VALUE);
             }
+
+            @Override
+            public String toString() {
+                StringBuilder builder = new StringBuilder();
+                builder.append("Altitude: {");
+                if (min.isPresent()) {
+                    builder.append("Min: ").append(min());
+                    if (max.isPresent()) builder.append(", ");
+                }
+                if (max.isPresent()) builder.append("Max: ").append(max());
+                builder.append("}");
+
+                return builder.toString();
+            }
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("{Weight: ").append(weight());
+            if (allowedBiomes().isPresent()) {
+                builder.append(", Allowed Biomes: [");
+                List<Codecs.TagEntryId> entryIdList = allowedBiomes().get();
+                for (Codecs.TagEntryId entryId :entryIdList) {
+                    if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
+                    builder.append(entryId.toString());
+                }
+                builder.append("]");
+            }
+
+            if (bannedBiomes().isPresent()) {
+                builder.append(", Banned Biomes: [");
+                List<Codecs.TagEntryId> entryIdList = bannedBiomes().get();
+                for (Codecs.TagEntryId entryId :entryIdList) {
+                    if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
+                    builder.append(entryId.toString());
+                }
+                builder.append("]");
+            }
+
+            if (allowedBlocks().isPresent()) {
+                builder.append(", Allowed Blocks: [");
+                List<Codecs.TagEntryId> entryIdList = allowedBlocks().get();
+                for (Codecs.TagEntryId entryId :entryIdList) {
+                    if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
+                    builder.append(entryId.toString());
+                }
+                builder.append("]");
+            }
+
+            if (bannedBlocks().isPresent()) {
+                builder.append(", Banned Blocks: [");
+                List<Codecs.TagEntryId> entryIdList = bannedBlocks().get();
+                for (Codecs.TagEntryId entryId :entryIdList) {
+                    if (!entryIdList.getFirst().equals(entryId)) builder.append(", ");
+                    builder.append(entryId.toString());
+                }
+                builder.append("]");
+            }
+
+            if (altitudeRestriction().isPresent()) {
+                builder.append(", ").append(altitudeRestriction().get());
+            }
+            builder.append("}");
+            return builder.toString();
         }
     }
 

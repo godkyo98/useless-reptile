@@ -1,13 +1,13 @@
 {
   "conditions": {
     "allowed_biomes": [
-      "#uselessreptile:wyvern_spawn_whitelist"
+      "#c:is_swamp"
     ],
     "allowed_blocks": [
-      "#uselessreptile:wyvern_spawnable_on"
+      "#minecraft:animals_spawnable_on"
     ],
     "banned_biomes": [
-      "#uselessreptile:wyvern_spawn_blacklist"
+      "minecraft:mangrove_swamp"
     ],
     "weight": 1
   },

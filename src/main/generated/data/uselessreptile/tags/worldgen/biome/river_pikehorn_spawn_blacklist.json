@@ -1,19 +1,7 @@
 {
   "values": [
     {
-      "id": "#c:is_aquatic_icy",
-      "required": false
-    },
-    {
-      "id": "#c:is_snowy",
-      "required": false
-    },
-    {
-      "id": "#c:is_cold",
-      "required": false
-    },
-    {
-      "id": "#c:is_icy",
+      "id": "#c:no_default_monsters",
       "required": false
     }
   ]

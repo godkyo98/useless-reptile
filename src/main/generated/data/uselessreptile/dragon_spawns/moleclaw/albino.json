@@ -1,13 +1,14 @@
 {
   "conditions": {
     "allowed_biomes": [
-      "#uselessreptile:moleclaw_spawn_whitelist"
+      "#c:is_overworld"
     ],
     "allowed_blocks": [
-      "#uselessreptile:moleclaw_spawnable_on"
-    ],
-    "banned_biomes": [
-      "#uselessreptile:moleclaw_spawn_blacklist"
+      "#c:ores",
+      "#minecraft:stone_ore_replaceables",
+      "#minecraft:deepslate_ore_replaceables",
+      "minecraft:dirt",
+      "minecraft:gravel"
     ],
     "weight": 1
   },

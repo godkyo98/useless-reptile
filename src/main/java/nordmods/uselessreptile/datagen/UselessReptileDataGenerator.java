@@ -6,6 +6,7 @@ import nordmods.uselessreptile.datagen.assets.URDragonModelDataProvider;
 import nordmods.uselessreptile.datagen.assets.UREquipmentModelDataProvider;
 import nordmods.uselessreptile.datagen.assets.URModelProvider;
 import nordmods.uselessreptile.datagen.data.*;
+import nordmods.uselessreptile.datagen.data.dragon_spawn.URDragonSpawnProvider;
 import nordmods.uselessreptile.datagen.data.tag.URBiomeTagProvider;
 import nordmods.uselessreptile.datagen.data.tag.URBlockTagProvider;
 import nordmods.uselessreptile.datagen.data.tag.URDamageTypeTagProvider;
