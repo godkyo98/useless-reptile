@@ -21,29 +21,26 @@ public class URGlowingLayer<T extends GeoAnimatable & AssetCahceOwner> extends G
                        VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick,
                        int packedLight, int packedOverlay) {
         if (URClientConfig.getConfig().disableEmissiveTextures) return;
+        if (!ResourceUtil.isResourceReloadFinished) return;
 
         AssetCache assetCache = animatable.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setGlowLayerLocationCache(null);
-            assetCache.setHasGlowing(true);
-            return;
-        }
-
         if (!assetCache.hasGlowing()) return;
-        Identifier id = getGlowingTexture(animatable);
-        if (!ResourceUtil.doesExist(id, false)) {
-            assetCache.setHasGlowing(false);
-            return;
+        Identifier id = assetCache.getGlowLayerLocationCache();
+        if (id == null) {
+            id = getGlowingTexture(animatable);
+            if (!ResourceUtil.doesExist(id, false)) {
+                assetCache.setHasGlowing(false);
+                return;
+            }
         }
 
-        RenderLayer cameo =  RenderLayer.getEyes(id);
-        getRenderer().reRender(getDefaultBakedModel(animatable), matrixStackIn, bufferSource, animatable, cameo,
-                bufferSource.getBuffer(cameo), partialTick, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV,
+        RenderLayer renderLayer =  RenderLayer.getEyes(id);
+        getRenderer().reRender(model, matrixStackIn, bufferSource, animatable, renderLayer,
+                bufferSource.getBuffer(renderLayer), partialTick, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV,
                 RenderUtil.WHITE);
     }
 
     protected Identifier getGlowingTexture(T animatable) {
-        if (animatable.getAssetCache().getGlowLayerLocationCache() != null) return animatable.getAssetCache().getGlowLayerLocationCache();
         String namespace = getTextureResource(animatable).getNamespace();
         String path = getTextureResource(animatable).getPath().replace(".png", "_glowing.png");
         Identifier id = Identifier.of(namespace, path);

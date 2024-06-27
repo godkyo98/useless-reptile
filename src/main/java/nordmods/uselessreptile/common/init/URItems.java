@@ -48,22 +48,6 @@ public class URItems {
     public static final Item LIGHTNING_CHASER_SPAWN_EGG = new SpawnEggItem(UREntities.LIGHTNING_CHASER_ENTITY,4145472, 10922151, new Item.Settings());
     public static final FluteItem FLUTE = new FluteItem(new Item.Settings().maxCount(1).component(FLUTE_MODE_COMPONENT, FluteComponent.DEFAULT));
 
-    public static final DragonEquipmentItem TEST_EQUIPMENT = new DragonEquipmentItem(
-            Suppliers.memoize(() -> {
-                AttributeModifiersComponent.Builder builder = AttributeModifiersComponent.builder();
-                AttributeModifierSlot attributeModifierSlot = AttributeModifierSlot.forEquipmentSlot(EquipmentSlot.BODY);
-                Identifier id = DragonEquipmentItem.equipmentModifierID(EquipmentSlot.BODY);
-                builder.add(URAttributes.DRAGON_GROUND_ROTATION_SPEED, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                builder.add(URAttributes.DRAGON_FLYING_ROTATION_SPEED, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                builder.add(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                builder.add(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                builder.add(URAttributes.DRAGON_ACCELERATION_DURATION, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                builder.add(URAttributes.DRAGON_REGENERATION_FROM_FOOD, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                builder.add(URAttributes.DRAGON_VERTICAL_SPEED, new EntityAttributeModifier(id, 10, EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE), attributeModifierSlot);
-                return builder.build();
-            }), new Item.Settings()
-    );
-
     public static final RegistryKey<ItemGroup> UR_ITEM_GROUP = RegistryKey.of(RegistryKeys.ITEM_GROUP, UselessReptile.id("item_group"));
 
     public static void init(){
@@ -85,8 +69,6 @@ public class URItems {
         register(WYVERN_SPAWN_EGG, "wyvern_spawn_egg");
         register(LIGHTNING_CHASER_SPAWN_EGG, "lightning_chaser_spawn_egg");
         register(FLUTE, "flute");
-
-        register(TEST_EQUIPMENT, "test_equipment");
 
         Registry.register(Registries.ITEM_GROUP, UR_ITEM_GROUP, FabricItemGroup.builder()
                 .icon(() -> new ItemStack(WYVERN_SKIN))
@@ -112,8 +94,6 @@ public class URItems {
             c.add(DRAGON_TAIL_ARMOR_DIAMOND);
             c.add(WYVERN_SKIN);
             c.add(FLUTE);
-
-            c.add(TEST_EQUIPMENT);
         });
     }
 

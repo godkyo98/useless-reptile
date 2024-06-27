@@ -76,8 +76,6 @@ import java.util.function.BiConsumer;
 public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner, InventoryChangedListener {
     protected double animationSpeed = 1;
     protected float rotationProgress;
-    protected float heightMod = 1;
-    protected float widthMod = 1;
     public static final int TRANSITION_TICKS = 10;
     protected float pitchLimitGround = 90;
     protected int primaryAttackDuration = 20;
@@ -242,7 +240,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return super.initialize(world, difficulty, spawnReason, entityData);
     }
 
-    public static DefaultAttributeContainer.Builder createDragonAttributes() {
+    protected static DefaultAttributeContainer.Builder createDragonAttributes() {
         return TameableEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_STEP_HEIGHT, 1)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
@@ -361,7 +359,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     @Override
     public EntityDimensions getBaseDimensions(EntityPose pose) {
-        return super.getBaseDimensions(pose).scaled(widthMod/getScale(), heightMod/getScale());
+        return super.getBaseDimensions(pose).scaled(getWidthMod()/getScale(), getHeightMod()/getScale());
     }
 
     @Override
@@ -512,8 +510,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         setHeightMod(heightMod);
         setWidthMod(widthMod);
 
-        this.heightMod = heightMod;
-        this.widthMod = widthMod;
         calculateDimensions();
     }
 

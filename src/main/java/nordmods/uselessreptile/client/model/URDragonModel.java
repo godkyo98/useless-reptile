@@ -15,12 +15,9 @@ import software.bernie.geckolib.model.GeoModel;
 public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
     @Override
     public Identifier getAnimationResource(T entity) {
-        AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setAnimationLocationCache(null);
-            return getDefaultAnimation(entity);
-        }
+        if (!ResourceUtil.isResourceReloadFinished) return getDefaultAnimation(entity);
 
+        AssetCache assetCache = entity.getAssetCache();
         Identifier id = assetCache.getAnimationLocationCache();
         if (id != null) return id;
 
@@ -40,12 +37,9 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
 
     @Override
     public Identifier getModelResource(T entity) {
-        AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setModelLocationCache(null);
-            return getDefaultModel(entity);
-        }
+        if (!ResourceUtil.isResourceReloadFinished) return getDefaultModel(entity);
 
+        AssetCache assetCache = entity.getAssetCache();
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
 
@@ -64,13 +58,10 @@ public class URDragonModel<T extends URDragonEntity> extends GeoModel<T> {
     }
 
     @Override
-    public Identifier getTextureResource(T entity){
-        AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setTextureLocationCache(null);
-            return getDefaultTexture(entity);
-        }
+    public Identifier getTextureResource(T entity) {
+        if (!ResourceUtil.isResourceReloadFinished) return getDefaultTexture(entity);
 
+        AssetCache assetCache = entity.getAssetCache();
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 

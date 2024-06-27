@@ -35,13 +35,14 @@ public abstract class URDragonRenderer <T extends URDragonEntity> extends GeoEnt
     @Override
     public void postRender(MatrixStack poseStack, T dragon, BakedGeoModel model, VertexConsumerProvider bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
         super.postRender(poseStack, dragon, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
-        DragonAssetCache dragonAssetCache = dragon.getAssetCache();
+        if (!ResourceUtil.isResourceReloadFinished) return;
 
+        DragonAssetCache dragonAssetCache = dragon.getAssetCache();
         int i = 0;
         for (ItemStack itemStack : dragon.getArmorItems()) {
             int j = i;
             i++;
-            if (itemStack.isEmpty() || !ResourceUtil.isResourceReloadFinished) {
+            if (itemStack.isEmpty()) {
                 dragonAssetCache.setEquipmentAnimatable(j, null);
                 continue;
             }

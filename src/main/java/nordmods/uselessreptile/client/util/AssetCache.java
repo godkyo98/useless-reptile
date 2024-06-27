@@ -58,7 +58,6 @@ public class AssetCache {
         hasGlowing = state;
     }
 
-
     public void cleanCache() {
         modelLocationCache = null;
         textureLocationCache = null;

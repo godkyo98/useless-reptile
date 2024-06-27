@@ -19,10 +19,8 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
     @Nullable
     public Identifier getModelResource(DragonEquipmentAnimatable entity) {
         AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setModelLocationCache(null);
-            return null;
-        }
+        if (!ResourceUtil.isResourceReloadFinished) return null;
+
         Identifier id = assetCache.getModelLocationCache();
         if (id != null) return id;
 
@@ -42,10 +40,8 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
     @Nullable
     public Identifier getTextureResource(DragonEquipmentAnimatable entity) {
         AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setTextureLocationCache(null);
-            return null;
-        }
+        if (!ResourceUtil.isResourceReloadFinished) return null;
+
         Identifier id = assetCache.getTextureLocationCache();
         if (id != null) return id;
 
@@ -62,11 +58,9 @@ public class DragonEqupmentModel extends GeoModel<DragonEquipmentAnimatable> {
     @Override
     @Nullable
     public Identifier getAnimationResource(DragonEquipmentAnimatable entity) {
+        if (!ResourceUtil.isResourceReloadFinished) return DEFAULT_ANIMATION;
+
         AssetCache assetCache = entity.getAssetCache();
-        if (!ResourceUtil.isResourceReloadFinished) {
-            assetCache.setAnimationLocationCache(null);
-            return DEFAULT_ANIMATION;
-        }
         Identifier id = assetCache.getAnimationLocationCache();
         if (id != null) return id;
 
