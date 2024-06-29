@@ -72,7 +72,7 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
-        if (isTamed() && isOwnerOrCreative(player) && !isInteractableItem(itemStack)) {
+        if (isTamed() && isOwner(player) && !isInteractableItem(itemStack)) {
             if (!hasPassengers() && hasSaddle()) {
                 if (isSitting()) setIsSitting(false);
                 else if (!getWorld().isClient()) player.startRiding(this);
@@ -132,7 +132,7 @@ public abstract class URRideableDragonEntity extends URDragonEntity implements R
 
     @Override
     public void openInventory(PlayerEntity player) {
-        if (!getWorld().isClient() && canBeControlledByRider() && isOwnerOrCreative(player)) {
+        if (!getWorld().isClient() && canBeControlledByRider() && isOwner(player)) {
             GUIEntityToRenderS2CPacket.send((ServerPlayerEntity) player, this);
             player.openHandledScreen(this);
         }

@@ -14,8 +14,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import nordmods.uselessreptile.common.entity.ai.pathfinding.FlyingDragonMoveControl;
-import nordmods.uselessreptile.common.entity.ai.pathfinding.FlyingDragonNavigation;
+import nordmods.uselessreptile.common.entity.ai.control.FlyingDragonMoveControl;
+import nordmods.uselessreptile.common.entity.ai.navigation.FlyingDragonNavigation;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.network.LiftoffParticlesS2CPacket;
 

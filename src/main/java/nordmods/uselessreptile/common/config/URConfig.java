@@ -52,7 +52,9 @@ public class URConfig {
     @SerialEntry
     public int lightningChaserMaxGroupSize = 1;
     @SerialEntry(comment = "BEHAVIOUR \nPossible values: ALL, TAMED, DISABLED")
-    public DragonGriefing allowDragonGriefing = DragonGriefing.ALL;
+    public DragonGriefing moleclawGriefing = DragonGriefing.ALL;
+    @SerialEntry
+    public DragonGriefing lightningChaserGriefing = DragonGriefing.ALL;
     @SerialEntry
     public int blockDropChance = 100;
     @SerialEntry

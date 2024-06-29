@@ -52,8 +52,8 @@ import net.minecraft.world.event.listener.GameEventListener;
 import nordmods.uselessreptile.client.util.AssetCahceOwner;
 import nordmods.uselessreptile.client.util.DragonAssetCache;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
-import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonLookControl;
-import nordmods.uselessreptile.common.entity.ai.pathfinding.DragonNavigation;
+import nordmods.uselessreptile.common.entity.ai.control.DragonLookControl;
+import nordmods.uselessreptile.common.entity.ai.navigation.DragonNavigation;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URStatusEffects;
@@ -75,11 +75,11 @@ import java.util.function.BiConsumer;
 
 public abstract class URDragonEntity extends TameableEntity implements GeoEntity, NamedScreenHandlerFactory, AssetCahceOwner, InventoryChangedListener {
     protected double animationSpeed = 1;
-    protected float rotationProgress;
     public static final int TRANSITION_TICKS = 10;
     protected float pitchLimitGround = 90;
     protected int primaryAttackDuration = 20;
     protected int secondaryAttackDuration = 20;
+    protected int specialAttackDuration = 20;
     protected int baseTamingProgress = 1;
     protected int eatFromInventoryTimer = 20;
     protected boolean canNavigateInFluids = false;
@@ -105,6 +105,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         builder.add(IS_SITTING, false);
         builder.add(DANCING, false);
         builder.add(TURNING_STATE, (byte)0);//1 - left, 2 - right, 0 - straight
+        builder.add(ROTATION_PROGRESS, (byte)0);
         builder.add(TAMING_PROGRESS, 1);
         builder.add(ATTACK_TYPE, 1);
         builder.add(SPEED_MODIFIER, 1f);
@@ -113,6 +114,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         builder.add(WIDTH_MODIFIER, 1f);
         builder.add(SECONDARY_ATTACK_COOLDOWN, 0);
         builder.add(PRIMARY_ATTACK_COOLDOWN, 0);
+        builder.add(SPECIAL_ATTACK_COOLDOWN, 0);
         builder.add(ACCELERATION_DURATION, 0);
         builder.add(BOUNDED_INSTRUMENT_SOUND, "");
         builder.add(VARIANT, "");
@@ -122,6 +124,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public static final TrackedData<Boolean> IS_SITTING = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<Boolean> DANCING = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     public static final TrackedData<Byte> TURNING_STATE = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.BYTE);
+    public static final TrackedData<Byte> ROTATION_PROGRESS = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.BYTE);
     public static final TrackedData<Integer> TAMING_PROGRESS = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Float> SPEED_MODIFIER = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.FLOAT);
     public static final TrackedData<Float> MOUNTED_OFFSET = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -129,6 +132,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public static final TrackedData<Float> WIDTH_MODIFIER = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.FLOAT);
     public static final TrackedData<Integer> SECONDARY_ATTACK_COOLDOWN = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Integer> PRIMARY_ATTACK_COOLDOWN = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    public static final TrackedData<Integer> SPECIAL_ATTACK_COOLDOWN = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Integer> ACCELERATION_DURATION = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<Integer> ATTACK_TYPE = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.INTEGER);
     public static final TrackedData<String> BOUNDED_INSTRUMENT_SOUND = DataTracker.registerData(URDragonEntity.class, TrackedDataHandlerRegistry.STRING);
@@ -141,6 +145,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public boolean isPrimaryAttack() {return getPrimaryAttackCooldown() > getMaxPrimaryAttackCooldown() - primaryAttackDuration;} //old range
     public void setPrimaryAttackCooldown(int state) {dataTracker.set(PRIMARY_ATTACK_COOLDOWN, state);}
     public int getPrimaryAttackCooldown() {return  dataTracker.get(PRIMARY_ATTACK_COOLDOWN);}
+
+    public boolean isSpecialAttack() {return getSpecialAttackCooldown() > getMaxSpecialAttackCooldown() - specialAttackDuration;}
+    public void setSpecialAttackCooldown(int state) {dataTracker.set(SPECIAL_ATTACK_COOLDOWN, state);}
+    public int getSpecialAttackCooldown() {return  dataTracker.get(SPECIAL_ATTACK_COOLDOWN);}
 
     public int getAccelerationDuration() {return dataTracker.get(ACCELERATION_DURATION);}
     public void setAccelerationDuration(int state) {dataTracker.set(ACCELERATION_DURATION, state);}
@@ -168,6 +176,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     public byte getTurningState() {return dataTracker.get(TURNING_STATE);}
     public void setTurningState(byte state) {dataTracker.set(TURNING_STATE, state);}
+
+    public byte getRotationProgress() {return dataTracker.get(ROTATION_PROGRESS);}
+    public float getNormalizedRotationProgress() {return (float)getRotationProgress()/(float)TRANSITION_TICKS;}
+    public void setRotationProgress(byte state) {dataTracker.set(ROTATION_PROGRESS, state);}
 
     public int getTamingProgress() {return dataTracker.get(TAMING_PROGRESS);}
     public void setTamingProgress(int state) {dataTracker.set(TAMING_PROGRESS, state);}
@@ -269,12 +281,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return null;
     }
 
-    //now we wait
-    @Override
-    public EntityView method_48926() {
-        return getWorld();
-    }
-
     protected class JukeboxEventListener implements GameEventListener {
         private final PositionSource positionSource;
         private final int range;
@@ -373,7 +379,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             }
         }
 
-        if (isTamed() && isOwnerOrCreative(player)) {
+        if (isTamed() && isOwner(player)) {
             if (itemStack.getItem() instanceof PotionItem potionItem && player.isSneaking()) {
                 boolean hasHarmful = false;
                 boolean hasBeneficial = false;
@@ -549,15 +555,19 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public int getMaxPrimaryAttackCooldown() {
         return (int) (getAttributeValue(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN) * getCooldownModifier());
     }
+    public int getMaxSpecialAttackCooldown() {
+        return (int) (getAttributeValue(URAttributes.DRAGON_SPECIAL_ATTACK_COOLDOWN) * getCooldownModifier());
+    }
 
     @Override
     public void tick() {
         super.tick();
-        updateRotationProgress();
+        if (!getWorld().isClient()) updateRotationProgress();
         animationSpeed = getSpeedModifier();
 
         if (getSecondaryAttackCooldown() > 0) setSecondaryAttackCooldown(getSecondaryAttackCooldown() - 1);
         if (getPrimaryAttackCooldown() > 0) setPrimaryAttackCooldown(getPrimaryAttackCooldown() - 1);
+        if (getSpecialAttackCooldown() > 0) setSpecialAttackCooldown(getSpecialAttackCooldown() - 1);
 
         if (ticksUntilHeal > -1 && --healTimer <= 0) {
             heal(1);
@@ -569,8 +579,6 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public boolean canImmediatelyDespawn(double distanceSquared) {
         return !this.isTamed() && this.age > 2400;
     }
-
-    protected boolean isOwnerOrCreative(PlayerEntity player) {return isOwner(player) || player.isCreative();}
 
     @SuppressWarnings("SameReturnValue")
     protected <A extends GeoEntity> PlayState loopAnim(String anim, AnimationState<A> event) {
@@ -603,12 +611,14 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return SoundCategory.NEUTRAL;
     }
 
-    public boolean isTargetFriendly(LivingEntity target) {
-        if (target instanceof TameableEntity tameable) return tameable.getOwner() == getOwner();
-        if (target instanceof PlayerEntity player) return player == getOwner();
-        return false;
+    @Override
+    public boolean canTarget(LivingEntity target) {
+        if (target instanceof TameableEntity tameable) return tameable.getOwner() != getOwner();
+        if (target instanceof PlayerEntity player) return player != getOwner();
+        return true;
     }
 
+    //idk how else to detect Replay Mod
     public boolean isClientSpectator() {
         if (MinecraftClient.getInstance().player != null) return MinecraftClient.getInstance().player.isSpectator();
         else return false;
@@ -696,33 +706,31 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     private void updateRotationProgress() {
         switch (getTurningState()) {
             case 1 -> {
-                if (rotationProgress < TRANSITION_TICKS) rotationProgress++;
+                if (getRotationProgress() < TRANSITION_TICKS) setRotationProgress((byte) (getRotationProgress() + 1));
             }
             case 2 -> {
-                if (rotationProgress > -TRANSITION_TICKS) rotationProgress--;
+                if (getRotationProgress() > -TRANSITION_TICKS) setRotationProgress((byte) (getRotationProgress() - 1));
             }
             default -> {
-                if (rotationProgress != 0) {
-                    if (rotationProgress > 0) rotationProgress--;
-                    else  rotationProgress++;
+                if (getRotationProgress() != 0) {
+                    if (getRotationProgress() > 0) setRotationProgress((byte) (getRotationProgress() - 1));
+                    else setRotationProgress((byte) (getRotationProgress() + 1));
                 }
             }
         }
     }
 
-    //must use that instead of lookAtEntity() for looking at target
-    public void lookAt(Vec3d pos) {
-        double dx = pos.getX() - getX();
-        double dz = pos.getZ() - getZ();
-        double dy = pos.getY() - getEyeY();
-        double distance = Math.sqrt(dx * dx + dz * dz);
-        float yaw = (float)(MathHelper.atan2(dz, dx) * MathHelper.DEGREES_PER_RADIAN) - 90;
-        float pitch = (float)(MathHelper.atan2(dy, distance) * -MathHelper.DEGREES_PER_RADIAN);
-        setRotation(yaw, pitch);
+    public float getYawWithProgress() {
+        return (getYaw() + getNormalizedRotationProgress() * getYawProgressLimit()) % 360;
     }
 
-    public void lookAt(Entity entity) {
-        lookAt(new Vec3d(entity.getX(), entity.getEyeY(), entity.getZ()));
+    public float getYawProgressLimit() {
+        return 0;
+    }
+
+    @Override
+    public DragonLookControl getLookControl() {
+        return (DragonLookControl) lookControl;
     }
 
     //making public for sake of debug render
@@ -756,16 +764,17 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         updateBanner();
     }
 
-    //I give no fuck how this happened to be so important for spawning
+    //I have no idea how this happened to be so important for spawning
     @Override
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
         return 0;
     }
 
-    //asset location caching so mod doesn't have to make stupid amount of string operations and map references each frame
+    //asset location caching so mod doesn't have to make stupid amount of checks if file even exists each frame
     private final DragonAssetCache assetCache = new DragonAssetCache();
 
     public DragonAssetCache getAssetCache() {
         return assetCache;
     }
+
 }

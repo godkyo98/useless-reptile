@@ -38,7 +38,7 @@ import nordmods.uselessreptile.common.entity.ai.goal.common.*;
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawAttackGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawEscapeLightGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawUntamedTargetGoal;
-import nordmods.uselessreptile.common.entity.ai.pathfinding.MoleclawNavigation;
+import nordmods.uselessreptile.common.entity.ai.navigation.MoleclawNavigation;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
@@ -258,7 +258,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
         }
 
         if (isTamed()) {
-            if (player.isSneaking() && itemStack.isEmpty() && isOwnerOrCreative(player)) {
+            if (player.isSneaking() && itemStack.isEmpty() && isOwner(player)) {
                 player.openHandledScreen(this);
                 return ActionResult.SUCCESS;
             }
@@ -281,7 +281,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
             if (doesCollide(targetBox, getSecondaryAttackBox())) tryAttack(mob);
         }
 
-        boolean shouldBreakBlocks = isTamed() ? URConfig.getConfig().allowDragonGriefing.canTamedBreak() : URConfig.getConfig().allowDragonGriefing.canUntamedBreak();
+        boolean shouldBreakBlocks = isTamed() ? URConfig.getConfig().moleclawGriefing.canTamedBreak() : URConfig.getConfig().moleclawGriefing.canUntamedBreak();
         boolean canBreakBlocks = shouldBreakBlocks && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING);
         if (getWorld().isClient() || !canBreakBlocks) return;
 

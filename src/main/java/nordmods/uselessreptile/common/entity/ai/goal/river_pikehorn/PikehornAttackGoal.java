@@ -24,7 +24,7 @@ public class PikehornAttackGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (entity.isTargetFriendly(entity.getTarget())) {
+        if (!entity.canTarget(entity.getTarget())) {
             entity.setTarget(null);
             return false;
         }
@@ -60,7 +60,7 @@ public class PikehornAttackGoal extends Goal {
             return;
         }
         entity.setSprinting(true);
-        entity.lookAt(target);
+        entity.getLookControl().lookAt(target);
         double attackDistance = entity.getWidth() * 2.0f * (entity.getWidth() * 2.0f);
         double distance = entity.squaredDistanceTo(target);
         entity.getNavigation().startMovingTo(target, 1);

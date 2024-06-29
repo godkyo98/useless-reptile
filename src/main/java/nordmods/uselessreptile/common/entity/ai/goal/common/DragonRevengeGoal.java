@@ -14,7 +14,7 @@ public class DragonRevengeGoal extends RevengeGoal {
 
     @Override
     public boolean canStart() {
-        if (super.canStart()) return !mob.isTargetFriendly(mob.getAttacker());
+        if (super.canStart()) return mob.canTarget(mob.getAttacker());
         else return false;
     }
 

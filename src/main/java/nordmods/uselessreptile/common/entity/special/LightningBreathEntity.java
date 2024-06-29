@@ -11,6 +11,7 @@ import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
@@ -19,11 +20,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
+import nordmods.primitive_multipart_entities.common.entity.EntityPart;
+import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
-import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
+import nordmods.uselessreptile.common.init.URStatusEffects;
 import nordmods.uselessreptile.common.init.URTags;
 import org.joml.Vector3f;
 
@@ -34,7 +37,7 @@ public class LightningBreathEntity extends ProjectileEntity {
     private boolean spawnSoundPlayed = false;
     private int age;
     public static final int MAX_AGE = 10;
-    public static final int MAX_LENGTH = 30;
+    public static final int MAX_LENGTH = 50;
     public float prevAlpha = 0.5f;
     public final LightningBreathBolt[] lightningBreathBolts = new LightningBreathBolt[5];
 
@@ -67,8 +70,11 @@ public class LightningBreathEntity extends ProjectileEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity target = entityHitResult.getEntity();
-        if (target.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), 6f))
+        if (target.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), 12)) {
             target.playSound(URSounds.SHOCKWAVE_HIT, 1, random.nextFloat() + 1f);
+            if (target instanceof LivingEntity livingEntity)
+                livingEntity.addStatusEffect(new StatusEffectInstance(URStatusEffects.SHOCK, 400, 0, false, false), getOwner());
+        }
     }
 
     @Override
@@ -83,7 +89,7 @@ public class LightningBreathEntity extends ProjectileEntity {
             }
 
             boolean shouldBreakBlocks = getOwner() instanceof URDragonEntity dragon && dragon.isTamed() ?
-                    URConfig.getConfig().allowDragonGriefing.canTamedBreak() : URConfig.getConfig().allowDragonGriefing.canUntamedBreak();
+                    URConfig.getConfig().lightningChaserGriefing.canTamedBreak() : URConfig.getConfig().lightningChaserGriefing.canUntamedBreak();
             if (getWorld().isClient() || !(shouldBreakBlocks && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING))) return;
 
             if (getWorld().isBlockSpaceEmpty(this, getBoundingBox())) return;
@@ -135,6 +141,7 @@ public class LightningBreathEntity extends ProjectileEntity {
     }
 
     private boolean canTarget(Entity target) {
+        if (target instanceof EntityPart part) target = part.owner;
         if (target.isInvulnerableTo(getDamageSources().create(DamageTypes.LIGHTNING_BOLT))) return false;
         Entity owner = getOwner();
         LivingEntity ownerOwner = owner instanceof TameableEntity tameable ? tameable.getOwner() : null;

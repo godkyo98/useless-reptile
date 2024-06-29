@@ -136,7 +136,9 @@ public class URMobAttributesConfig {
     @SerialEntry
     public int lightningChaserBaseSecondaryAttackCooldown = 30;
     @SerialEntry
-    public int lightningChaserBasePrimaryAttackCooldown = 30;
+    public int lightningChaserBasePrimaryAttackCooldown = 100;
+    @SerialEntry
+    public int lightningChaserBaseSpecialAttackCooldown = 300;
     @SerialEntry
     public int lightningChaserBaseAccelerationDuration = 800;
     @SerialEntry

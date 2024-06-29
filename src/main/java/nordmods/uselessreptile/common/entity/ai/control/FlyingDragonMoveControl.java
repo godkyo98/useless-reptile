@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.entity.ai.pathfinding;
+package nordmods.uselessreptile.common.entity.ai.control;
 
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -16,11 +16,11 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
     }
 
     public void moveBack() {
-        this.state = MoveControl.State.STRAFE;
+        state = MoveControl.State.STRAFE;
     }
 
     public void notMove() {
-        this.state = State.WAIT;
+        state = State.WAIT;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
         double diffZ = targetZ - entity.getZ();
         double distanceSquared = diffX * diffX + diffY * diffY + diffZ * diffZ;
         float destinationYaw = (float)(MathHelper.atan2(diffZ, diffX) * 57.2957763671875D) - 90.0F;
-        boolean swimming = entity.isTouchingWater() && entity.canNavigateInFluids();
+        boolean inWater = entity.isTouchingWater() && !entity.canNavigateInFluids();
 
         if (Double.isNaN(entity.getVelocity().y)) entity.setVelocity(entity.getVelocity().x, 0, entity.getVelocity().z);
         int accelerationDuration = entity.getAccelerationDuration();
@@ -42,17 +42,19 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
         entity.setGliding(accelerationModifier > 1);
         entity.setMovingBackwards(false);
 
-        if (this.state == MoveControl.State.STRAFE) {
+        if (state == MoveControl.State.STRAFE) {
             state = State.WAIT;
             entity.setMovingBackwards(true);
 
             if (accelerationDuration > entity.getMaxAccelerationDuration() * 0.25) accelerationDuration -= 2;
             else accelerationDuration++;
 
+            entity.setRotation(destinationYaw - 180f, entity.getPitch());
+
             float speed;
-            if (entity.isFlying() && !swimming) {
+            if (entity.isFlying()) {
                 speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_FLYING_SPEED) * accelerationModifier;
-                if (entity.isTouchingWater() || entity.getRecentDamageSource() == entity.getDamageSources().lava()) {
+                if (inWater || entity.getRecentDamageSource() == entity.getDamageSources().lava()) {
                     entity.getJumpControl().setActive();
                 }
             } else speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
@@ -75,9 +77,9 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
             entity.setRotation(destinationYaw, entity.getPitch());
 
             float speed;
-            if (entity.isFlying() && !swimming) {
+            if (entity.isFlying()) {
                 speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_FLYING_SPEED) * accelerationModifier;
-                if (entity.isTouchingWater() || entity.getRecentDamageSource() == entity.getDamageSources().lava()) entity.getJumpControl().setActive();
+                if (inWater || entity.getRecentDamageSource() == entity.getDamageSources().lava()) entity.getJumpControl().setActive();
             } else speed = (float) entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
             entity.setMovementSpeed(speed * entity.getSpeedMod());
 
@@ -109,10 +111,10 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
                 }
             }
             entity.setTiltState(tiltState);
-        } else if (this.state == MoveControl.State.JUMPING) {
-            this.entity.setMovementSpeed((float)this.entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
-            if (this.entity.isOnGround()) {
-                this.state = MoveControl.State.WAIT;
+        } else if (state == MoveControl.State.JUMPING) {
+            entity.setMovementSpeed((float)entity.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+            if (entity.isOnGround()) {
+                state = MoveControl.State.WAIT;
             }
         } else {
             entity.setUpwardSpeed(0.0F);

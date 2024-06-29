@@ -29,7 +29,7 @@ public class MoleclawAttackGoal extends Goal {
     @Override
     public boolean canStart() {
         if (entity.canBeControlledByRider()) return false;
-        if (entity.isTargetFriendly(entity.getTarget())) {
+        if (!entity.canTarget(entity.getTarget())) {
             entity.setTarget(null);
             return false;
         }
@@ -60,7 +60,7 @@ public class MoleclawAttackGoal extends Goal {
     @Override
     public void tick() {
         entity.setSprinting(true);
-        entity.lookAt(target);
+        entity.getLookControl().lookAt(target);
         entity.getNavigation().startMovingTo(target, 1);
 
         if (!entity.isMoving()) notMovingTimer++;

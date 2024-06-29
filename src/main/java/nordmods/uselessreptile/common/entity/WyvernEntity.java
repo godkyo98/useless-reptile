@@ -30,9 +30,7 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
@@ -270,12 +268,12 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         }
 
         if (isTamed()) {
-            if (player.isSneaking() && itemStack.isEmpty() && isOwnerOrCreative(player)) {
+            if (player.isSneaking() && itemStack.isEmpty() && isOwner(player)) {
                 player.openHandledScreen(this);
                 return ActionResult.SUCCESS;
             }
 
-            if (itemStack.getItem() == Items.GLASS_BOTTLE && isOwnerOrCreative(player)) {
+            if (itemStack.getItem() == Items.GLASS_BOTTLE && isOwner(player)) {
                 Item bottle = itemStack.getItem();
                 ItemStack potion = new ItemStack(Items.POTION);
                 potion.set(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(URPotions.ACID));
@@ -302,19 +300,17 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     public void shoot() {
         if (getWorld().isClient()) return;
         setPrimaryAttackCooldown(getMaxPrimaryAttackCooldown());
-        float progress = rotationProgress / TRANSITION_TICKS;
-        float yaw = 0;
-        boolean check = isFlying() && isMoving() && !isMovingBackwards();
-        if (canBeControlledByRider()) {
-            yaw = check ? 90 : 45;
-            yaw *= progress;
-        }
+        float yaw = getYawWithProgress();
         for (int i = 0; i < 5; ++i) {
             AcidBlastEntity projectileEntity = new AcidBlastEntity(getWorld(), this);
             projectileEntity.setPosition(head.getX(), head.getY(), head.getZ());
             projectileEntity.setVelocity(this, getPitch(), getYaw() - yaw, 0.5f, 3.0f, 5.0f);
             getWorld().spawnEntity(projectileEntity);
         }
+    }
+
+    public float getYawProgressLimit() {
+        return canBeControlledByRider() ? 90 : 45;
     }
 
     public void meleeAttack(LivingEntity target) {
@@ -372,17 +368,6 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         return parts;
     }
 
-    @Override
-    public void lookAt(Vec3d pos) {
-        double dx = pos.getX() - head.getX();
-        double dz = pos.getZ() - head.getZ();
-        double dy = pos.getY() - head.getY() + head.getHeight()/2;
-        double distance = Math.sqrt(dx * dx + dz * dz);
-        float yaw = (float)(MathHelper.atan2(dz, dx) * MathHelper.DEGREES_PER_RADIAN) - 90;
-        float pitch = (float)(MathHelper.atan2(dy, distance) * -MathHelper.DEGREES_PER_RADIAN);
-        setRotation(yaw, pitch);
-    }
-
     public void updateChildParts() {
         Vec2f wingLeftScale;
         Vec2f wingRightScale;
@@ -395,7 +380,7 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         Vector3f tail2Pos;
         Vector3f tail3Pos;
 
-        float yawOffset = rotationProgress / TRANSITION_TICKS;
+        float yawOffset = getNormalizedRotationProgress();
         float pitchOffset = tiltProgress / TRANSITION_TICKS;
 
         if (isFlying()) {

@@ -98,7 +98,7 @@ public class PikehornHuntGoal extends Goal {
 
                 } else {
                     //kill the fish
-                    entity.lookAt(fish);
+                    entity.getLookControl().lookAt(fish);
                     entity.getNavigation().startMovingTo(fish, 1);
                     if (entity.getPrimaryAttackCooldown() > 0) return;
                     if (entity.doesCollide(entity.getAttackBox(), fish.getBoundingBox())) entity.attackMelee(fish);

@@ -1,4 +1,4 @@
-package nordmods.uselessreptile.common.entity.ai.pathfinding;
+package nordmods.uselessreptile.common.entity.ai.navigation;
 
 import net.minecraft.entity.ai.pathing.PathNode;
 import net.minecraft.util.math.BlockPos;

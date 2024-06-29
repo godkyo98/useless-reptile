@@ -26,7 +26,7 @@ public class WyvernAttackGoal extends Goal {
     @Override
     public boolean canStart() {
         if (entity.canBeControlledByRider()) return false;
-        if (entity.isTargetFriendly(entity.getTarget())) {
+        if (!entity.canTarget(entity.getTarget())) {
             entity.setTarget(null);
             return false;
         }
@@ -61,14 +61,14 @@ public class WyvernAttackGoal extends Goal {
         }
         entity.setSprinting(true);
         float yawChange = entity.getRotationSpeed();
-        entity.lookAt(target);
+        entity.getLookControl().lookAt(target);
         double attackDistance = entity.getWidth() * 2.0f * (entity.getWidth() * 2.0f);
         double distance = entity.squaredDistanceTo(target);
         entity.getNavigation().startMovingTo(target, 1);
         boolean doesCollide = entity.doesCollide(entity.getAttackBox(), target.getBoundingBox());
 
         if (!doesCollide && entity.getPrimaryAttackCooldown() == 0 && (distance > attackDistance * 4 || !target.isOnGround() || distance < attackDistance && entity.getY() - target.getY() >= 1)) {
-            entity.lookAt(target);
+            entity.getLookControl().lookAt(target);
             entity.shoot();
         }
 

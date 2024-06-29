@@ -263,7 +263,7 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
             return ActionResult.SUCCESS;
         }
 
-        if (isTamed() && isOwnerOrCreative(player)) {
+        if (isTamed() && isOwner(player)) {
             if (player.isSneaking() && itemStack.isEmpty()) startRiding(player);
         }
         return super.interactMob(player, hand);
