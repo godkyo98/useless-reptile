@@ -615,7 +615,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public boolean canTarget(LivingEntity target) {
         if (target instanceof TameableEntity tameable) return tameable.getOwner() != getOwner();
         if (target instanceof PlayerEntity player) return player != getOwner();
-        return true;
+        return super.canTarget(target);
     }
 
     //idk how else to detect Replay Mod

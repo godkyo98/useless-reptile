@@ -3,10 +3,7 @@ package nordmods.uselessreptile.common.entity.special;
 import com.mojang.authlib.GameProfile;
 import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.FallingBlockEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -15,6 +12,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -69,9 +67,17 @@ public class LightningBreathEntity extends ProjectileEntity {
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
+        if (!(getWorld() instanceof ServerWorld serverWorld)) return;
         Entity target = entityHitResult.getEntity();
         if (target.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), 12)) {
             target.playSound(URSounds.SHOCKWAVE_HIT, 1, random.nextFloat() + 1f);
+            boolean wasOnFireBefore = target.isOnFire();
+            LightningEntity fakeLightningSoINoNullPointerExceptionWouldHappenIHope = new LightningEntity(EntityType.LIGHTNING_BOLT, serverWorld);
+            target.onStruckByLightning(serverWorld, fakeLightningSoINoNullPointerExceptionWouldHappenIHope);
+            if (!wasOnFireBefore) {
+                target.setFireTicks(0);
+                target.setOnFire(false);
+            }
             if (target instanceof LivingEntity livingEntity)
                 livingEntity.addStatusEffect(new StatusEffectInstance(URStatusEffects.SHOCK, 400, 0, false, false), getOwner());
         }

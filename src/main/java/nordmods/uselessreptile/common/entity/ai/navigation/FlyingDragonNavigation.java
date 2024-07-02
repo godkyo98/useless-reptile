@@ -36,6 +36,7 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
         entity.setPathfindingPenalty(PathNodeType.WATER, entity.isFlying() && !entity.hasTargetInWater() ? 8 : 0);
 
         if (!isIdle() && target != null) {
+            tickCount += 2;
             if (entity.isFlying()) {
                 nodeMaker = new BirdPathNodeMaker();
                 jumpCount = 0;
@@ -43,7 +44,6 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
             }
             else {
                 nodeMaker = new LandPathNodeMaker();
-                tickCount += 2;
                 continueFollowingPath();
                 moveOrStop(target);
 
@@ -59,6 +59,7 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
                     }
                 }
             }
+            checkTimeouts(getPos());
         }
     }
 
@@ -78,8 +79,6 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
             currentPath.next();
             jumpCount = 0;
         }
-
-        checkTimeouts(vec3d);
     }
 
     protected boolean shouldJumpToNextNode(Vec3d currentPos) {

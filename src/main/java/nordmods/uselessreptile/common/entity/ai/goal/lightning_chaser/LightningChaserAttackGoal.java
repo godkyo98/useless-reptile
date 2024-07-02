@@ -4,11 +4,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.shape.VoxelShape;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
 import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
@@ -70,11 +70,12 @@ public class LightningChaserAttackGoal extends Goal {
         double distance = entity.squaredDistanceTo(target);
         double yDiff = target.getY() - entity.getY();
         if (yDiff > 0 && !entity.isFlying()) entity.startToFly();
-        if (distance < MIN_DISTANCE_SQUARED) {
+        boolean canDamage = !target.isInvulnerableTo(entity.getDamageSources().create(DamageTypes.LIGHTNING_BOLT, entity));
+        if (distance < MIN_DISTANCE_SQUARED && canDamage) {
             if (!entity.isFlying()) entity.startToFly();
             entity.getMoveControl().moveBack();
             if (target instanceof PlayerEntity player && yDiff < player.getAttributeValue(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE)) entity.getNavigation().startMovingTo(entity.getX(), entity.getY() - yDiff + 1, entity.getZ(), 1);
-        } else if (distance < MAX_DISTANCE_SQUARED) {
+        } else if (distance < MAX_DISTANCE_SQUARED && canDamage) {
             if (!entity.getLookControl().canLookAtTarget()) {
                 entity.getNavigation().startMovingTo(entity.getX(), entity.getY() + yDiff, entity.getZ(), 1);
             }
@@ -83,8 +84,10 @@ public class LightningChaserAttackGoal extends Goal {
 
         if (--attackCooldown <= 0) {
             if (tryMeleeAttack()) return;
-            if (tryRangedAttack()) return;
-            if (tryShockwaveAttack()) return;
+            if (canDamage) {
+                if (tryRangedAttack()) return;
+                if (tryShockwaveAttack()) return;
+            }
         }
     }
 
@@ -122,13 +125,5 @@ public class LightningChaserAttackGoal extends Goal {
         entity.triggerShockwave();
         attackCooldown = 40;
         return true;
-    }
-
-    private boolean anyBlocksAround(Entity entity, double y) {
-        Box box = entity.getBoundingBox().expand(1);
-        for (VoxelShape shape : entity.getWorld().getBlockCollisions(entity, box.offset(0, -box.minY + y, 0))) {
-            if (!shape.isEmpty()) return true;
-        }
-        return false;
     }
 }

@@ -415,7 +415,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
             ids.add(lightningBreathEntity.getId());
 
-            boolean collides = !getWorld().isBlockSpaceEmpty(lightningBreathEntity, lightningBreathEntity.getBoundingBox()) ||
+            boolean collides = !getWorld().isBlockSpaceEmpty(lightningBreathEntity, lightningBreathEntity.getBoundingBox().shrink(0.5f, 0.5f, 0.5f)) ||
                     !getWorld().getOtherEntities(lightningBreathEntity, lightningBreathEntity.getBoundingBox(), entity -> {
                         LivingEntity owner = getOwner();
                         if (entity instanceof Tameable tameable && tameable.getOwner() == owner) return false;
