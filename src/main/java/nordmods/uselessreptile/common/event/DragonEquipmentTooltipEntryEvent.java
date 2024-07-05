@@ -7,14 +7,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
-import nordmods.uselessreptile.common.init.UREvents;
+import nordmods.uselessreptile.common.init.URModEvents;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Adds entries to {@link nordmods.uselessreptile.common.item.DragonEquipmentItem#appendTooltip(ItemStack, Item.TooltipContext, List, TooltipType)} to show which entities can equip this item
- * For usage example refer to {@link UREvents#addDragonEquipmentTooltipEntries()}
+ * For usage example refer to {@link URModEvents#addDragonEquipmentTooltipEntries()}
  */
 public interface DragonEquipmentTooltipEntryEvent {
     Event<DragonEquipmentTooltipEntryEvent> EVENT = EventFactory.createArrayBacked(

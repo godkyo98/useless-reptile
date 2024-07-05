@@ -5,9 +5,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageTypes;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
@@ -34,7 +36,7 @@ public class LightningChaserAttackGoal extends Goal {
         if (entity.hasSurrendered() || entity.getShouldBailOut()) return false;
 
         if (entity.canBeControlledByRider()) return false;
-        if (!entity.canTarget(entity.getTarget())) entity.setTarget(null);
+        if (!entity.canTarget(entity.getTarget())) return false;
         target = entity.getTarget();
         return target != null;
     }
@@ -58,6 +60,7 @@ public class LightningChaserAttackGoal extends Goal {
         return true;
     }
 
+    //todo visibility checks if can't break blocks
     @Override
     public void tick() {
         if (target == null || target.isRemoved()) {
@@ -69,18 +72,40 @@ public class LightningChaserAttackGoal extends Goal {
 
         double distance = entity.squaredDistanceTo(target);
         double yDiff = target.getY() - entity.getY();
-        if (yDiff > 0 && !entity.isFlying()) entity.startToFly();
+        if (yDiff > entity.getHeight() && !entity.isFlying()) entity.startToFly();
         boolean canDamage = !target.isInvulnerableTo(entity.getDamageSources().create(DamageTypes.LIGHTNING_BOLT, entity));
-        if (distance < MIN_DISTANCE_SQUARED && canDamage) {
-            if (!entity.isFlying()) entity.startToFly();
+        double desiredY = target.getY() + (canDamage ? 2 : 0) + target.getHeight();
+
+        if (distance < MIN_DISTANCE_SQUARED && canDamage) { //too close
+            entity.getNavigation().stop();
             entity.getMoveControl().moveBack();
-            if (target instanceof PlayerEntity player && yDiff < player.getAttributeValue(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE)) entity.getNavigation().startMovingTo(entity.getX(), entity.getY() - yDiff + 1, entity.getZ(), 1);
-        } else if (distance < MAX_DISTANCE_SQUARED && canDamage) {
-            if (!entity.getLookControl().canLookAtTarget()) {
-                entity.getNavigation().startMovingTo(entity.getX(), entity.getY() + yDiff, entity.getZ(), 1);
+            if (target instanceof PlayerEntity player && yDiff < player.getAttributeValue(EntityAttributes.PLAYER_ENTITY_INTERACTION_RANGE)
+                    || target instanceof MobEntity mob && mob.getAttackBox().intersects(entity.getBoundingBox().expand(2))) {
+                if (!entity.isFlying()) { //try jump/back off
+                    entity.forceFlightNextTick();
+                    Vec3d vec3d = entity.getRotationVector(MathHelper.clamp(-entity.getPitch(), -10, 10), entity.getYaw() - 180);
+                    entity.addVelocity(vec3d.multiply(2));
+                } else {
+                    entity.getMoveControl().forceFlyUp();
+                    entity.getMoveControl().moveBack();
+                }
             }
-            else entity.getNavigation().stop();
-        } else entity.getNavigation().startMovingTo(target.getX(), target.getY(), target.getZ(), 1);
+        } else if (distance < MAX_DISTANCE_SQUARED && canDamage) { //within range
+            entity.getNavigation().stop();
+            if (!entity.getLookControl().canLookAtTarget()) {
+                double distanceXZ = Math.pow(target.getX() - entity.getX(), 2) * Math.pow(target.getZ() - entity.getZ(), 2);
+                double divergence = Math.max(0, (distanceXZ - MAX_DISTANCE_SQUARED / 8f) * 0.25);
+                if (distanceXZ < MAX_DISTANCE_SQUARED / 8f) entity.getMoveControl().moveBack();
+                else if (desiredY + divergence < entity.getY() || desiredY - divergence > entity.getY())  entity.getMoveControl().moveBack();
+                else {
+                    if (yDiff > entity.getHeight()) entity.getMoveControl().forceFlyUp();
+                    else if (yDiff < -entity.getHeight()) entity.getMoveControl().forceFlyDown();
+                }
+            } else {//try compensate momentum
+                if (entity.getVelocity().y > 0) entity.getMoveControl().forceFlyDown();
+                else if (entity.getVelocity().y < 0) entity.getMoveControl().forceFlyUp();
+            }
+        } else entity.getNavigation().startMovingTo(target.getX(), desiredY, target.getZ(), 1); //out of reach/can't be damaged by range attack
 
         if (--attackCooldown <= 0) {
             if (tryMeleeAttack()) return;

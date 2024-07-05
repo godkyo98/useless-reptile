@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -31,7 +32,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LightningBreathEntity extends ProjectileEntity {
+public class LightningBreathEntity extends ProjectileEntity implements ProjectileDamageHelper {
     private boolean spawnSoundPlayed = false;
     private int age;
     public static final int MAX_AGE = 10;
@@ -69,7 +70,9 @@ public class LightningBreathEntity extends ProjectileEntity {
         super.onEntityHit(entityHitResult);
         if (!(getWorld() instanceof ServerWorld serverWorld)) return;
         Entity target = entityHitResult.getEntity();
-        if (target.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), 12)) {
+        DamageSource source = getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner());
+        if (target.isInvulnerableTo(source)) return;
+        if (target.damage(source, getResultingDamage())) {
             target.playSound(URSounds.SHOCKWAVE_HIT, 1, random.nextFloat() + 1f);
             boolean wasOnFireBefore = target.isOnFire();
             LightningEntity fakeLightningSoINoNullPointerExceptionWouldHappenIHope = new LightningEntity(EntityType.LIGHTNING_BOLT, serverWorld);
@@ -169,6 +172,16 @@ public class LightningBreathEntity extends ProjectileEntity {
     @Override
     public boolean shouldRender(double cameraX, double cameraY, double cameraZ) {
         return true;
+    }
+
+    @Override
+    public float getDefaultDamage() {
+        return 15;
+    }
+
+    @Override
+    public float getDamageScaling() {
+        return 2.5f;
     }
 
     public static class LightningBreathBolt {

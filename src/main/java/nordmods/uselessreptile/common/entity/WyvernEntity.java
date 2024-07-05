@@ -300,7 +300,7 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
     public void shoot() {
         if (getWorld().isClient()) return;
         setPrimaryAttackCooldown(getMaxPrimaryAttackCooldown());
-        float yaw = getYawWithProgress();
+        float yaw = getYawWithAdjustment();
         for (int i = 0; i < 5; ++i) {
             AcidBlastEntity projectileEntity = new AcidBlastEntity(getWorld(), this);
             projectileEntity.setPosition(head.getX(), head.getY(), head.getZ());

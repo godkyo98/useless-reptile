@@ -13,4 +13,5 @@ public interface FlyingDragon {
     void startToFly();
     float getVerticalSpeed();
     float getFlyingRotationSpeed();
+    void forceFlightNextTick();
 }

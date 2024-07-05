@@ -301,12 +301,12 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
             else return false;
 
             boolean isJukebox = false;
-            if (URDragonEntity.this.jukeboxPos != null) isJukebox = world.getBlockState(URDragonEntity.this.jukeboxPos).isOf(Blocks.JUKEBOX);
+            if (jukeboxPos != null) isJukebox = world.getBlockState(jukeboxPos).isOf(Blocks.JUKEBOX);
             if (event == GameEvent.JUKEBOX_PLAY) {
-                URDragonEntity.this.updateJukeboxPos(new BlockPos(vec3i), true);
+                updateJukeboxPos(new BlockPos(vec3i), true);
                 return true;
             } else if (event == GameEvent.JUKEBOX_STOP_PLAY || !isJukebox) {
-                URDragonEntity.this.updateJukeboxPos(new BlockPos(vec3i), false);
+                updateJukeboxPos(new BlockPos(vec3i), false);
                 return true;
             } else {
                 return false;
@@ -314,23 +314,21 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         }
     }
 
+    @Override
     public void updateEventHandler(BiConsumer<EntityGameEventHandler<?>, ServerWorld> callback) {
-        World var3 = this.getWorld();
-        if (var3 instanceof ServerWorld serverWorld) {
-            callback.accept(this.jukeboxEventHandler, serverWorld);
-        }
-
+        if (getWorld() instanceof ServerWorld serverWorld) callback.accept(this.jukeboxEventHandler, serverWorld);
+        super.updateEventHandler(callback);
     }
 
     public void updateJukeboxPos(BlockPos jukeboxPos, boolean playing) {
         if (playing) {
-            if (!this.isDancing()) {
+            if (!isDancing()) {
                 this.jukeboxPos = jukeboxPos;
-                this.setDancing(this.getTarget() == null);
+                setDancing(getTarget() == null);
             }
         } else {
             this.jukeboxPos = null;
-            this.setDancing(false);
+            setDancing(false);
         }
 
     }
@@ -613,8 +611,8 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     @Override
     public boolean canTarget(LivingEntity target) {
-        if (target instanceof TameableEntity tameable) return tameable.getOwner() != getOwner();
-        if (target instanceof PlayerEntity player) return player != getOwner();
+        if (target == null) return false;
+        if (target instanceof TameableEntity tameable && tameable.getOwner() == getOwner()) return false;
         return super.canTarget(target);
     }
 
@@ -720,8 +718,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         }
     }
 
-    public float getYawWithProgress() {
-        return (getYaw() + getNormalizedRotationProgress() * getYawProgressLimit()) % 360;
+    public float getYawWithAdjustment() {
+        float yaw = getYaw();
+        if (!hasControllingPassenger() && getTarget() != null) return yaw; //making it easier for dum-dum to aim on its own
+        return (yaw + getNormalizedRotationProgress() * getYawProgressLimit()) % 360;
     }
 
     public float getYawProgressLimit() {

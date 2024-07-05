@@ -18,7 +18,7 @@ import nordmods.uselessreptile.common.init.URStatusEffects;
 
 import java.util.*;
 
-public class ShockwaveSphereEntity extends ProjectileEntity {
+public class ShockwaveSphereEntity extends ProjectileEntity implements ProjectileDamageHelper {
     private float currentRadius = 0;
     private float prevRadius = 0;
     public static final float MAX_RADIUS = 40;
@@ -75,7 +75,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
             target.addVelocityInternal(vec3d.normalize().multiply(POWER * lengthMod * exposure));
             if (target instanceof LivingEntity livingEntity) {
                 livingEntity.addStatusEffect(new StatusEffectInstance(URStatusEffects.SHOCK, (int) (100 * MathHelper.clamp(lengthMod, 1, 2) * exposure), 0, false, false), getOwner());
-                livingEntity.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), (float) (2.5 * MathHelper.clamp(lengthMod, 1, 2)));
+                livingEntity.damage(getDamageSources().create(DamageTypes.LIGHTNING_BOLT, getOwner()), (float) (getResultingDamage() * MathHelper.clamp(lengthMod, 1, 2)));
             }
         }
         if (!(target instanceof ProjectileEntity)) affected.add(target);
@@ -125,5 +125,15 @@ public class ShockwaveSphereEntity extends ProjectileEntity {
 
     public float getPrevRadius() {
         return prevRadius;
+    }
+
+    @Override
+    public float getDefaultDamage() {
+        return 3f;
+    }
+
+    @Override
+    public float getDamageScaling() {
+        return 0.5f;
     }
 }

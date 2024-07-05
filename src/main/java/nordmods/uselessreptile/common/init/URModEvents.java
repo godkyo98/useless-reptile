@@ -18,7 +18,7 @@ import nordmods.uselessreptile.common.util.LightningChaserSpawnTimer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UREvents {
+public class URModEvents {
     public static void init() {
         spawnLightningChaser();
         addDragonEquipmentTooltipEntries();

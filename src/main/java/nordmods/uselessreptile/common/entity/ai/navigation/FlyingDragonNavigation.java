@@ -10,12 +10,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import nordmods.uselessreptile.common.entity.ai.control.FlyingDragonMoveControl;
 import nordmods.uselessreptile.common.entity.base.FlyingDragon;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 
 
 public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> extends BirdNavigation {
-
     private final T entity;
     private int jumpCount;
 
@@ -41,6 +41,11 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
                 nodeMaker = new BirdPathNodeMaker();
                 jumpCount = 0;
                 moveOrStop(target);
+                if (!isIdle() && entity.horizontalCollision) {
+                    double yDiffNode = currentPath.getCurrentNode().getPos().getY() - entity.getY();
+                    if (yDiffNode < 0) getMoveControl().forceFlyDown();
+                    if (yDiffNode > 0) getMoveControl().forceFlyUp();
+                }
             }
             else {
                 nodeMaker = new LandPathNodeMaker();
@@ -52,7 +57,10 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
                     double yDiffTarget = target.getY() - entity.getY();
                     double xDiffTarget = Math.pow(entity.getX() - target.getX(), 2);
                     double zDiffTarget = Math.pow(entity.getZ() - target.getZ(), 2);
-                    boolean shouldFlyUp = jumpCount > 9 || yDiffTarget > 3 && Math.sqrt(xDiffTarget + zDiffTarget) < 16 || yDiffTarget > 8 || Math.sqrt(xDiffTarget + zDiffTarget) > 64;
+                    boolean shouldFlyUp = jumpCount > 9
+                            || yDiffTarget > 3 && Math.sqrt(xDiffTarget + zDiffTarget) < 16
+                            || yDiffTarget > 8
+                            || Math.sqrt(xDiffTarget + zDiffTarget) > 64;
                     if (yDiffNode > 0.5 && entity.horizontalCollision || shouldFlyUp && !entity.hasTargetInWater()) {
                         entity.getJumpControl().setActive();
                         startToFly(shouldFlyUp);
@@ -69,11 +77,11 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
         int index = currentPath.getCurrentNodeIndex();
         Vec3d nodePos = Vec3d.ofBottomCenter(currentPath.getNodePos(index));
 
-        double d = Math.abs(entity.getX() - nodePos.getX());
+        double xDiff = Math.abs(entity.getX() - nodePos.getX());
         double yDiff = nodePos.getY() - entity.getY();
-        double f = Math.abs(entity.getZ() - nodePos.getZ());
+        double zDiff = Math.abs(entity.getZ() - nodePos.getZ());
 
-        boolean bl = d < (double)nodeReachProximity && f < (double)nodeReachProximity &&  yDiff <= entity.getStepHeight() && yDiff > -5.0D;
+        boolean bl = xDiff < (double)nodeReachProximity && zDiff < (double)nodeReachProximity &&  yDiff <= entity.getStepHeight() && yDiff > -5.0D;
 
         if (bl || canJumpToNext(currentPath.getNode(index).type) && shouldJumpToNextNode(vec3d)) {
             currentPath.next();
@@ -104,6 +112,10 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
         nodeReachProximity = (float) Math.sqrt(entity.getRotationSpeed() * entity.getWidth());
         entity.getMoveControl().moveTo(target.getX(), target.getY(), target.getZ(), 1);
         if (distance <= nodeReachProximity) entity.getNavigation().stop();
+    }
+
+    private FlyingDragonMoveControl<T> getMoveControl() {
+        return (FlyingDragonMoveControl<T>) entity.getMoveControl();
     }
 }
 

@@ -388,6 +388,11 @@ public class MoleclawEntity extends URRideableDragonEntity {
     }
 
     @Override
+    public boolean disablesShield() {
+        return isPrimaryAttack();
+    }
+
+    @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return URSounds.MOLECLAW_HURT;
     }

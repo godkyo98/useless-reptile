@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -19,6 +20,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -37,6 +39,11 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.event.EntityPositionSource;
+import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.event.PositionSource;
+import net.minecraft.world.event.listener.EntityGameEventHandler;
+import net.minecraft.world.event.listener.GameEventListener;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
 import nordmods.primitive_multipart_entities.common.entity.MultipartEntity;
 import nordmods.uselessreptile.UselessReptile;
@@ -53,9 +60,11 @@ import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
 import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
 import nordmods.uselessreptile.common.gui.LightningChaserScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
+import nordmods.uselessreptile.common.init.URGameEvents;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.network.GUIEntityToRenderS2CPacket;
 import nordmods.uselessreptile.common.network.SyncLightningBreathRotationsS2CPacket;
+import nordmods.uselessreptile.common.network.URPacketHelper;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -66,6 +75,7 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.keyframe.event.SoundKeyframeEvent;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 public class LightningChaserEntity extends URRideableFlyingDragonEntity implements MultipartEntity {
     private int shockwaveDelay = -1;
@@ -86,6 +96,8 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     private final URDragonPart tail2 = new URDragonPart(this);
     private final URDragonPart tail3 = new URDragonPart(this);
     private final URDragonPart[] parts = new URDragonPart[]{wing1Left, wing2Left, wing1Right, wing2Right, neck1, neck2, head, tail1, tail2, tail3};
+    protected final EntityGameEventHandler<LightningStrikeEventListener> lightningStrikeEventHandler = new EntityGameEventHandler<>(new LightningStrikeEventListener
+            (new EntityPositionSource(this, getStandingEyeHeight()), 256));
 
     public LightningChaserEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -102,7 +114,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         goalSelector.add(1, new LightningChaserRoamAroundGoal(this));
         goalSelector.add(2, new LightningChaserAttackGoal(this));
         goalSelector.add(3, new FlyingDragonFlyDownGoal<>(this, 30));
-        goalSelector.add(1, new LightningChaserRevengeGoal(this));
+        targetSelector.add(1, new LightningChaserRevengeGoal(this));
     }
 
     @Override
@@ -331,38 +343,15 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             if (isPrimaryAttackPressed && getPrimaryAttackCooldown() == 0) triggerShoot();
         }
 
-        if (!getWorld().isClient()) {
-            getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(THUNDERSTORM_BONUS);
-            getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED).removeModifier(THUNDERSTORM_BONUS);
-            getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(THUNDERSTORM_BONUS);
-            getAttributeInstance(URAttributes.DRAGON_ACCELERATION_DURATION).removeModifier(THUNDERSTORM_BONUS);
-            getAttributeInstance(URAttributes.DRAGON_VERTICAL_SPEED).removeModifier(THUNDERSTORM_BONUS);
-            getAttributeInstance(URAttributes.DRAGON_FLYING_ROTATION_SPEED).removeModifier(THUNDERSTORM_BONUS);
-            getAttributeInstance(URAttributes.DRAGON_GROUND_ROTATION_SPEED).removeModifier(THUNDERSTORM_BONUS);
-            if (getWorld().getLevelProperties().isThundering()) {
-                getAttributeInstance(EntityAttributes.GENERIC_ARMOR)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 4, EntityAttributeModifier.Operation.ADD_VALUE));
-                getAttributeInstance(EntityAttributes.GENERIC_FLYING_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.2, EntityAttributeModifier.Operation.ADD_VALUE));
-                getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.05, EntityAttributeModifier.Operation.ADD_VALUE));
-                getAttributeInstance(URAttributes.DRAGON_ACCELERATION_DURATION)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, -0.33, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-                getAttributeInstance(URAttributes.DRAGON_VERTICAL_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.1, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-                getAttributeInstance(URAttributes.DRAGON_FLYING_ROTATION_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-                getAttributeInstance(URAttributes.DRAGON_GROUND_ROTATION_SPEED)
-                        .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, 0.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            }
-        }
+        updateThunderstormBonus();
 
         if (!isTamed() && !shouldBailOut) {
-            if (getTamingProgress() <= 0 && getHealth() / getMaxHealth() < 0.3) {
-                if (!hasSurrendered() && !isDead()) setHealth(getMaxHealth() * 0.3f);
+            if (getTamingProgress() <= 0 && getHealth() / getMaxHealth() < 0.3 && !hasSurrendered()) {
+                if (!isDead()) setHealth(getMaxHealth() * 0.3f);
                 setInAirTimer(getMaxInAirTimer());
                 setTarget(null);
                 setSurrendered(true);
+                playSound(URSounds.LIGHTNING_CHASER_SURRENDER);
                 if (isChallenger) bailOutTimer = 6000;
             }
 
@@ -384,6 +373,37 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         updateChildParts();
     }
 
+    private void updateThunderstormBonus() {
+        if (getWorld().isClient()) return;
+        if (getWorld().getLevelProperties().isThundering()) {
+            tryAddModifier(EntityAttributes.GENERIC_ARMOR, 4, EntityAttributeModifier.Operation.ADD_VALUE);
+            tryAddModifier(EntityAttributes.GENERIC_FLYING_SPEED, 0.2, EntityAttributeModifier.Operation.ADD_VALUE);
+            tryAddModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.05, EntityAttributeModifier.Operation.ADD_VALUE);
+            tryAddModifier(URAttributes.DRAGON_ACCELERATION_DURATION, -0.33, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            tryAddModifier(URAttributes.DRAGON_VERTICAL_SPEED, 0.1, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            tryAddModifier(URAttributes.DRAGON_FLYING_ROTATION_SPEED, 0.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+            tryAddModifier(URAttributes.DRAGON_GROUND_ROTATION_SPEED, 0.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
+        } else {
+            removeModifier(EntityAttributes.GENERIC_ARMOR);
+            removeModifier(EntityAttributes.GENERIC_FLYING_SPEED);
+            removeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+            removeModifier(URAttributes.DRAGON_ACCELERATION_DURATION);
+            removeModifier(URAttributes.DRAGON_VERTICAL_SPEED);
+            removeModifier(URAttributes.DRAGON_FLYING_ROTATION_SPEED);
+            removeModifier(URAttributes.DRAGON_GROUND_ROTATION_SPEED);
+        }
+    }
+
+    private void tryAddModifier(RegistryEntry<EntityAttribute> entityAttribute, double bonus, EntityAttributeModifier.Operation operation) {
+        if (!getAttributeInstance(entityAttribute).hasModifier(THUNDERSTORM_BONUS))
+            getAttributeInstance(entityAttribute)
+                    .addTemporaryModifier(new EntityAttributeModifier(THUNDERSTORM_BONUS, bonus, operation));
+    }
+
+    private void removeModifier(RegistryEntry<EntityAttribute> entityAttribute) {
+        getAttributeInstance(entityAttribute).removeModifier(THUNDERSTORM_BONUS);
+    }
+
     @Override
     public void onStruckByLightning(ServerWorld world, LightningEntity lightning) {
         if (lightning.getChanneler() != null && getTamingProgress() > 0) setTamingProgress(getTamingProgress() - 1);
@@ -400,14 +420,14 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     }
 
     public void shoot() {
-        float yaw = getYawWithProgress();
+        float yaw = getYawWithAdjustment();
         Vec3d rot = getRotationVector(getPitch(), yaw);
         ArrayList<Integer> ids = new ArrayList<>();
         LightningBreathEntity firstSegment = null;
 
         for (int i = 1; i <= LightningBreathEntity.MAX_LENGTH; i++) {
             LightningBreathEntity lightningBreathEntity = new LightningBreathEntity(getWorld(), this);
-            lightningBreathEntity.setPosition(head.getPos().add(rot.multiply(i)).add(0,  isFlying() ? -0.1 : -0.75, 0));
+            lightningBreathEntity.setPosition(head.getPos().add(rot.multiply(i)).add(0,  isFlying() ? -0.6 : -1.25, 0));
             lightningBreathEntity.setVelocity(Vec3d.ZERO);
             lightningBreathEntity.setOwner(this);
             getWorld().spawnEntity(lightningBreathEntity);
@@ -439,7 +459,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         return 45;
     }
 
-    public void shockwave() {
+    private void shockwave() {
         ShockwaveSphereEntity shockwaveSphereEntity = new ShockwaveSphereEntity(getWorld());
         shockwaveSphereEntity.setOwner(this);
         shockwaveSphereEntity.setPosition(getPos().add(0, getHeightMod(), 0));
@@ -489,6 +509,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             setOwner(player);
             setPersistent();
             setSurrendered(false);
+            shouldBailOut = false;
             getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
             return ActionResult.SUCCESS;
         }
@@ -518,6 +539,53 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     @Override
     public int getLimitPerChunk() {
         return URConfig.getConfig().lightningChaserMaxGroupSize * 2;
+    }
+
+    @Override
+    public boolean canTarget(LivingEntity target) {
+        if (hasSurrendered() || getShouldBailOut()) return false;
+        return super.canTarget(target);
+    }
+
+    protected class LightningStrikeEventListener implements GameEventListener {
+        private final PositionSource positionSource;
+        private final int range;
+
+        public LightningStrikeEventListener(PositionSource positionSource, int range) {
+            this.positionSource = positionSource;
+            this.range = range;
+        }
+
+        public PositionSource getPositionSource() {return this.positionSource;}
+
+        public int getRange() {return this.range;}
+
+        @Override
+        public boolean listen(ServerWorld world, RegistryEntry<GameEvent> event, GameEvent.Emitter emitter, Vec3d emitterPos) {
+            if (event != URGameEvents.LIGHTNING_STRIKE_FAR) return false;
+            if (isTamed() || getTarget() != null) return false;
+            if (emitter.sourceEntity() instanceof LightningEntity lightning) {
+                PlayerEntity target = lightning.getChanneler();
+                if (target != null) {
+                    if (!canTarget(target)) return false;
+                    setTarget(target);
+                    URPacketHelper.playSound(LightningChaserEntity.this, URSounds.LIGHTNING_CHASER_ACCEPT_CHALLENGE, getSoundCategory(), 1, 1,1);
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public void updateEventHandler(BiConsumer<EntityGameEventHandler<?>, ServerWorld> callback) {
+        if (getWorld() instanceof ServerWorld serverWorld) callback.accept(lightningStrikeEventHandler, serverWorld);
+        super.updateEventHandler(callback);
+    }
+
+    @Override
+    public boolean disablesShield() {
+        return isPrimaryAttack();
     }
 
     @Override

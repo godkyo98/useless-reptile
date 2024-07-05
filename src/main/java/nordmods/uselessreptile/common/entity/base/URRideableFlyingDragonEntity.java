@@ -29,6 +29,7 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
     protected float tiltProgress;
     protected boolean shouldGlide;
     private int glideTimer = 100;
+    private boolean forceFlight = false;
 
     protected URRideableFlyingDragonEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -85,6 +86,7 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
             shouldGlide = glideTimer < 0 && getAccelerationDuration()/getMaxAccelerationDuration() > 0.9;
             if (glideTimer < -50 - getRandom().nextInt(100)) glideTimer = 100 + getRandom().nextInt(100);
         }
+        checkForceFlight();
     }
 
     @Override
@@ -273,5 +275,21 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
     @Override
     public FlyingDragonMoveControl<? extends FlyingDragon> getMoveControl() {
         return (FlyingDragonMoveControl<?>) moveControl;
+    }
+
+    @Override
+    public FlyingDragonNavigation<? extends FlyingDragon> getNavigation() {
+        return (FlyingDragonNavigation<?>) navigation;
+    }
+
+    public void forceFlightNextTick() {
+        forceFlight = true;
+    }
+
+    private void checkForceFlight() {
+        if (forceFlight) {
+            forceFlight = false;
+            startToFly();
+        }
     }
 }

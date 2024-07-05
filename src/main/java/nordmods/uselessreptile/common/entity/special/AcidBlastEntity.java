@@ -15,8 +15,10 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.world.World;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
-import nordmods.uselessreptile.common.config.URMobAttributesConfig;
-import nordmods.uselessreptile.common.init.*;
+import nordmods.uselessreptile.common.init.URDamageTypes;
+import nordmods.uselessreptile.common.init.UREntities;
+import nordmods.uselessreptile.common.init.URSounds;
+import nordmods.uselessreptile.common.init.URStatusEffects;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimatableManager;
@@ -25,7 +27,8 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class AcidBlastEntity extends PersistentProjectileEntity implements GeoEntity {
+//todo rewrite to not use PersistentProjectileEntity
+public class AcidBlastEntity extends PersistentProjectileEntity implements GeoEntity, ProjectileDamageHelper {
 
     private int life;
     private static final int COLOR = 10085398;
@@ -73,7 +76,7 @@ public class AcidBlastEntity extends PersistentProjectileEntity implements GeoEn
     protected void onEntityHit(EntityHitResult entityHitResult) {
         if (getWorld().isClient()) return;
         Entity target = entityHitResult.getEntity();
-        target.damage(target.getDamageSources().create(URDamageTypes.ACID, getOwner()),2 * URMobAttributesConfig.getConfig().dragonDamageMultiplier);
+        target.damage(target.getDamageSources().create(URDamageTypes.ACID, getOwner()), getResultingDamage());
         spawnEffectCloud();
         playSound(URSounds.ACID_SPLASH, 1, 1);
         super.onEntityHit(entityHitResult);
@@ -137,4 +140,19 @@ public class AcidBlastEntity extends PersistentProjectileEntity implements GeoEn
     }
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+    @Override
+    public boolean shouldSave() {
+        return false;
+    }
+
+    @Override
+    public float getDefaultDamage() {
+        return 3;
+    }
+
+    @Override
+    public float getDamageScaling() {
+        return 1;
+    }
 }
