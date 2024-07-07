@@ -321,8 +321,8 @@ public class RiverPikehornEntity extends URFlyingDragonEntity {
     }
 
     @Override
-    protected float getSpeedModifier() {
-        return super.getSpeedModifier() / (isTouchingWater() ? 2 : 1);
+    protected float getMovementSpeedModifier() {
+        return super.getMovementSpeedModifier() / (isTouchingWater() ? 2 : 1);
     }
 
     public void stopHunt() {

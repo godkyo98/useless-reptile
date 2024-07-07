@@ -6,7 +6,6 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import nordmods.uselessreptile.UselessReptile;
 
-@SuppressWarnings("CanBeFinal")
 public class URConfig {
     public static final ConfigClassHandler<URConfig> CONFIG = ConfigClassHandler.createBuilder(URConfig.class)
             .id(UselessReptile.id("config"))

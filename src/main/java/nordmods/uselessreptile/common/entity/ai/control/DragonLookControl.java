@@ -39,6 +39,7 @@ public class DragonLookControl extends LookControl {
         return Math.abs(pitch) < pitchTolerance;
     }
 
+    @Override
     public void tick() {
         if (lookAtTimer > 0) {
             --lookAtTimer;

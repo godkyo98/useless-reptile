@@ -6,6 +6,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Heightmap;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 
+import java.util.EnumSet;
+
 public class LightningChaserRoamAroundGoal extends Goal {
     private final LightningChaserEntity entity;
     private BlockPos spot;
@@ -14,6 +16,7 @@ public class LightningChaserRoamAroundGoal extends Goal {
 
     public LightningChaserRoamAroundGoal(LightningChaserEntity entity) {
         this.entity = entity;
+        setControls(EnumSet.of(Control.LOOK, Control.MOVE));
     }
 
     @Override

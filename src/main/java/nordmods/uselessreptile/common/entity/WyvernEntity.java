@@ -304,13 +304,13 @@ public class WyvernEntity extends URRideableFlyingDragonEntity implements Multip
         for (int i = 0; i < 5; ++i) {
             AcidBlastEntity projectileEntity = new AcidBlastEntity(getWorld(), this);
             projectileEntity.setPosition(head.getX(), head.getY(), head.getZ());
-            projectileEntity.setVelocity(this, getPitch(), getYaw() - yaw, 0.5f, 3.0f, 5.0f);
+            projectileEntity.setVelocity(this, getPitch(), yaw, 0.5f, 3.0f, 5.0f);
             getWorld().spawnEntity(projectileEntity);
         }
     }
 
     public float getYawProgressLimit() {
-        return canBeControlledByRider() ? 90 : 45;
+        return 90;
     }
 
     public void meleeAttack(LivingEntity target) {

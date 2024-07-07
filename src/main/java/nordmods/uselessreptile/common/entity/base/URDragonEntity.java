@@ -1,5 +1,7 @@
 package nordmods.uselessreptile.common.entity.base;
 
+import com.mojang.authlib.GameProfile;
+import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -8,6 +10,7 @@ import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
@@ -57,6 +60,7 @@ import nordmods.uselessreptile.common.entity.ai.navigation.DragonNavigation;
 import nordmods.uselessreptile.common.gui.URDragonScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URStatusEffects;
+import nordmods.uselessreptile.common.init.URTags;
 import nordmods.uselessreptile.common.network.InstrumentSoundBoundMessageS2CPacket;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import nordmods.uselessreptile.common.util.dragon_spawn.DragonSpawn;
@@ -184,7 +188,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public int getTamingProgress() {return dataTracker.get(TAMING_PROGRESS);}
     public void setTamingProgress(int state) {dataTracker.set(TAMING_PROGRESS, state);}
 
-    public float getSpeedMod() {return dataTracker.get(SPEED_MODIFIER);}
+    public float getSpeedModifier() {return dataTracker.get(SPEED_MODIFIER);}
     public void setSpeedMod(float state) {dataTracker.set(SPEED_MODIFIER, state);}
 
     public float getMountedOffset() {return dataTracker.get(MOUNTED_OFFSET);}
@@ -519,7 +523,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     //because rotation is called twice within one tick... somehow
     public float getRotationSpeed() {
-        return getGroundRotationSpeed() * getSpeedModifier() / 2f;
+        return getGroundRotationSpeed() * getMovementSpeedModifier() / 2f;
     }
 
     public float getGroundRotationSpeed() {
@@ -531,7 +535,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     }
 
     public float getMaxAccelerationDuration() {
-        return (float) (getAttributeValue(URAttributes.DRAGON_ACCELERATION_DURATION) * getSpeedModifier());
+        return (float) (getAttributeValue(URAttributes.DRAGON_ACCELERATION_DURATION) * getMovementSpeedModifier());
     }
 
     protected float getCooldownModifier() {
@@ -542,9 +546,10 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
         return mod;
     }
 
-    protected float getSpeedModifier() {
+    protected float getMovementSpeedModifier() {
         double baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        return (float) (getMovementSpeed() / baseSpeed);
+        double speed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        return (float) (speed / baseSpeed);
     }
 
     public int getMaxSecondaryAttackCooldown() {
@@ -561,7 +566,11 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public void tick() {
         super.tick();
         if (!getWorld().isClient()) updateRotationProgress();
-        animationSpeed = getSpeedModifier();
+
+        double baseSpeed;
+        if (this instanceof FlyingDragon flyingDragon && flyingDragon.isFlying()) baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_FLYING_SPEED);
+        else baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+        animationSpeed = getMovementSpeed() / baseSpeed;
 
         if (getSecondaryAttackCooldown() > 0) setSecondaryAttackCooldown(getSecondaryAttackCooldown() - 1);
         if (getPrimaryAttackCooldown() > 0) setPrimaryAttackCooldown(getPrimaryAttackCooldown() - 1);
@@ -721,7 +730,7 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public float getYawWithAdjustment() {
         float yaw = getYaw();
         if (!hasControllingPassenger() && getTarget() != null) return yaw; //making it easier for dum-dum to aim on its own
-        return (yaw + getNormalizedRotationProgress() * getYawProgressLimit()) % 360;
+        return (yaw - getNormalizedRotationProgress() * getYawProgressLimit()) % 360;
     }
 
     public float getYawProgressLimit() {
@@ -753,6 +762,23 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
     public abstract String getDefaultVariant();
 
+    public final boolean isBlockProtected(BlockPos blockPos) {
+        BlockState blockState = getWorld().getBlockState(blockPos);
+        PlayerEntity rider = getOwner() instanceof URRideableDragonEntity dragon && dragon.canBeControlledByRider() ?
+                (PlayerEntity) getControllingPassenger() : null;
+        GameProfile gameProfile = rider != null ? rider.getGameProfile() : CommonProtection.UNKNOWN;
+        return !blockState.isIn(URTags.DRAGON_UNBREAKABLE) && CommonProtection.canBreakBlock(getWorld(), blockPos, gameProfile, rider);
+    }
+
+    public boolean canBreakBlocks() {
+        return false;
+    }
+
+    @Override
+    public EntityNavigation getNavigation() {
+        return navigation;
+    }
+
     @Override
     public boolean canBeLeashed() {
         return isTamed();
@@ -776,5 +802,4 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
     public DragonAssetCache getAssetCache() {
         return assetCache;
     }
-
 }

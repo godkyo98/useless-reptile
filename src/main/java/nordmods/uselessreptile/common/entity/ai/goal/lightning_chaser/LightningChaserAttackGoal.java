@@ -11,6 +11,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.explosion.Explosion;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 import nordmods.uselessreptile.common.entity.special.LightningBreathEntity;
 import nordmods.uselessreptile.common.entity.special.ShockwaveSphereEntity;
@@ -60,7 +61,6 @@ public class LightningChaserAttackGoal extends Goal {
         return true;
     }
 
-    //todo visibility checks if can't break blocks
     @Override
     public void tick() {
         if (target == null || target.isRemoved()) {
@@ -73,7 +73,8 @@ public class LightningChaserAttackGoal extends Goal {
         double distance = entity.squaredDistanceTo(target);
         double yDiff = target.getY() - entity.getY();
         if (yDiff > entity.getHeight() && !entity.isFlying()) entity.startToFly();
-        boolean canDamage = !target.isInvulnerableTo(entity.getDamageSources().create(DamageTypes.LIGHTNING_BOLT, entity));
+        boolean canSee = entity.canBreakBlocks() || entity.getVisibilityCache().canSee(target);
+        boolean canDamage = !target.isInvulnerableTo(entity.getDamageSources().create(DamageTypes.LIGHTNING_BOLT, entity)) && canSee;
         double desiredY = target.getY() + (canDamage ? 2 : 0) + target.getHeight();
 
         if (distance < MIN_DISTANCE_SQUARED && canDamage) { //too close
@@ -147,6 +148,7 @@ public class LightningChaserAttackGoal extends Goal {
         }
         double distance = entity.squaredDistanceTo(target);
         if (attackDistance < distance) return false;
+        if (Explosion.getExposure(entity.getPos(), target) < 0.1) return false;
         entity.triggerShockwave();
         attackCooldown = 40;
         return true;

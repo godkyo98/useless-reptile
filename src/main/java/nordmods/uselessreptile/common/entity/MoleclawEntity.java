@@ -1,7 +1,5 @@
 package nordmods.uselessreptile.common.entity;
 
-import com.mojang.authlib.GameProfile;
-import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.goal.SitGoal;
@@ -41,6 +39,7 @@ import nordmods.uselessreptile.common.entity.ai.goal.moleclaw.MoleclawUntamedTar
 import nordmods.uselessreptile.common.entity.ai.navigation.MoleclawNavigation;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
 import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
+import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.gui.MoleclawScreenHandler;
 import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.init.URSounds;
@@ -211,7 +210,7 @@ public class MoleclawEntity extends URRideableDragonEntity {
         else setSpeedMod(1f);
         if (isMovingBackwards()) setSpeedMod(0.6f);
         float speed = (float) getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        setMovementSpeed(speed * getSpeedMod());
+        setMovementSpeed(speed * getSpeedModifier());
 
         if (canBeControlledByRider()) {
             PlayerEntity rider = (PlayerEntity) getControllingPassenger();
@@ -281,34 +280,30 @@ public class MoleclawEntity extends URRideableDragonEntity {
             if (doesCollide(targetBox, getSecondaryAttackBox())) tryAttack(mob);
         }
 
-        boolean shouldBreakBlocks = isTamed() ? URConfig.getConfig().moleclawGriefing.canTamedBreak() : URConfig.getConfig().moleclawGriefing.canUntamedBreak();
-        boolean canBreakBlocks = shouldBreakBlocks && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING);
-        if (getWorld().isClient() || !canBreakBlocks) return;
+        if (!canBreakBlocks()) return;
 
         Box box = getSecondaryAttackBox();
         Iterable<BlockPos> blocks = BlockPos.iterate((int) box.minX, (int) box.minY, (int) box.minZ, (int) box.maxX, (int) box.maxY, (int) box.maxZ);
+        float maxMiningLevel = (float) getAttributeValue(URAttributes.MOLECLAW_MINING_LEVEL);
+        if (hasStatusEffect(StatusEffects.STRENGTH)) maxMiningLevel += getStatusEffect(StatusEffects.STRENGTH).getAmplifier() + 1;
+        if (hasStatusEffect(StatusEffects.WEAKNESS)) maxMiningLevel -= getStatusEffect(StatusEffects.WEAKNESS).getAmplifier() + 1;
         for (BlockPos blockPos : blocks) {
+            if (!isBlockProtected(blockPos)) continue;
+
             BlockState blockState = getWorld().getBlockState(blockPos);
-            PlayerEntity rider = canBeControlledByRider() ? (PlayerEntity) getControllingPassenger() : null;
-            GameProfile playerId = rider != null ? rider.getGameProfile() : CommonProtection.UNKNOWN;
-            if (blockState.isIn(URTags.DRAGON_UNBREAKABLE) || !CommonProtection.canBreakBlock(getWorld(), blockPos, playerId, rider)) continue;
-
-            //rip MiningLevelManager
-            float miningLevel = 0;
-            if (blockState.isIn(BlockTags.INCORRECT_FOR_NETHERITE_TOOL)) miningLevel = 5;
-            else if (blockState.isIn(BlockTags.INCORRECT_FOR_DIAMOND_TOOL)) miningLevel = 4;
-            else if (blockState.isIn(BlockTags.INCORRECT_FOR_IRON_TOOL)) miningLevel = 3;
-            else if (blockState.isIn(BlockTags.INCORRECT_FOR_STONE_TOOL)) miningLevel = 2;
-            else if (blockState.isIn(BlockTags.INCORRECT_FOR_WOODEN_TOOL)) miningLevel = 1;
-            float maxMiningLevel = (float) getAttributeValue(URAttributes.MOLECLAW_MINING_LEVEL);
-            if (hasStatusEffect(StatusEffects.STRENGTH)) maxMiningLevel += getStatusEffect(StatusEffects.STRENGTH).getAmplifier() + 1;
-            if (hasStatusEffect(StatusEffects.WEAKNESS)) maxMiningLevel -= getStatusEffect(StatusEffects.WEAKNESS).getAmplifier() + 1;
-
+            float miningLevel = MoleclawGetBlockMiningLevelEvent.EVENT.invoker().getMiningLevel(blockState);
             if (!blockState.isAir() && miningLevel <= maxMiningLevel) {
                 boolean shouldDrop = getRandom().nextDouble() * 100 <= URConfig.getConfig().blockDropChance;
                 getWorld().breakBlock(blockPos, shouldDrop, this);
             }
         }
+    }
+
+    @Override
+    public boolean canBreakBlocks() {
+        if (getWorld().isClient()) return false;
+        boolean shouldBreakBlocks = isTamed() ? URConfig.getConfig().moleclawGriefing.canTamedBreak() : URConfig.getConfig().moleclawGriefing.canUntamedBreak();
+        return shouldBreakBlocks && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING);
     }
 
     @Override

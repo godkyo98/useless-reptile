@@ -36,9 +36,10 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
         entity.setPathfindingPenalty(PathNodeType.WATER, entity.isFlying() && !entity.hasTargetInWater() ? 8 : 0);
 
         if (!isIdle() && target != null) {
-            tickCount += 2;
+            tickCount++;
+            continueFollowingPath();
             if (entity.isFlying()) {
-                nodeMaker = new BirdPathNodeMaker();
+                if (!(nodeMaker instanceof BirdPathNodeMaker)) nodeMaker = new BirdPathNodeMaker();
                 jumpCount = 0;
                 moveOrStop(target);
                 if (!isIdle() && entity.horizontalCollision) {
@@ -48,8 +49,7 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
                 }
             }
             else {
-                nodeMaker = new LandPathNodeMaker();
-                continueFollowingPath();
+                if (!(nodeMaker instanceof LandPathNodeMaker)) nodeMaker = new LandPathNodeMaker();
                 moveOrStop(target);
 
                 if (!isIdle()) {
@@ -81,11 +81,12 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
         double yDiff = nodePos.getY() - entity.getY();
         double zDiff = Math.abs(entity.getZ() - nodePos.getZ());
 
-        boolean bl = xDiff < (double)nodeReachProximity && zDiff < (double)nodeReachProximity &&  yDiff <= entity.getStepHeight() && yDiff > -5.0D;
+        boolean bl = !entity.isFlying() && xDiff < (double)nodeReachProximity && zDiff < (double)nodeReachProximity &&  yDiff <= entity.getStepHeight() && yDiff > -5.0D;
 
         if (bl || canJumpToNext(currentPath.getNode(index).type) && shouldJumpToNextNode(vec3d)) {
             currentPath.next();
             jumpCount = 0;
+            tickCount = 0;
         }
     }
 
@@ -109,9 +110,9 @@ public class FlyingDragonNavigation<T extends URDragonEntity & FlyingDragon> ext
 
     protected void moveOrStop(BlockPos target) {
         double distance = entity.squaredDistanceTo(target.getX(), target.getY(), target.getZ());
-        nodeReachProximity = (float) Math.sqrt(entity.getRotationSpeed() * entity.getWidth());
+        nodeReachProximity = entity.getWidth();
         entity.getMoveControl().moveTo(target.getX(), target.getY(), target.getZ(), 1);
-        if (distance <= nodeReachProximity) entity.getNavigation().stop();
+        if (distance <= nodeReachProximity) stop();
     }
 
     private FlyingDragonMoveControl<T> getMoveControl() {

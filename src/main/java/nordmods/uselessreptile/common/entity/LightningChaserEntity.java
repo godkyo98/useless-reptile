@@ -35,10 +35,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
+import net.minecraft.world.*;
 import net.minecraft.world.event.EntityPositionSource;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.PositionSource;
@@ -51,6 +48,7 @@ import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
 import nordmods.uselessreptile.common.entity.ai.goal.common.FlyingDragonFlyDownGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserAttackGoal;
+import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserBailOutGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserRevengeGoal;
 import nordmods.uselessreptile.common.entity.ai.goal.lightning_chaser.LightningChaserRoamAroundGoal;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
@@ -97,7 +95,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     private final URDragonPart tail3 = new URDragonPart(this);
     private final URDragonPart[] parts = new URDragonPart[]{wing1Left, wing2Left, wing1Right, wing2Right, neck1, neck2, head, tail1, tail2, tail3};
     protected final EntityGameEventHandler<LightningStrikeEventListener> lightningStrikeEventHandler = new EntityGameEventHandler<>(new LightningStrikeEventListener
-            (new EntityPositionSource(this, getStandingEyeHeight()), 256));
+            (new EntityPositionSource(this, getStandingEyeHeight()), URGameEvents.LIGHTNING_STRIKE_FAR.value().notificationRadius()));
 
     public LightningChaserEntity(EntityType<? extends TameableEntity> entityType, World world) {
         super(entityType, world);
@@ -112,6 +110,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     @Override
     protected void initGoals() {
         goalSelector.add(1, new LightningChaserRoamAroundGoal(this));
+        goalSelector.add(1, new LightningChaserBailOutGoal(this));
         goalSelector.add(2, new LightningChaserAttackGoal(this));
         goalSelector.add(3, new FlyingDragonFlyDownGoal<>(this, 30));
         targetSelector.add(1, new LightningChaserRevengeGoal(this));
@@ -346,17 +345,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
         updateThunderstormBonus();
 
         if (!isTamed() && !shouldBailOut) {
-            if (getTamingProgress() <= 0 && getHealth() / getMaxHealth() < 0.3 && !hasSurrendered()) {
-                if (!isDead()) setHealth(getMaxHealth() * 0.3f);
-                setInAirTimer(getMaxInAirTimer());
-                setTarget(null);
-                setSurrendered(true);
-                playSound(URSounds.LIGHTNING_CHASER_SURRENDER);
-                if (isChallenger) bailOutTimer = 6000;
-            }
-
             if (hasSurrendered()) if (age % 200 == 0) heal(2);
-
             if (isChallenger) {
                 if (getTarget() == null) {
                     if (bailOutTimer > 0) bailOutTimer--;
@@ -366,7 +355,6 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
                     }
                 }
             } else if (getHealth() / getMaxHealth() > 0.5) setSurrendered(false);
-
             setIsSitting(hasSurrendered());
         }
 
@@ -402,6 +390,20 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
 
     private void removeModifier(RegistryEntry<EntityAttribute> entityAttribute) {
         getAttributeInstance(entityAttribute).removeModifier(THUNDERSTORM_BONUS);
+    }
+
+    @Override
+    public boolean damage(DamageSource damageSource, float amount) {
+        boolean toReturn = super.damage(damageSource, amount);
+        if (getHealth() / getMaxHealth() < 0.3 && !hasSurrendered()) {
+            if (!isDead()) setHealth(getMaxHealth() * 0.3f);
+            setInAirTimer(getMaxInAirTimer());
+            setTarget(null);
+            setSurrendered(true);
+            URPacketHelper.playSound(this, URSounds.LIGHTNING_CHASER_SURRENDER, getSoundCategory(), 1, 1,1);
+            if (isChallenger) bailOutTimer = 6000;
+        }
+        return toReturn;
     }
 
     @Override
@@ -505,13 +507,19 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
 
-        if ((hasSurrendered() || player.isCreative() && isTamingItem(itemStack)) && !isTamed()) {
-            setOwner(player);
-            setPersistent();
-            setSurrendered(false);
-            shouldBailOut = false;
-            getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
-            return ActionResult.SUCCESS;
+        if (!isTamed()) {
+            if (hasSurrendered() && getTamingProgress() <= 0 || player.isCreative() && isTamingItem(itemStack)) {
+                setOwner(player);
+                setPersistent();
+                setSurrendered(false);
+                shouldBailOut = false;
+                isChallenger = false;
+                getWorld().sendEntityStatus(this, EntityStatuses.ADD_POSITIVE_PLAYER_REACTION_PARTICLES);
+                return ActionResult.SUCCESS;
+            } else if (hasSurrendered() && getTamingProgress() > 0) {
+                getWorld().sendEntityStatus(this, EntityStatuses.ADD_NEGATIVE_PLAYER_REACTION_PARTICLES);
+                return ActionResult.SUCCESS;
+            }
         }
 
         if (isTamed()) {
@@ -586,6 +594,13 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
     @Override
     public boolean disablesShield() {
         return isPrimaryAttack();
+    }
+
+    @Override
+    public boolean canBreakBlocks() {
+        if (getWorld().isClient()) return false;
+        boolean shouldBreakBlocks = isTamed() ? URConfig.getConfig().lightningChaserGriefing.canTamedBreak() : URConfig.getConfig().lightningChaserGriefing.canUntamedBreak();
+        return shouldBreakBlocks && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING);
     }
 
     @Override

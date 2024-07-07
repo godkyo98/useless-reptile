@@ -1,7 +1,5 @@
 package nordmods.uselessreptile.common.entity.special;
 
-import com.mojang.authlib.GameProfile;
-import eu.pb4.common.protection.api.CommonProtection;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -11,22 +9,17 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import nordmods.primitive_multipart_entities.common.entity.EntityPart;
-import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.base.URDragonEntity;
-import nordmods.uselessreptile.common.entity.base.URRideableDragonEntity;
 import nordmods.uselessreptile.common.init.UREntities;
 import nordmods.uselessreptile.common.init.URSounds;
 import nordmods.uselessreptile.common.init.URStatusEffects;
-import nordmods.uselessreptile.common.init.URTags;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -97,22 +90,18 @@ public class LightningBreathEntity extends ProjectileEntity implements Projectil
                 onEntityHit(entityHitResult);
             }
 
-            boolean shouldBreakBlocks = getOwner() instanceof URDragonEntity dragon && dragon.isTamed() ?
-                    URConfig.getConfig().lightningChaserGriefing.canTamedBreak() : URConfig.getConfig().lightningChaserGriefing.canUntamedBreak();
-            if (getWorld().isClient() || !(shouldBreakBlocks && getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING))) return;
+            if (!(getOwner() instanceof URDragonEntity dragon) || !dragon.canBreakBlocks()) {
+                discard();
+                return;
+            }
 
-            if (getWorld().isBlockSpaceEmpty(this, getBoundingBox())) return;
-            Iterable<BlockPos> blocks = BlockPos.iterateOutwards(getBlockPos(), 3, 2, 3);
-            float harnessLimit = 30;
+            Iterable<BlockPos> blocks = BlockPos.iterateOutwards(getBlockPos(), 2, 1, 2);
+            float harnessLimit = 20;
             List<FallingBlockEntity> fallingBlockEntities = new ArrayList<>();
             for (BlockPos blockPos : blocks) {
                 BlockState blockState = getWorld().getBlockState(blockPos);
-                PlayerEntity rider = getOwner() instanceof URRideableDragonEntity dragon && dragon.canBeControlledByRider() ?
-                        (PlayerEntity) getControllingPassenger() : null;
-                GameProfile playerId = rider != null ? rider.getGameProfile() : CommonProtection.UNKNOWN;
-                if (blockState.isAir() || blockState.isIn(URTags.DRAGON_UNBREAKABLE) || !CommonProtection.canBreakBlock(getWorld(), blockPos, playerId, rider)) continue;
-
-                float hardness =  blockState.getHardness(getWorld(), blockPos);
+                if (!dragon.isBlockProtected(blockPos)) continue;
+                float hardness = blockState.getHardness(getWorld(), blockPos);
                 if (hardness < 0) continue;
                 harnessLimit -= hardness;
                 if (harnessLimit < 0) break;
@@ -120,6 +109,7 @@ public class LightningBreathEntity extends ProjectileEntity implements Projectil
                 fallingBlockEntities.add(fallingBlockEntity);
             }
             List<FallingBlockEntity> sorted = new ArrayList<>();
+
             while (!fallingBlockEntities.isEmpty()) {
                 int maxY = -1000;
                 FallingBlockEntity toAdd = null;
@@ -134,6 +124,7 @@ public class LightningBreathEntity extends ProjectileEntity implements Projectil
                     fallingBlockEntities.remove(toAdd);
                 }
             }
+
             sorted.forEach(fallingBlockEntity -> {
                 Vec3d velocity = getBlockPos().toCenterPos().subtract(fallingBlockEntity.getBlockPos().toCenterPos()).add(0, 1, 0).normalize();
                 fallingBlockEntity.setVelocity(velocity);

@@ -98,7 +98,7 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
         else if (isMovingBackwards() && isFlying()) setSpeedMod(0.6f);
         else setSpeedMod(1f);
         float speed = isFlying() ? (float) getAttributeValue(EntityAttributes.GENERIC_FLYING_SPEED) : (float) getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        setMovementSpeed(speed * getSpeedMod());
+        setMovementSpeed(speed * getSpeedModifier());
 
         if (isOnGround()) setFlying(false);
         setNoGravity(isFlying());
@@ -220,7 +220,7 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
 
     @Override
     public float getRotationSpeed() {
-        if (isFlying()) return getFlyingRotationSpeed() * getSpeedModifier() / 2f;
+        if (isFlying()) return getFlyingRotationSpeed() * getMovementSpeedModifier() / 2f;
         return super.getRotationSpeed();
     }
 
@@ -236,9 +236,11 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
     }
 
     @Override
-    protected float getSpeedModifier() {
-        double baseSpeed = isFlying() ? getAttributeBaseValue(EntityAttributes.GENERIC_FLYING_SPEED) : getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        return (float) (getMovementSpeed() / baseSpeed);
+    protected float getMovementSpeedModifier() {
+        if (!isFlying()) return super.getMovementSpeedModifier();
+        double baseSpeed = getAttributeBaseValue(EntityAttributes.GENERIC_FLYING_SPEED);
+        double speed = getAttributeBaseValue(EntityAttributes.GENERIC_FLYING_SPEED);
+        return (float) (speed / baseSpeed);
     }
 
     public int getMaxInAirTimer() {
@@ -275,11 +277,6 @@ public abstract class URRideableFlyingDragonEntity extends URRideableDragonEntit
     @Override
     public FlyingDragonMoveControl<? extends FlyingDragon> getMoveControl() {
         return (FlyingDragonMoveControl<?>) moveControl;
-    }
-
-    @Override
-    public FlyingDragonNavigation<? extends FlyingDragon> getNavigation() {
-        return (FlyingDragonNavigation<?>) navigation;
     }
 
     public void forceFlightNextTick() {

@@ -6,12 +6,14 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Heightmap;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.entity.LightningChaserEntity;
 import nordmods.uselessreptile.common.event.DragonEquipmentTooltipEntryEvent;
+import nordmods.uselessreptile.common.event.MoleclawGetBlockMiningLevelEvent;
 import nordmods.uselessreptile.common.network.URPacketHelper;
 import nordmods.uselessreptile.common.util.LightningChaserSpawnTimer;
 
@@ -22,6 +24,7 @@ public class URModEvents {
     public static void init() {
         spawnLightningChaser();
         addDragonEquipmentTooltipEntries();
+        getDefaultBlockMiningLevelForMoleclaw();
     }
 
     private static void spawnLightningChaser() {
@@ -70,6 +73,17 @@ public class URModEvents {
             if (entry.isIn(URTags.LIGHTNING_CHASER_TAIL_ARMOR) || entry.isIn(URTags.LIGHTNING_CHASER_CHESTPLATES) || entry.isIn(URTags.LIGHTNING_CHASER_HELMETS))
                 entityTypes.add(UREntities.LIGHTNING_CHASER_ENTITY);
             return entityTypes;
+        });
+    }
+
+    private static void getDefaultBlockMiningLevelForMoleclaw() {
+        MoleclawGetBlockMiningLevelEvent.EVENT.register(blockState -> {
+            if (blockState.isIn(BlockTags.INCORRECT_FOR_NETHERITE_TOOL)) return 5;
+            if (blockState.isIn(BlockTags.INCORRECT_FOR_DIAMOND_TOOL)) return 4;
+            if (blockState.isIn(BlockTags.INCORRECT_FOR_IRON_TOOL)) return 3;
+            if (blockState.isIn(BlockTags.INCORRECT_FOR_STONE_TOOL)) return 2;
+            if (blockState.isIn(BlockTags.INCORRECT_FOR_WOODEN_TOOL)) return 1;
+            return 0;
         });
     }
 }
