@@ -129,7 +129,7 @@ public class ShockwaveSphereEntity extends ProjectileEntity implements Projectil
 
     @Override
     public float getDefaultDamage() {
-        return 3f;
+        return 4;
     }
 
     @Override

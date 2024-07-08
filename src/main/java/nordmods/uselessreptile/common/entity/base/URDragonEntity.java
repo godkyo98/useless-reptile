@@ -16,8 +16,6 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.PassiveEntity;
@@ -383,20 +381,14 @@ public abstract class URDragonEntity extends TameableEntity implements GeoEntity
 
         if (isTamed() && isOwner(player)) {
             if (itemStack.getItem() instanceof PotionItem potionItem && player.isSneaking()) {
-                boolean hasHarmful = false;
-                boolean hasBeneficial = false;
-                for (StatusEffectInstance effect : potionItem.getComponents().get(DataComponentTypes.POTION_CONTENTS).customEffects()) {
-                    StatusEffectCategory effectType = effect.getEffectType().value().getCategory();
-                    if (effectType == StatusEffectCategory.BENEFICIAL) hasBeneficial = true;
-                    if (effectType == StatusEffectCategory.HARMFUL) hasHarmful = true;
+                potionItem.finishUsing(itemStack, getWorld(), this);
+                playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
+                if (!player.isCreative()) { //checking for emptiness for case if somehow potion stack size is more than 1
+                    itemStack.decrement(1);
+                    if (itemStack.isEmpty()) player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                    else player.giveItemStack(new ItemStack(Items.GLASS_BOTTLE));
                 }
-                if (hasBeneficial || !hasHarmful) {
-                    //we make the copy cuz else for some fucking reason minecraft will subtract effect time from potion itself too
-                    for (StatusEffectInstance effect : potionItem.getComponents().get(DataComponentTypes.POTION_CONTENTS).customEffects()) addStatusEffect(new StatusEffectInstance(effect));
-                    if (!player.isCreative()) player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
-                    playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
-                    return ActionResult.SUCCESS;
-                }
+                return ActionResult.SUCCESS;
             }
 
             if (isInstrument(itemStack) && !player.isSneaking()) {

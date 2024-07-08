@@ -367,6 +367,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             tryAddModifier(EntityAttributes.GENERIC_ARMOR, 4, EntityAttributeModifier.Operation.ADD_VALUE);
             tryAddModifier(EntityAttributes.GENERIC_FLYING_SPEED, 0.2, EntityAttributeModifier.Operation.ADD_VALUE);
             tryAddModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.05, EntityAttributeModifier.Operation.ADD_VALUE);
+            tryAddModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2f, EntityAttributeModifier.Operation.ADD_VALUE);
             tryAddModifier(URAttributes.DRAGON_ACCELERATION_DURATION, -0.33, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
             tryAddModifier(URAttributes.DRAGON_VERTICAL_SPEED, 0.1, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
             tryAddModifier(URAttributes.DRAGON_FLYING_ROTATION_SPEED, 0.5, EntityAttributeModifier.Operation.ADD_MULTIPLIED_TOTAL);
@@ -375,6 +376,7 @@ public class LightningChaserEntity extends URRideableFlyingDragonEntity implemen
             removeModifier(EntityAttributes.GENERIC_ARMOR);
             removeModifier(EntityAttributes.GENERIC_FLYING_SPEED);
             removeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+            removeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE);
             removeModifier(URAttributes.DRAGON_ACCELERATION_DURATION);
             removeModifier(URAttributes.DRAGON_VERTICAL_SPEED);
             removeModifier(URAttributes.DRAGON_FLYING_ROTATION_SPEED);

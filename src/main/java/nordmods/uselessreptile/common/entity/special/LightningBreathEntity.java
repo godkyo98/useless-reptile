@@ -167,12 +167,12 @@ public class LightningBreathEntity extends ProjectileEntity implements Projectil
 
     @Override
     public float getDefaultDamage() {
-        return 15;
+        return 16;
     }
 
     @Override
     public float getDamageScaling() {
-        return 2.5f;
+        return 2;
     }
 
     public static class LightningBreathBolt {
