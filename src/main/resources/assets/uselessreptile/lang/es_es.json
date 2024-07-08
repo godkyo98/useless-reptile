@@ -38,8 +38,6 @@
     "key.uselessreptile.secondaryAttackKey": "Ataque Secundario",
     "key.uselessreptile.flyDownKey": "Volar Hacia Abajo",
     "key.uselessreptile.flyUpKey": "Volar Hacia Arriba",
-
-    "subtitles.uselessreptile.wyvern.bite": "Wyvern de Pantano Muerde",
     "subtitles.uselessreptile.wyvern.hurt": "Wyvern de Pantano Sufre",
     "subtitles.uselessreptile.wyvern.ambient": "Wyvern de Pantano Gruñe",
     "subtitles.uselessreptile.wyvern.death": "Wyvern de Pantano Muere",
@@ -64,35 +62,25 @@
     "tooltip.uselessreptile.flute_mode2": "Modo de Flauta: Atacar Objetivo",
 
     "config.uselessreptile.title": "Configuración de Useless Reptile",
-    "config.uselessreptile.category.dragon" : "Opciones de Dragón",
-    "config.uselessreptile.category.camera" : "Configuraciones de la Cámara",
     "config.uselessreptile.option.wyvernSpawnWeight": "Peso de Generación de Wyvern de Pantano",
     "config.uselessreptile.option.moleclawSpawnWeight": "Peso de Generación de Garra-Topo",
     "config.uselessreptile.option.blockDropChance": "Probabilidad de Soltar Objetos",
-    "config.uselessreptile.option.allowDragonGriefing": "Duelo de Dragón",
     "config.uselessreptile.option.cameraDistanceOffset": "Distancia del Offset de la Cámara",
     "config.uselessreptile.option.cameraVerticalOffset": "Offset de Cámara Vertical",
     "config.uselessreptile.option.cameraHorizontalOffset": "Offset de Cámara Horizontal",
     "config.uselessreptile.option.enableCameraOffset": "Activar Offset de la Cámara",
     "config.uselessreptile.option.enableCrosshair": "Activar la mira en tercera persona",
     "config.uselessreptile.option.autoThirdPerson": "Automáticamente cambiar perspectivas",
-    "config.uselessreptile.option.disableNamedTextures": "Inhabilitar Texturas con Nombre",
     "config.uselessreptile.option.pikehornSpawnWeight": "Peso de Generación de Picuerno de Río",
-
-    "config.uselessreptile.option.wyvernSpawnWeight.@Tooltip": "Responsable de que tan Comunes sean los Wyverns de Pantano en el Mundo.\nSetting esto a 0 va a deshabilitar generación \n§cValues por Debajo de 0 Puede Provocar Errores",
-    "config.uselessreptile.option.moleclawSpawnWeight.@Tooltip": "Responsable de que tan Comunes sean los Garra-Topos en el Mundo.\nSetting esto a 0 va a deshabilitar generación \n§cValues por Debajo de 0 Puede Provocar Errores",
     "config.uselessreptile.option.blockDropChance.@Tooltip": "Define el Porcentaje de bloques que Serán Soltados Después de un Ataque de un Dragón que Rompa Bloques",
     "config.uselessreptile.option.allowDragonGriefing.@Tooltip": "Define si los Dragones son Capaces de Destruir Bloques o No.\nAllowed values: \n§3ALL §f(todo puede romperse), \n§3TAMED §f(solo domados pueden), \n§3DISABLED §f(ninguno puede romper)",
     "config.uselessreptile.option.enableCameraOffset.@Tooltip": "Activa el offset de la cámara en tercera persona mientras montas el dragón\nIf off, los offsets no serán aplicados",
     "config.uselessreptile.option.enableCrosshair.@Tooltip": "Activa la mira mientras montas el dragón",
     "config.uselessreptile.option.autoThirdPerson.@Tooltip": "Automaticamente cambia perspectivas cuando empiezas y terminas de montar el dragón",
-    "config.uselessreptile.option.disableNamedTextures.@Tooltip": "Previene texturas con nombre a aplicarse y en cambio usa predeterminadas",
     "config.uselessreptile.option.dragonHealthMultiplier.@Tooltip": "Multiplica la vida maxima de todos los dragones",
     "config.uselessreptile.option.dragonDamageMultiplier.@Tooltip": "Multiplica el daño de ataque en algunos dragones\nPuede que no se aplique a ciertos ataques",
     "config.uselessreptile.option.dragonHealthMultiplier": "Multiplicador de Vida del Dragón",
     "config.uselessreptile.option.dragonDamageMultiplier": "Multiplicador de Daño del Dragón",
-    "config.uselessreptile.option.pikehornSpawnWeight.@Tooltip": "Responsable de que tan Comunes sean los Picuerno de Río en el Mundo.\nSetting esto a 0 va a deshabilitar generación \n§cValues por Debajo de 0 Puede Provocar Errores",
-
     "effect.uselessreptile.acid": "Ácido",
 
     "death.attack.acid": "%1$s se fundió",
@@ -102,7 +90,7 @@
     "advancement.uselessreptile.moleclaw_helmet": "Luz al final del tunel",
     "advancement.uselessreptile.tame_moleclaw": "Lo que hay debajo",
     "advancement.uselessreptile.tame_wyvern": "Alas, Piernas y Colas",
-    "advancement.uselessreptile.tame_pikehorn": "El Unicornio! Es real!",
+    "advancement.uselessreptile.tame_river_pikehorn": "El Unicornio! Es real!",
     "advancement.uselessreptile.use_flute": "Flautista de Hamelín",
 
     "advancement.uselessreptile.root.desc": "Aquí hay Dragones!",
@@ -110,6 +98,6 @@
     "advancement.uselessreptile.moleclaw_helmet.desc": "Crea un casco de Garra-Topo para que ya no le tema a la luz",
     "advancement.uselessreptile.tame_moleclaw.desc": "Domestica un Garra-Topo con rábano",
     "advancement.uselessreptile.tame_wyvern.desc": "Domestica un Wyvern de Pantano con pollo crudo",
-    "advancement.uselessreptile.tame_pikehorn.desc": "Domestica a un Picuerno de Río con un Pez Tropical Dentro de un Cubo",
+    "advancement.uselessreptile.tame_river_pikehorn.desc": "Domestica a un Picuerno de Río con un Pez Tropical Dentro de un Cubo",
     "advancement.uselessreptile.use_flute.desc": "Usa una Flauta Para Ordenar a tus Picuernos de Río"
 }

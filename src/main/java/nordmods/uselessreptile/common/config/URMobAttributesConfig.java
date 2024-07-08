@@ -31,16 +31,19 @@ public class URMobAttributesConfig {
     public float dragonFlyingSpeedMultiplier = 1;
 
     @SerialEntry(comment = """
-            Note on vanilla attribute value ranges (can be bypassed with other mods):
+            Base dragon attributes.
+            Note that in vanilla game attribute values are limited by certain range (this can be changed by other mods):
             Damage: [0;2048]
             Knockback: [0;5]
             Health: [1;1024]
             Armor: [0;30]
             Armor toughness: [0;20]
-            Ground and flying speed: [0;1024]
-            Other values are technically not attributes and added by the mod itself and have no limitations.
-            Attack cooldowns and acceleration duration are measured in ticks, rotation speed - in degrees.
-            Movement speed is measured in corgi-sized meteors
+            Ground, flying and vertical speed: [0;1024]
+            Rotation speeds: [0;180]
+            Attack cooldowns: [0;2048]
+            Acceleration duration: [0;2048]
+            Regeneration from food: [0;1024]
+            Attack cooldowns and acceleration duration are measured in ticks, rotation speeds - in degrees. Movement speed is measured in corgi-sized meteors
             
             SWAMP WYVERN ATTRIBUTES\s""")
     public float wyvernDamage = 6.0f;

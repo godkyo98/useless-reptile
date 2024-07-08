@@ -40,8 +40,6 @@
   "key.uselessreptile.secondaryAttackKey": "第二攻撃",
   "key.uselessreptile.flyDownKey": "飛翔下降",
   "key.uselessreptile.flyUpKey": "飛翔上昇",
-
-  "subtitles.uselessreptile.wyvern.bite": "スワンプワイバーンが噛む",
   "subtitles.uselessreptile.wyvern.hurt": "スワンプワイバーンがダメージを受ける",
   "subtitles.uselessreptile.wyvern.ambient": "スワンプワイバーンが唸る",
   "subtitles.uselessreptile.wyvern.death": "スワンプワイバーンが死ぬ",
@@ -61,10 +59,6 @@
 
   "other.uselessreptile.none": "無し",
   "other.uselessreptile.sound_respond": "%1$sの反応する音：%2$s",
-  "other.uselessreptile.flute_mode0": "フルートモード：呼出",
-  "other.uselessreptile.flute_mode1": "フルートモード：漁業",
-  "other.uselessreptile.flute_mode2": "フルートモード：攻撃指定",
-
   "config.uselessreptile.title": "Useless Reptile設定",
   "config.uselessreptile.category.gameplay" : "ゲームプレイ設定",
   "config.uselessreptile.category.client" : "クライアント設定",
@@ -76,7 +70,6 @@
   "config.uselessreptile.option.wyvernSpawnWeight": "スワンプワイバーンのスポーン比重",
   "config.uselessreptile.option.moleclawSpawnWeight": "モールクローのスポーン比重",
   "config.uselessreptile.option.blockDropChance": "ブロックのドロップ確率",
-  "config.uselessreptile.option.allowDragonGriefing": "ドラゴンのグリーフィング",
   "config.uselessreptile.option.cameraDistanceOffset": "カメラの距離オフセット",
   "config.uselessreptile.option.cameraVerticalOffset": "カメラの垂直オフセット",
   "config.uselessreptile.option.cameraHorizontalOffset": "カメラの水平オフセット",
@@ -93,8 +86,6 @@
   "config.uselessreptile.group.dragonBehaviour.@Tooltip" : "ゲーム中のドラゴンの挙動を変更するオプション。",
   "config.uselessreptile.group.camera.@Tooltip" : "ドラゴンに乗る際のカメラの設定。",
   "config.uselessreptile.group.dragonAppearance.@Tooltip" : "ドラゴンの見た目を変更するオプション。",
-  "config.uselessreptile.option.wyvernSpawnWeight.@Tooltip": "ワールド内でスワンプワイバーンのスポ－ン頻度。\nこの値を0にするとスポーンしなくなる。\n§c0未満の値を設定するとクラッシュする可能性がある。",
-  "config.uselessreptile.option.moleclawSpawnWeight.@Tooltip": "ワールド内でモールクローのスポ－ン頻度。\nこの値を0にするとスポーンしなくなる。\n§c0未満の値を設定するとクラッシュする可能性がある。",
   "config.uselessreptile.option.blockDropChance.@Tooltip": "ドラゴンの攻撃によって壊れたブロックのドロップ確率。",
   "config.uselessreptile.option.allowDragonGriefing.@Tooltip": "ドラゴンがブロックを破壊できるか。\n設定可能な値：\n§3ALL §f(破壊可能), \n§3TAMED §f(テイム個体のみ破壊可能), \n§3DISABLED §f(破壊不可能)",
   "config.uselessreptile.option.enableCameraOffset.@Tooltip": "ドラゴンに乗っている間、三人称視点でのカメラオフセットを有効にするか。\noffの場合、オフセットは適応されない。",
@@ -103,7 +94,6 @@
   "config.uselessreptile.option.disableNamedEntityModels.@Tooltip": "特殊なテクスチャやモデルを無効化し、デフォルトの物を使用する。",
   "config.uselessreptile.option.dragonHealthMultiplier.@Tooltip": "全てのドラゴンの最大体力を増加させる。",
   "config.uselessreptile.option.dragonDamageMultiplier.@Tooltip": "全てのドラゴンの攻撃力を増加させる。\n一部の攻撃には適応されない場合がある。",
-  "config.uselessreptile.option.pikehornSpawnWeight.@Tooltip": "ワールド内でリバーパイクホーンのスポ－ン頻度。\nこの値を0にするとスポーンしなくなる。\n§c0未満の値を設定するとクラッシュする可能性がある。",
   "config.uselessreptile.option.disableEmissiveTextures.@Tooltip": "ドラゴンの発光レイヤーのレンダリングを停止する。",
 
   "effect.uselessreptile.acid": "酸",
@@ -115,7 +105,7 @@
   "advancement.uselessreptile.moleclaw_helmet": "トンネルを抜けるとそこには光があった",
   "advancement.uselessreptile.tame_moleclaw": "その下には何があるのか",
   "advancement.uselessreptile.tame_wyvern": "翼、脚、そして尻尾",
-  "advancement.uselessreptile.tame_pikehorn": "ユニコーンは実在した",
+  "advancement.uselessreptile.tame_river_pikehorn": "ユニコーンは実在した",
   "advancement.uselessreptile.use_flute": "笛吹き男",
 
   "advancement.uselessreptile.root.desc": "ドラゴンがいる世界だ！",
@@ -123,6 +113,6 @@
   "advancement.uselessreptile.moleclaw_helmet.desc": "光を怖がる対策にモールクローヘルメットをクラフトする",
   "advancement.uselessreptile.tame_moleclaw.desc": "モールクローをビートルートで手懐ける",
   "advancement.uselessreptile.tame_wyvern.desc": "スワンプワイバーンを生の鶏肉で手懐ける",
-  "advancement.uselessreptile.tame_pikehorn.desc": "リバーパイクホーンを熱帯魚入りバケツで手懐ける",
+  "advancement.uselessreptile.tame_river_pikehorn.desc": "リバーパイクホーンを熱帯魚入りバケツで手懐ける",
   "advancement.uselessreptile.use_flute.desc": "フルートを使用してリバーパイクホーンに命令する"
 }

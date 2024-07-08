@@ -14,6 +14,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -21,6 +22,7 @@ import net.minecraft.util.Language;
 import nordmods.uselessreptile.client.config.URClientConfig;
 import nordmods.uselessreptile.common.config.URConfig;
 import nordmods.uselessreptile.common.config.URMobAttributesConfig;
+import nordmods.uselessreptile.common.init.URAttributes;
 import nordmods.uselessreptile.common.util.URSpawnGroup;
 
 @Environment(EnvType.CLIENT)
@@ -536,7 +538,7 @@ public class ModMenuIntegration implements ModMenuApi {
                         .text(Text.translatable("config.uselessreptile.group.dragonAttributes.@Tooltip")).build());
 
         Option<Float> wyvernDamage = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonDamage"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_DAMAGE.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonDamage.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernDamage,
@@ -545,7 +547,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernKnockback = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonKnockback"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonKnockback.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernKnockback,
@@ -554,7 +556,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernHealth = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonHealth"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MAX_HEALTH.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonHealth.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernHealth,
@@ -563,7 +565,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernArmor = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmor"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmor.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernArmor,
@@ -572,7 +574,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernArmorToughness = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmorToughness"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmorToughness.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernArmorToughness,
@@ -581,7 +583,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernGroundSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonGroundSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MOVEMENT_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonGroundSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernGroundSpeed,
@@ -590,7 +592,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernFlyingSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonFlyingSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_FLYING_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonFlyingSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernFlyingSpeed,
@@ -599,7 +601,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Integer> wyvernBaseSecondaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseSecondaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.wyvernBaseSecondaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernBaseSecondaryAttackCooldown,
@@ -608,7 +610,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> wyvernBasePrimaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBasePrimaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.wyvernBasePrimaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernBasePrimaryAttackCooldown,
@@ -617,7 +619,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> wyvernBaseAccelerationDuration = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseAccelerationDuration"))
+                .name(Text.translatable(URAttributes.DRAGON_ACCELERATION_DURATION.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonBaseAccelerationDuration.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernBaseAccelerationDuration,
@@ -626,7 +628,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Float> wyvernRotationSpeedGround = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround"))
+                .name(Text.translatable(URAttributes.DRAGON_GROUND_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernRotationSpeedGround,
@@ -635,7 +637,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernRotationSpeedAir = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedAir"))
+                .name(Text.translatable(URAttributes.DRAGON_FLYING_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedAir.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernRotationSpeedAir,
@@ -644,7 +646,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernVerticalSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonVerticalSpeed"))
+                .name(Text.translatable(URAttributes.DRAGON_VERTICAL_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonVerticalSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernVerticalSpeed,
@@ -653,7 +655,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> wyvernRegenerationFromFood = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood"))
+                .name(Text.translatable(URAttributes.DRAGON_REGENERATION_FROM_FOOD.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.wyvernRegenerationFromFood,
@@ -686,7 +688,7 @@ public class ModMenuIntegration implements ModMenuApi {
                         .text(Text.translatable("config.uselessreptile.group.dragonAttributes.@Tooltip")).build());
 
         Option<Float> moleclawDamage = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonDamage"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_DAMAGE.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonDamage.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawDamage,
@@ -695,7 +697,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> moleclawKnockback = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonKnockback"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonKnockback.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawKnockback,
@@ -704,7 +706,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> moleclawHealth = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonHealth"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MAX_HEALTH.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonHealth.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawHealth,
@@ -713,7 +715,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> moleclawArmor = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmor"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmor.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawArmor,
@@ -722,7 +724,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> moleclawArmorToughness = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmorToughness"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmorToughness.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawArmorToughness,
@@ -731,7 +733,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> moleclawGroundSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonGroundSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MOVEMENT_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonGroundSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawGroundSpeed,
@@ -740,7 +742,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Integer> moleclawBaseSecondaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseSecondaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.moleclawBaseSecondaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawBaseSecondaryAttackCooldown,
@@ -749,7 +751,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> moleclawBasePrimaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBasePrimaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.moleclawBasePrimaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawBasePrimaryAttackCooldown,
@@ -758,7 +760,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Float> moleclawRotationSpeedGround = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround"))
+                .name(Text.translatable(URAttributes.DRAGON_GROUND_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawRotationSpeedGround,
@@ -767,7 +769,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> moleclawRegenerationFromFood = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood"))
+                .name(Text.translatable(URAttributes.DRAGON_REGENERATION_FROM_FOOD.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.moleclawRegenerationFromFood,
@@ -796,7 +798,7 @@ public class ModMenuIntegration implements ModMenuApi {
                         .text(Text.translatable("config.uselessreptile.group.dragonAttributes.@Tooltip")).build());
 
         Option<Float> pikehornDamage = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonDamage"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_DAMAGE.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonDamage.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornDamage,
@@ -805,7 +807,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornKnockback = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonKnockback"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonKnockback.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornKnockback,
@@ -814,7 +816,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornHealth = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonHealth"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MAX_HEALTH.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonHealth.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornHealth,
@@ -823,7 +825,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornArmor = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmor"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmor.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornArmor,
@@ -832,7 +834,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornArmorToughness = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmorToughness"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmorToughness.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornArmorToughness,
@@ -841,7 +843,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornGroundSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonGroundSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MOVEMENT_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonGroundSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornGroundSpeed,
@@ -850,7 +852,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornFlyingSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonFlyingSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_FLYING_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonFlyingSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornFlyingSpeed,
@@ -859,7 +861,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Integer> pikehornBasePrimaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBasePrimaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.pikehornBasePrimaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornBasePrimaryAttackCooldown,
@@ -868,7 +870,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> pikehornBaseAccelerationDuration = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseAccelerationDuration"))
+                .name(Text.translatable(URAttributes.DRAGON_ACCELERATION_DURATION.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonBaseAccelerationDuration.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornBaseAccelerationDuration,
@@ -877,7 +879,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Float> pikehornRotationSpeedGround = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround"))
+                .name(Text.translatable(URAttributes.DRAGON_GROUND_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornRotationSpeedGround,
@@ -886,7 +888,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornRotationSpeedAir = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedAir"))
+                .name(Text.translatable(URAttributes.DRAGON_FLYING_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedAir.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornRotationSpeedAir,
@@ -895,7 +897,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornVerticalSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonVerticalSpeed"))
+                .name(Text.translatable(URAttributes.DRAGON_VERTICAL_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonVerticalSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornVerticalSpeed,
@@ -904,7 +906,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> pikehornRegenerationFromFood = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood"))
+                .name(Text.translatable(URAttributes.DRAGON_REGENERATION_FROM_FOOD.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.riverPikehornRegenerationFromFood,
@@ -936,7 +938,7 @@ public class ModMenuIntegration implements ModMenuApi {
                         .text(Text.translatable("config.uselessreptile.group.dragonAttributes.@Tooltip")).build());
 
         Option<Float> lightningChaserDamage = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonDamage"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_DAMAGE.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonDamage.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserDamage,
@@ -945,7 +947,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserKnockback = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonKnockback"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ATTACK_KNOCKBACK.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonKnockback.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserKnockback,
@@ -954,7 +956,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserHealth = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonHealth"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MAX_HEALTH.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonHealth.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserHealth,
@@ -963,7 +965,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserArmor = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmor"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmor.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserArmor,
@@ -972,7 +974,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserArmorToughness = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonArmorToughness"))
+                .name(Text.translatable(EntityAttributes.GENERIC_ARMOR_TOUGHNESS.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonArmorToughness.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserArmorToughness,
@@ -981,7 +983,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserGroundSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonGroundSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_MOVEMENT_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonGroundSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserGroundSpeed,
@@ -990,7 +992,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserFlyingSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonFlyingSpeed"))
+                .name(Text.translatable(EntityAttributes.GENERIC_FLYING_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonFlyingSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserFlyingSpeed,
@@ -999,7 +1001,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Integer> lightningChaserBaseSecondaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseSecondaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_SECONDARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.lightningChaserBaseSecondaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserBaseSecondaryAttackCooldown,
@@ -1008,7 +1010,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> lightningChaserBasePrimaryAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBasePrimaryAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_PRIMARY_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.lightningChaserBasePrimaryAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserBasePrimaryAttackCooldown,
@@ -1017,7 +1019,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> lightningChaserBaseSpecialAttackCooldown = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseSpecialAttackCooldown"))
+                .name(Text.translatable(URAttributes.DRAGON_SPECIAL_ATTACK_COOLDOWN.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.lightningChaserBaseSpecialAttackCooldown.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserBaseSpecialAttackCooldown,
@@ -1026,7 +1028,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Integer> lightningChaserBaseAccelerationDuration = Option.<Integer>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonBaseAccelerationDuration"))
+                .name(Text.translatable(URAttributes.DRAGON_ACCELERATION_DURATION.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonBaseAccelerationDuration.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserBaseAccelerationDuration,
@@ -1035,7 +1037,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(IntegerFieldController::new)
                 .build();
         Option<Float> lightningChaserRotationSpeedGround = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround"))
+                .name(Text.translatable(URAttributes.DRAGON_GROUND_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedGround.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserRotationSpeedGround,
@@ -1044,7 +1046,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserRotationSpeedAir = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRotationSpeedAir"))
+                .name(Text.translatable(URAttributes.DRAGON_FLYING_ROTATION_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRotationSpeedAir.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserRotationSpeedAir,
@@ -1053,7 +1055,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserVerticalSpeed = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonVerticalSpeed"))
+                .name(Text.translatable(URAttributes.DRAGON_VERTICAL_SPEED.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonVerticalSpeed.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserVerticalSpeed,
@@ -1062,7 +1064,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .customController(FloatFieldController::new)
                 .build();
         Option<Float> lightningChaserRegenerationFromFood = Option.<Float>createBuilder()
-                .name(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood"))
+                .name(Text.translatable(URAttributes.DRAGON_REGENERATION_FROM_FOOD.value().getTranslationKey()))
                 .description(OptionDescription.createBuilder()
                         .text(Text.translatable("config.uselessreptile.option.dragonRegenerationFromFood.@Tooltip"), requiresRestart()).build())
                 .binding(defaults.lightningChaserRegenerationFromFood,
