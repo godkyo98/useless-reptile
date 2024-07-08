@@ -73,7 +73,7 @@ public class FlyingDragonMoveControl<T extends URDragonEntity & FlyingDragon> ex
                 entity.setMovementSpeed(speed * entity.getSpeedModifier());
             }
             case JUMPING -> {
-                entity.setMovementSpeed(speed);
+                entity.setMovementSpeed(speed * entity.getSpeedModifier());
                 if (entity.isOnGround()) state = MoveControl.State.WAIT;
             }
             default -> {

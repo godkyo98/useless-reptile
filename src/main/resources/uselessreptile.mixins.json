@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "common.AbstractBlockMixin",
+    "common.ItemMixin",
     "common.LightningEntityMixin",
     "common.PlayerEntityMixin",
     "common.ServerPlayerEntityMixin",
